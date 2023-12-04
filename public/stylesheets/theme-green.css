@@ -1,0 +1,34 @@
+:root {
+    --gray10: rgb(18, 40, 13);
+    --gray20: rgb(39, 66, 33);
+    --gray30: rgb(45, 87, 36);
+    --gray40: rgb(62, 121, 52);
+    --gray45: rgb(71, 141, 59);
+    --gray50: rgb(77, 158, 62);
+    --gray60: rgb(90, 204, 68);
+    --gray70: rgb(90, 204, 68);
+    --gray80: rgb(113, 255, 86);
+    --gray100: rgb(152, 255, 132);
+
+    --fade050: rgba(35, 78, 25, 0.5);
+    --fade180: rgba(18, 40, 13, 0.8);
+    --fade250: rgba(39, 66, 33, 0.5);
+
+    --text-color1: rgb(255, 255, 255);
+    --text-color2: rgb(194, 255, 182);
+
+    --link-color: rgb(76, 198, 255);
+    --alert-color: rgb(194, 255, 182);
+
+    --border: 1px solid var(--gray80);
+    --footer-height: 3rem;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.ui-icon {filter: brightness(2);}
+
+input::placeholder {
+    color: var(--text-color2);
+}

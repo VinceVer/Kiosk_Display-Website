@@ -1,0 +1,90 @@
+doctype html
+html(lang='en')
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=no")
+    link(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)
+    link(rel='stylesheet' href='/stylesheets/mobile.css')
+  body.fade
+    button#settingsIcon(onclick="openSettings()")
+
+    #display(style="visibility: hidden")
+      #header KIOSKS
+      #kiosk_table
+        table
+          thead
+            tr
+              th Name:
+              th Note:
+          tbody#table_urgency5
+          tbody#table_urgency42
+          tbody#table_urgency4
+          tbody#table_urgency3
+          tbody(id= (layout.prefer_1over2 === "true") ? "table_urgency1" : "table_urgency2")
+          tbody#table_urgency12
+          tbody(id= (layout.prefer_1over2 === "true") ? "table_urgency2" : "table_urgency1")
+          tbody#table_urgency0
+          tbody#table_urgencynull
+          tbody#table_urgency-1
+
+      #overlay.clickToClose.overlay
+        .banner.clickToClose
+          h1.clickToClose
+        #devices.data
+          h2 Connected Devices
+        #applications.data
+          h2 Applications
+        .map.clickToClose
+
+      #settings.clickToClose.overlay
+        .data
+          .left
+            p Sort 🟡 above 🟣:
+          .right
+            input(type="checkbox")
+          .left
+            p Theme:
+          .right
+            select(name="theme")
+              option(value="dark" selected=(layout.theme === "dark" ? true : false)) Dark
+              option(value="light" selected=(layout.theme === "light" ? true : false)) Light
+              option(value="banana" selected=(layout.theme === "banana" ? true : false)) Banana
+              option(value="smurf" selected=(layout.theme === "smurf" ? true : false)) Smurf
+              option(value="watermelon" selected=(layout.theme === "watermelon" ? true : false)) Watermelon
+          .double
+            select#location_select(name="theme" oninput="location.href = this.value")
+              option(value="" selected disabled) Switch Location
+
+
+      #footer
+        p.last_check Last check:
+        p.health_score(style=`color: hsl(${misc_data.score-50 < 0 ? 0 : (misc_data.score-50)*2}, 100%, 65%)`) #{misc_data.score}%
+
+    #alertBox
+      h2
+      h4
+      .flexBar
+      .blockActions
+
+    #segment_CM.contextMenu(style="height: 0px; opacity: 0; display: none;")
+      div
+        button.title
+        button(name="online") Change to Online
+
+    #templates(style="display: none")
+      table
+        tr#tableRow
+          td.name
+          td.note
+
+      #segment.segment
+        .flexBar
+          h3
+          h4 test
+          h5 
+        .content
+          div
+        
+
+    #data_storage(data-config_data=config_data data-status_database=status_database data-misc_data=misc_data data-hub_adress=hub_adress style="display: none")
+
+    script(src='/javascripts/mobile-list.js')

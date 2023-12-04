@@ -1,0 +1,512 @@
+/* :root {
+    --gray20: rgb(20, 20, 20);
+    --gray30: rgb(30, 30, 30);
+    --gray40: rgb(40, 40, 40);
+    --gray50: rgb(50, 50, 50);
+    --gray60: rgb(60, 60, 60);
+    --gray70: rgb(70, 70, 70);
+    --gray80: rgb(80, 80, 80);
+    --gray100: rgb(100, 100, 100);
+
+    --fade050: rgba(0, 0, 0, 0.5);
+
+    --text-color1: rgb(150, 150, 150);
+    --text-color2: rgb(255, 255, 255);
+
+    --link-color: rgb(76, 198, 255);
+
+    --border: 1px solid var(--gray60);
+
+    font-family: Arial, Helvetica, sans-serif;
+} */
+
+.t-stress {color: var(--text-color2)}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color1);
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-right: 10px;
+    width: fit-content;
+}
+
+h1 {font-size: 2.5rem;}
+h2 {font-size: 2rem;}
+h3 {
+    color: var(--text-color2);
+    font-size: 1.5rem;
+    margin: 5px 0 0 0;
+}
+
+/* Equations. */
+.equals {color: #7bff76}
+.g-l-than {color: #76b6ff}
+.inequal {color: #ff7676}
+/* ---------- */
+
+body {
+    animation: gradientAnimation1 120s ease-in-out infinite;
+    background-color: var(--gray20);
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 0, 0, 0.05) 10%, rgba(0, 0, 0, 0.2) 40%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0.05) 90%);
+    background-size: 200% 200%;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    width: 100vw;
+}
+
+body::after {
+    animation: gradientAnimation2 120s ease-in-out infinite;
+    background-color: var(--fade250);
+    background-image: 
+        radial-gradient(circle at 90% 80%, rgba(0, 0, 0, 0.05) 10%, rgba(0, 0, 0, 0.2) 40%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0.05) 90%);
+    background-size: 200% 200%;
+    content: "";
+    display: block;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    width: 100vw;
+}
+
+form {width: fit-content}
+
+input[type=text], input[type=number] {
+    background-color: var(--gray40);
+    border: 0;
+    color: var(--text-color2);
+    font-size: 1.2rem;
+    margin: 0 10px 0 10px;
+    padding: 2px 5px 2px 5px;
+    transform: translate(0, -3px);
+    width: 15.75rem;
+
+    &:hover {
+        -webkit-filter: invert(0.1);
+        cursor: pointer;
+        filter: invert(0.1);
+    }
+}
+
+input[type=button] {
+    background-color: var(--gray40);
+    border: 0;
+    border-radius: 3px;
+    color: var(--text-color2);
+    font-size: 1.2rem;
+    margin: 0 2px 0 2px;
+    padding: 2px 5px 2px 5px;
+    transform: translate(0, -3px);
+    width: fit-content;
+
+    &:hover {
+        -webkit-filter: invert(0.1);
+        cursor: pointer;
+        filter: invert(0.1);
+    }
+
+    &.selected {
+        -webkit-filter: invert(0.2);
+        filter: invert(0.2);
+    }
+}
+
+input[type=submit]:not(#loginButton) {
+    background-color: var(--gray40);
+    border: 0;
+    color: var(--text-color1);
+    font-size: 1.2rem;
+    margin-right: 10px;
+    padding: 2px 7px 2px 7px;
+    transform: translate(0, -3px);
+    width: fit-content;
+
+    &:hover {
+        -webkit-filter: invert(0.1);
+        cursor: pointer;
+        filter: invert(0.1);
+    }
+}
+
+nav {
+    background-color: var(--gray30);
+    border-right: var(--border);
+    height: 100vh;
+    position: absolute;
+    width: 20rem;
+}
+
+p {color: var(--text-color1)}
+
+select {
+    background-color: var(--gray30);
+    border: none;
+    color: var(--text-color2);
+    font-size: 1.2rem;
+    margin: 0 10px -6px 10px;
+    padding: 2px 5px 2px 5px;
+    transform: translate(0, -3px);
+    width: 15.75rem;
+
+    &:hover {
+        -webkit-filter: invert(0.1);
+        cursor: pointer;
+        filter: invert(0.1);
+    }
+}
+
+button.HOME {
+    aspect-ratio: 6/1;
+    background: url(/images/HomeButton.png) no-repeat;
+    background-color: var(--gray40);
+    background-size: cover;
+    border: 0;
+    color: white;
+    font-size: 1rem;
+    margin: 5%;
+    position: relative;
+    text-align: start;
+    width: 90%;
+
+    &:hover {
+        -webkit-filter: invert(0.1);
+        cursor: pointer;
+        filter: invert(0.1);
+    }
+}
+
+.acList {
+    background: var(--gray50);
+    color: var(--text-color1);
+    /*height: fit-content;*/
+    width: calc(100% - 20px);
+
+    & div {
+        margin: 5px;
+
+        &.autocomplete-active, &:hover {
+            cursor: default;
+            text-decoration: underline;
+        }
+
+        &.autocomplete-active {font-weight: bold;}
+
+        & span {
+            color: var(--text-color2)
+        }
+    }
+}
+
+.blur {
+    -webkit-filter: blur(3px) brightness(0.75);
+    filter: blur(3px) brightness(0.75);
+
+    transition: filter 0.3s ease-in-out;
+}
+
+.cardView {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.contextMenu {
+    background-color: var(--fade180);
+    border: var(--border);
+    border-radius: 5px;
+    display: none;
+    flex-direction: column;
+    height: 0;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: fixed;
+    overflow: hidden;
+    transition: height 0.3s ease, opacity 0.3s ease, left 0.2s ease, top 0.2s ease;
+    z-index: 3;
+}
+
+.contextMenu button {
+    background: none;
+    border: none;
+    color: var(--text-color2);
+    font-size: 1.3rem;
+    margin: 0;
+    padding: 5px 20px 5px 20px;
+    text-align: start;
+    white-space: nowrap;
+    
+    &.title {
+        color: var(--text-color1);
+        padding-bottom: 0;
+        text-align: center;
+    }
+
+    &:hover:not(.title, [name=remove]) {
+        background-color: rgba(255, 255, 255, 0.2);
+        filter: brightness(1.2);
+    }
+
+    &[name=remove]:hover {
+        background-color: rgba(240, 83, 83, 0.3);
+        filter: brightness(1.2);
+    }
+}
+
+.flexBar {
+    align-items: center;
+    display: flex;
+    width: 100%;
+}
+
+.header {
+    display: block;
+    margin-top: 75px;
+}
+
+.hideOnLoad {
+    visibility: hidden;
+}
+
+.navBar {
+    background-color: var(--gray30);
+    height: 5rem;
+    position: fixed;
+    width: 100vw;
+}
+
+.navLink {
+    background-color: var(--gray40);
+    color: var(--text-color2);
+    display: inline-block;
+    margin: 5px 5% 0 5%;
+    padding: 10px 0 10px 5px;
+    text-decoration: none;
+    width: calc(90% - 5px);
+
+    &.selected {
+        background-color: var(--gray60);
+        &:hover {background-color: var(--gray80);}
+    }
+
+    &:hover {background-color: var(--gray50);}
+
+    a {
+        color: white;
+        display: inline;
+    }
+}
+
+.progressBlock {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 3px;
+    position: absolute;
+    transition: width 1s linear;
+}
+
+#alertBox {
+    align-items: center;
+    background-color: var(--gray40);
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px black;
+    display: none;
+    flex-direction: column;
+    height: max-content;
+    /*justify-content: start;*/
+    left: 50vw;
+    opacity: 0;
+    padding: 15px 30px 15px 30px;
+    position: fixed;
+    top: 10rem;
+    transform: translate(-50%, 0);
+    transition: opacity 0.5s ease-in-out;
+    width: max-content;
+    z-index: 2;
+
+    &> .blockActions {
+        height: 100vh;
+        position: fixed;
+        top: -10rem;
+        width: 100vw;
+        z-index: -1;
+    }
+    &> .flexBar {
+        justify-content: space-around;
+        margin: 0 0 20px 0;
+    }
+    &> .flexBar button {
+        /*background: url("/images/ConfirmButton.png") no-repeat;*/
+        background-color: var(--gray80);
+        background-position: center;
+        background-size: cover;
+        border: 0;
+        border-radius: 5px;
+        color: white;
+        font-size: 1rem;
+        height: 2rem;
+        padding: 5px 25px 5px 25px;
+        width: fit-content;
+
+        &:hover {
+            -webkit-filter: invert(0.1);
+            cursor: pointer;
+            filter: invert(0.1);
+        }
+    }
+    &> h2 {
+        font-size: 1.7rem;
+        margin: 20px;
+    }
+    &> h4 {
+        font-size: 1.2rem;
+        margin: 0 20px 20px 20px
+    }
+}
+
+#brightnessFilter {
+    background-color: rgba(10, 10, 10, 0.5);
+    height: 100vh;
+    position: fixed;
+    width: 100vw;
+}
+
+#conditionInputCode {
+    background-color: var(--gray40);
+    border: 0;
+    color: var(--text-color1);
+    font-size: 1.2rem;
+    margin: 10px 10px 0 0;
+    padding: 2px 5px 2px 5px;
+    position: absolute;
+    width: 15.75rem;
+
+    &:hover {
+        -webkit-filter: invert(0.1);
+        cursor: pointer;
+        filter: invert(0.1);
+    }
+}
+
+#display {
+    height: 100vh;
+    left: calc(20rem + 30px);
+    overflow-y: auto;
+    padding-bottom: 100px;
+    position: absolute;
+    width: calc(100vw - 20rem - 30px);
+
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {display: none;}
+}
+
+#progressButton {
+    padding: 10px 0 0 0;
+    &> .progressBar {border-radius: 3px;}
+}
+
+#hrefBar, .hrefBar {
+    color: var(--text-color1);
+    position: relative;
+    z-index: 2;
+
+    &> a {
+        display: inline;
+
+        &:link {color: #5495ff;}
+        &:visited {color: #5495ff;}
+        &:hover {color: #5495ff;}
+        &:active {color: #5495ff;}
+    }
+}
+
+
+#login {
+    aspect-ratio: 12/1;
+    bottom: 0;
+    display: none;
+    height: 25px;
+    justify-content: space-between;
+    left: 0;
+    margin: 5%;
+    position: absolute;
+    width: 17.75rem;
+}
+
+#login input {
+    background-color: var(--gray40);
+    border: 0;
+    color: var(--text-color2);
+    font-size: 1rem;
+    text-align: start;
+    width: 15.75rem;
+
+    &:hover {
+        -webkit-filter: invert(0.1);
+        cursor: pointer;
+        filter: invert(0.1);
+    }
+}
+
+#login input[type=password] {width: calc(15.75rem);}
+#login #loginButton {width: fit-content;}
+
+#logout {
+    aspect-ratio: 12/1;
+    background-color: var(--gray40);
+    border: 0;
+    bottom: 0;
+    color: var(--text-color1);
+    display: none;
+    font-size: 1rem;
+    height: 25px;
+    justify-content: space-between;
+    left: 0;
+    margin: 5%;
+    padding-top: 3px;
+    position: absolute;
+    width: 17.75rem;
+
+    &:hover {
+        -webkit-filter: invert(0.1);
+        cursor: pointer;
+        filter: invert(0.1);
+    }
+}
+
+@keyframes gradientAnimation1 {
+    0% {
+        background-position: 100% 30%;
+    }
+    25% {
+        background-position: 50% 30%;
+    }
+    50% {
+        background-position: 20% 50%;
+    }
+    75% {
+        background-position: 35% 20%;
+    }
+    100% {
+        background-position: 100% 30%;
+    }
+}
+  
+@keyframes gradientAnimation2 {
+    0% {
+        background-position: 50% 25%;
+    }
+    25% {
+        background-position: 30% 30%;
+    }
+    50% {
+        background-position: 100% 40%;
+    }
+    75% {
+        background-position: 70% 65%;
+    }
+    100% {
+        background-position: 50% 25%;
+    }
+}

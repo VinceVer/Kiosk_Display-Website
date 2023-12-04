@@ -1,0 +1,30 @@
+:root {
+    --gray10: rgb(10, 10, 10);
+    --gray20: rgb(20, 20, 20);
+    --gray30: rgb(30, 30, 30);
+    --gray40: rgb(40, 40, 40);
+    --gray45: rgb(45, 45, 45);
+    --gray50: rgb(50, 50, 50);
+    --gray60: rgb(60, 60, 60);
+    --gray70: rgb(70, 70, 70);
+    --gray80: rgb(80, 80, 80);
+    --gray100: rgb(100, 100, 100);
+
+    --fade050: rgba(0, 0, 0, 0.5);
+    --fade180: rgba(10, 10, 10, 0.8);
+    --fade250: rgba(20, 20, 20, 0.5);
+
+    --text-color1: rgb(150, 150, 150);
+    --text-color2: rgb(255, 255, 255);
+
+    --link-color: rgb(76, 198, 255);
+    --alert-color: rgb(240, 83, 83);
+
+    --border: 1px solid var(--gray60);
+    --footer-height: 3rem;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+#settingsIcon {filter: invert(0.7)}

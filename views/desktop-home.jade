@@ -1,0 +1,192 @@
+doctype html
+html(lang='en')
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+
+    title Kiosk Display - #{config_data.location}
+
+    link#themeLink(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)
+    link(rel='stylesheet' href='/stylesheets/desktop.css')
+    link(rel='stylesheet' href='/stylesheets/desktop.anim.css')
+  body.fade
+    #brightnessFilter(style=`background-color: rgba(10, 10, 10, ${1 - layout.background_opacity / 100})`)
+    #anim_100_counter
+      div.number(data-iterations=1 data-end=1) 0
+      div.number(data-iterations=1 data-end=10) 0
+      div.number(data-iterations=10 data-end=100) 0
+      span %
+
+    nav#header
+      button.HOME(onclick="location.href = '/'") MAIN MENU
+      a.navLink(href="/desktop/layout") Change Layout
+      //a.navLink(href="/desktop/data") Data Analytics
+      //a.navLink(href="/desktop/") Link 2
+      //a.navLink(href="/desktop/") Link 3
+
+      div#hookT1.hook(data-alt_align="start")
+      div#hookT2.hook(data-alt_align="start")
+      //form#login(onsubmit="testPassword(this.parentNode.querySelector('input').value, event)")
+        input(type="password" placeholder=" Log in by entering the site key" required)
+        input#loginButton(type="submit" value="\u23CE")
+      //button#logout(onclick="testPassword('LOGOUT')") Click here to logout
+
+    #display(style="visibility: hidden")
+      .bar
+      #container
+      #overlay.clickToClose
+        #devices.data
+          h2 Connected Devices
+        .info.clickToClose
+          .banner
+            h1
+          .map
+        #applications.data
+          h2 Applications
+      #footer
+        .flexBar(style="display: inline-flex; gap: 0.25rem; margin: 0.25rem; width: fit-content")
+          button.appButton#app_AButton(onclick="openCloseApp('app_A', this)" class=`${layout.app_A_display === "block" ? "selected" : ""}`) !
+          button.appButton#app_5Button(onclick="openCloseApp('app_5', this)" class=`${layout.app_5_display === "block" ? "selected" : ""}`) ⚠
+          button.appButton#app_TButton(onclick="openCloseApp('app_T', this)" class=`${layout.app_T_display === "block" ? "selected" : ""}`) ⧖
+          button.appButton#app_HsButton(onclick="openCloseApp('app_Hs', this)" class=`${layout.app_Hs_display === "block" ? "selected" : ""}`) %
+          button.appButton#app_iButton(title="Infographic Overlay" onclick="openCloseApp('app_i', this)" class=`${layout.app_i_display === "block" ? "selected" : ""}`) i
+          //- button.appButton#app_RButton(onclick="openCloseApp('app_R', this)" class=`${layout.app_R_display === "block" ? "selected" : ""}`) R
+
+        div#hookL.hook(data-alt_align="end")
+        
+        h6#alert=misc_data.alert
+
+        div#hookR.hook(data-alt_align="end")
+    
+    #app_5.app
+      .header Reported Problems
+        button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
+      table
+        tbody
+    #app_Hs.app
+      .header
+        button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
+      p.health_score(style=`color: hsl(${misc_data.score-50 < 0 ? 0 : (misc_data.score-50)*2}, 100%, 65%)`) Health Score: #{misc_data.score}%
+    #app_T.app
+      .header
+        button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
+      p.last_check Last check:
+    #app_A.app
+      .header Alert options
+        button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
+      form(onsubmit="submitForm(event, this, '/update/misc.json/alert')")
+        .flexBar(style="margin: 10px 0 0 5px; width: fit-content") Enter an alert:
+          input(type="text", name="value" required)
+        .flexBar(style="gap: 10px; margin: 10px 0 0 5px; width: fit-content")
+          button Update
+          button Remove
+    #app_i.app
+      .header Display Info
+        button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
+      .flexBar(style="margin: 10px 0 0 5px; width: fit-content")
+        select.i_type(style="margin-right: 5px" onchange="app_iHandler(this.parentNode)")
+          option(value="" selected disabled) Select Datatype
+          option(value="coupons_printed") Coupons Printed
+          option(value="tags_printed") Tags Printed
+          option(value="coupons_printed + tags_printed") Coupons + Tags Printed
+        select.i_time(onchange="app_iHandler(this.parentNode)")
+          option(value="" selected disabled) Select Time window
+          option(value="last24h") Last 24h
+          option(value="lastWeek") Last 7d
+          option(value="lastMonth") Last 30d
+          option(value="thisWeek") Current Week
+          option(value="thisMonth") Current Month
+
+    #alertBox
+      h2
+      h4
+      .flexBar
+      .blockActions
+
+    #segment_CM.contextMenu
+      button.title
+      //button Open analytics
+      button(name="online") Change to Online
+      button(name="status") Modify status messages
+      button(name="remove") Remove from database
+
+    #tile_CM.contextMenu
+      button.title
+      button(name="ignore") Ignore status
+      button(name="online") Change to Online
+      button(name="remove") Remove from database
+
+    #templates(style="display: none")
+      table
+        tr#app_5Row
+          td.name
+          td.time
+      #segment.segment
+        .flexBar
+          h3
+          h4 test
+        .content
+          div
+        h5 Last seen: 
+
+    #data_storage(data-config_data=config_data data-status_database=status_database data-misc_data=misc_data style="display: none")
+
+    style.
+      :root {
+        --tag-size: #{layout.tag_size / 20 + "rem"};
+        --tile-size: #{layout.tile_size / 20 + "rem"};
+        --label-locations: #{layout.label_locations === "true" ? "inline-block" : "none"};
+      }
+
+      #app_5 {
+        display: #{layout.app_5_display || "none"};
+        height: #{layout.app_5_height || "fit-content"};
+        left: #{layout.app_5_left || "10px"};
+        bottom: #{layout.app_5_bottom || "calc(var(--footer-height) + 10px)"};
+        width: #{layout.app_5_width || "fit-content"};
+      }
+
+      #app_Hs {
+        display: #{layout.app_Hs_display || "none"};
+        height: #{layout.app_Hs_height || "fit-content"};
+        left: #{layout.app_Hs_left || "10px"};
+        bottom: #{layout.app_Hs_bottom || "calc(var(--footer-height) + 10px)"};
+        width: #{layout.app_Hs_width || "fit-content"};
+      }
+
+      #app_T {
+        display: #{layout.app_T_display || "none"};
+        height: #{layout.app_T_height || "fit-content"};
+        left: #{layout.app_T_left || "10px"};
+        bottom: #{layout.app_T_bottom || "calc(var(--footer-height) + 10px)"};
+        width: #{layout.app_T_width || "fit-content"};
+      }
+
+      #app_A {
+        display: #{layout.app_A_display || "none"};
+        height: #{layout.app_A_height || "fit-content"};
+        left: #{layout.app_A_left || "10px"};
+        bottom: #{layout.app_A_bottom || "calc(var(--footer-height) + 10px)"};
+        width: #{layout.app_A_width || "fit-content"};
+      }
+
+      #app_i {
+        display: #{layout.app_i_display || "none"};
+        height: #{layout.app_i_height || "fit-content"};
+        left: #{layout.app_i_left || "10px"};
+        bottom: #{layout.app_i_bottom || "calc(var(--footer-height) + 10px)"};
+        width: #{layout.app_i_width || "fit-content"};
+      }
+
+      .kiosk.urgency_-1 {--identifier-opacity: #{layout.urgency_1_tag || 0};}
+      .kiosk.urgency_0 {--identifier-opacity: #{layout.urgency0_tag || 0};}
+      .kiosk.urgency_1 {--identifier-opacity: #{layout.urgency1_tag || 0};}
+      .kiosk.urgency_2 {--identifier-opacity: #{layout.urgency2_tag || 0};}
+      .kiosk.urgency_3 {--identifier-opacity: #{layout.urgency3_tag || 0};}
+      .kiosk.urgency_4 {--identifier-opacity: #{layout.urgency4_tag || 0};}
+      .kiosk.urgency_5 {--identifier-opacity: 1;}
+      .kiosk.urgency_12 {--identifier-opacity: max(#{layout.urgency1_tag || 0}, #{layout.urgency2_tag || 0});}
+      .kiosk.urgency_42 {--identifier-opacity: max(#{layout.urgency4_tag || 0}, #{layout.urgency2_tag || 0});}
+
+    script(src='/javascripts/general-functions.js')
+    script(src='/javascripts/desktop-home.js')
+    script(src='/javascripts/desktop-home.anim.js')

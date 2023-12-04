@@ -1,0 +1,48 @@
+#settingsInput {
+    align-items: center;
+    /*background-color: var(--fade050);*/
+    display: flex;
+    height: calc(100vh - 5rem);
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 5rem;
+    width: 100vw;
+}
+
+.flexBar {
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+input {
+    color: var(--text-color1);
+}
+
+input[type=checkbox] {scale: 1.5;}
+input[type=range] {width: 100%;}
+
+.background_input {
+    border: 2px dashed var(--gray100);
+    padding: 10px;
+
+    &> label {
+        height: 100%;
+        margin: -12px 0 0 -12px;
+        position: absolute;
+        width: 100%;
+    }
+}
+
+.progressBar {
+    background-color: var(--gray100);
+    height: 5px;
+    margin: 0;
+    transition: width 1s linear;
+    width: 0;
+}
+
+#progressButton {
+    padding: 10px 0 0 0;
+    &> .progressBar {border-radius: 3px;}
+}

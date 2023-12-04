@@ -1,0 +1,70 @@
+.chip-data, .chip-error, .chip-warn, .chip-success, .chip-info {
+    border-radius: 2px;
+    color: black;
+    display: inline-block;
+    height: 20px;
+    margin: 5px 0 0 10px;
+    padding: 5px 10px 0px 10px;
+    width: fit-content;
+}
+
+.chip-data {color: var(--text-color1); background-color: var(--gray50);}
+.chip-error {background-color: #f16262;}
+.chip-warn {background-color: #f1d762;}
+.chip-success {background-color: #62f162;}
+.chip-info {background-color: #62b8f1;}
+
+.gridTile {
+    background-color: var(--gray40);
+    background-position: center;
+    background-size: cover;
+    border: 0;
+    border-radius: 3px;
+    box-sizing: border-box;
+    height: max-content;
+    margin: 10px 0 0 10px;
+    padding: 10px 20px 10px 20px;
+    text-align: left;
+    transition: box-shadow 0.3s ease;
+    width: max-content;
+
+    &:hover {
+        box-shadow: 0px 0px 10px white;
+        &.delete {box-shadow: 0px 0px 10px #f16262;}
+    }
+    &.small {
+        color: var(--text-color2);
+        font-size: 1.1rem;
+        padding: 5px 15px 5px 15px;
+        &:hover {box-shadow: 0px 0px 10px #f16262;}
+    }
+}
+
+.gridTile.addButton {
+    background-image: url(/images/addButton.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+input.gridTile {
+    background-color: var(--gray40);
+    border: 0;
+    border-radius: 3px;
+    font-size: 1rem;
+    font-weight: bold;
+    height: max-content;
+    margin: 10px 0 0 10px;
+    padding: 10px 20px 10px 20px;
+    text-align: center;
+    width: max-content;
+
+    &:hover {box-shadow: 0px 0px 10px white;}
+}
+
+
+#infoGrid > .gridTile {
+    height: 100px;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+    width: 250px;
+}

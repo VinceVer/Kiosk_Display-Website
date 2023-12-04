@@ -1,0 +1,176 @@
+@keyframes fall {
+    0% {rotate: 0deg;}
+    4%, 12%, 20%, 28%, 36% {rotate: -10deg;}
+    8%, 16%, 24%, 32% {rotate: 10deg;}
+    40% {rotate: 0deg;}
+    60% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(0, 120vh);
+    }
+}
+
+@keyframes grow {
+    0% {
+        box-shadow: 0 0 0px rgba(0, 0, 0, 0);
+        opacity: 1;
+        transform: translate(var(--margin-left), var(--margin-top)) scale(0) rotate(-360deg);
+
+        & p {opacity: 1;}
+    }
+    80% {
+        box-shadow: 0 0 50px var(--text-color2);
+        transform: translate(var(--margin-left), var(--margin-top)) scale(10) rotate(0deg);
+    }
+    85% {box-shadow: 0 0 50px var(--text-color2);}
+    85.5% {box-shadow: 0 0 50px #57c543;}
+    90% {
+        box-shadow: 0 0 50px #57c543;
+        opacity: 1;
+        transform: translate(var(--margin-left), var(--margin-top)) scale(10);
+
+        & p {opacity: 1;}
+    }
+    100% {
+        box-shadow: 0 0 100px rgba(0, 0, 0, 0);
+        opacity: 0;
+        transform: translate(100vw, var(--margin-top)) scale(10);
+
+        & p {opacity: 0;}
+    }
+}
+
+@keyframes nod {
+    0% {transform: translate(0, 0);}
+    10%, 30%, 50%, 70%, 90% {transform: translate(0, -10%);}
+    20%, 40%, 60%, 80% {transform: translate(0, 10%);}
+    100% {transform: translate(0, 0);}
+}
+
+@keyframes push_A {
+    0% {transform: translate(0, 0);}
+    23% {transform: translate(0, 0);}
+    25% {transform: translate(10%, 0) scaleX(0.8);}
+    40% {transform: translate(var(--margin-left), 0) rotate(0deg) scaleX(1);}
+    50% {transform: translate(var(--margin-left), 0) rotate(0deg);}
+    60% {transform: translate(var(--margin-left), 0) rotate(40deg) scale(1);}
+    62% {transform: translate(var(--margin-left), 0) rotate(40deg) scale(1);}
+    65% {transform: translate(var(--margin-left), 0) rotate(0deg) scale(1.5);}
+    68% {transform: translate(var(--margin-left), 0) rotate(0deg) scale(1);}
+    75% {
+        opacity: 1;
+        transform: translate(var(--margin-left), 0) rotate(0deg) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--margin-left), 100vh) rotate(360deg) scale(1);
+    }
+}
+
+@keyframes push_B {
+    0% {transform: translate(0, 0) scaleX(1);}
+    20% {transform: translate(-20%, 0) scaleX(0.6);}
+    25% {transform: translate(10%, 0) scaleX(1.2);}
+    30% {transform: translate(0, 0) scaleX(1);}
+    100% {transform: translate(0, 0);}
+}
+
+@keyframes shake {
+    0% {transform: translate(0, 0);}
+    10%, 30%, 50%, 70%, 90% {transform: translate(10%, 0);}
+    20%, 40%, 60%, 80% {transform: translate(-10%, 0);}
+    100% {transform: translate(0, 0);}
+}
+
+@keyframes spin {
+    0% {transform: translate(0, 0) rotate(0deg);}
+    100% {transform: translate(0, 0) rotate(1080deg);}
+}
+
+@keyframes stomp_A {
+    80% {transform: translate(0, 0) scaleY(1);}
+    90% {transform: translate(0, -10%) scaleY(0.8);}
+    100% {transform: translate(0, 0) scaleY(1);}
+}
+
+@keyframes stomp_B {
+    0% {transform: translate(0, 0);}
+    70% {transform: translate(0, 20%) scaleY(0.6);}
+    85% {transform: translate(0, -120%) scaleY(1);}
+    90% {transform: translate(0, 0);}
+    95% {transform: translate(0, 10%) scaleY(0.8);}
+    100% {transform: translate(0, 0) scaleY(1);}
+}
+
+@keyframes walk_wiggle { /* = spin */
+    0% {transform: translate(0, 0) rotate(-360deg);}
+    40% {transform: translate(var(--margin-left), 0) rotate(360deg);}
+    50% {transform: translate(var(--margin-left), 0) rotate(360deg);}
+    60% {transform: translate(var(--margin-left), 0) rotate(400deg) scale(1);}
+    62% {transform: translate(var(--margin-left), 0) rotate(400deg) scale(1);}
+    65% {transform: translate(var(--margin-left), 0) rotate(360deg) scale(1.5);}
+    68% {transform: translate(var(--margin-left), 0) rotate(360deg) scale(1);}
+    75% {
+        opacity: 1;
+        transform: translate(var(--margin-left), 0) rotate(360deg) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--margin-left), 100vh) rotate(720deg) scale(1);
+    }
+}
+
+@keyframes return {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(-360deg) scale(0);
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+}
+
+/* Apply the animation to an element */
+.fall {animation: fall 4s ease-in both;}
+.grow {animation: grow 15s ease-in both;}
+.nod {animation: nod 1s ease both;}
+.push_A {animation: push_A 5s ease-in both;}
+.push_B {animation: push_B 5s ease-in both;}
+.shake {animation: shake 1s ease both;}
+.spin {animation: spin 1s ease both;}
+.stomp_A {animation: stomp_A 2s ease both;}
+.stomp_B {animation: stomp_B 2s ease both;}
+.walk_wiggle {animation: walk_wiggle 5s ease-in both;}
+
+.return {animation: return 1s ease both;}
+
+#anim_100_counter {
+    align-items: start;
+    color: hsl(0, 100%, 65%);
+    display: none;
+    font-size: 15rem;
+    font-weight: bold;
+    height: 15rem;
+    left: 50%;
+    opacity: 0;
+    overflow: hidden;
+    position: fixed;
+    top: 50%;
+    translate: -50% -10rem;
+    transition: color 5s ease-out, opacity 2s ease;
+    z-index: 1;
+}
+
+#anim_100_counter div.number {
+    display: inline-block;
+    line-height: 15rem;
+    margin-right: -2rem;
+    text-align: center;
+    text-orientation: upright;
+    transition: transform 5s ease;
+    width: 12rem;
+    writing-mode: vertical-rl;
+}

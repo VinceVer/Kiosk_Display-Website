@@ -1,0 +1,150 @@
+:root {
+    --gray10: rgb(10, 10, 10);
+    --gray20: rgb(20, 20, 20);
+    --gray30: rgb(30, 30, 30);
+    --gray40: rgb(40, 40, 40);
+    --gray50: rgb(50, 50, 50);
+    --gray60: rgb(60, 60, 60);
+    --gray70: rgb(70, 70, 70);
+    --gray80: rgb(80, 80, 80);
+    --gray100: rgb(100, 100, 100);
+
+    --fade050: rgba(0, 0, 0, 0.5);
+    --fade180: rgba(10, 10, 10, 0.8);
+
+    --text-color1: rgb(150, 150, 150);
+    --text-color2: rgb(255, 255, 255);
+
+    --link-color: rgb(76, 198, 255);
+    --alert-color: rgb(240, 83, 83);
+
+    --border: 1px solid var(--gray60);
+    --footer-height: 3rem;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color1);
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-right: 10px;
+    width: fit-content;
+}
+
+h1 {
+    font-size: 5rem;
+    margin: 20px 0 0 0;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    width: 100%;
+}
+  
+body {
+    background-color: var(--gray20);
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    width: 100vw;
+}
+
+input[type=password] {
+    background-color: var(--gray40);
+    border: 0;
+    color: var(--text-color2);
+    font-size: 2rem;
+    height: 3rem;
+    margin: 0 10px 40px 10px;
+    padding: 2px 15px 2px 5px;
+    transform: translate(0, -3px);
+    width: 25.75rem;
+
+    &:hover {
+        -webkit-filter: invert(0.1);
+        cursor: pointer;
+        filter: invert(0.1);
+    }
+}
+
+input[type=submit] {
+    background-color: var(--gray40);
+    border: 0;
+    color: var(--text-color1);
+    font-size: 2rem;
+    height: 3.2rem;
+    margin-right: 10px;
+    padding: 2px 15px 2px 15px;
+    transform: translate(0, -3px);
+    width: fit-content;
+
+    &:hover {
+        -webkit-filter: invert(0.1);
+        cursor: pointer;
+        filter: invert(0.1);
+    }
+}
+
+@media screen and (orientation: portrait) {
+    nav {
+        background-color: var(--gray30);
+        border-bottom: var(--border);
+        height: 7rem;
+        position: relative;
+        top: -1px;
+        width: 100vw;
+
+        & button.HOME {
+            font-size: 2.5rem;
+        }
+    }
+}
+
+@media screen and (orientation: landscape) {
+    nav {
+        background-color: var(--gray30);
+        border-bottom: var(--border);
+        height: 3rem;
+        position: relative;
+        top: -1px;
+        width: 100vw;
+
+        & button.HOME {
+            font-size: 1rem;
+        }
+    }
+}
+
+button.HOME {
+    aspect-ratio: 6/1;
+    background: url(/images/HomeButton.png) no-repeat;
+    background-color: var(--gray40);
+    background-size: cover;
+    border: 0;
+    color: white;
+    height: 80%;
+    margin: 0.25rem;
+    position: relative;
+    text-align: start;
+
+    &:hover {
+        -webkit-filter: invert(0.1);
+        cursor: pointer;
+        filter: invert(0.1);
+    }
+}
+
+#loginBar {
+    align-items: center;
+    background-color: var(--gray30);
+    border-bottom: var(--border);
+    border-top: var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: fit-content;
+    -ms-transform: translateY(-50%);
+    position: fixed;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 100vw;
+}

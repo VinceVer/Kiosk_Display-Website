@@ -1,0 +1,121 @@
+:root {
+  --bg-color: rgb(20, 20, 20);
+  --bg-color-alt: rgb(30, 30, 30);
+  --card-color: rgb(23, 23, 23);
+}
+
+html {
+  font-size: 12px;
+}
+
+body {
+  background-color: var(--bg-color);
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  width: 100vw;
+}
+
+@media screen and (orientation: portrait) {
+  #tiles {
+    flex-direction: column;
+
+    height: 80vh;
+    left: 50%;
+    max-width: calc(30vw);
+    padding: 10vh 2rem 10vh 2rem;
+    top: 0;
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    width: calc(29rem);
+  }
+}
+
+@media screen and (orientation: landscape) {
+  #tiles {
+    flex-direction: row;
+
+    left: 0;
+    padding: 2rem 10vw 2rem 10vw;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 80vw;
+  }
+}
+
+.tile {
+  aspect-ratio: 1/1;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8%;
+  cursor: pointer;
+  display: flex;
+  flex-basis: 25rem;
+  flex-direction: column;
+  /*flex-shrink: 0;*/
+  position: relative;
+  /*width: 25rem;*/
+
+  &:hover::before {opacity: 1;}
+
+  &> .tile-content {
+      background-color: var(--card-color);
+      border-radius: inherit;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      inset: 1px;
+      padding: 10px;
+      position: absolute;
+      z-index: 2;
+  }
+}
+
+.tile::before,
+.tile::after {
+  border-radius: inherit;
+  content: "";
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+
+  transition: opacity 500ms;
+}
+
+.tile::before {
+  background: radial-gradient(
+      50rem circle at var(--mouse-x) var(--mouse-y),
+      rgba(255, 255, 255, 0.06),
+      transparent 40%
+  );
+  z-index: 3;
+}
+
+.tile::after {  
+  background: radial-gradient(
+    60rem circle at var(--mouse-x) var(--mouse-y), 
+    rgba(255, 255, 255, 0.4),
+    transparent 40%
+  );
+  z-index: 1;
+}
+
+#tiles {
+  align-items: center;
+  background-color: var(--bg-color-alt);
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  /*left: 0;*/
+  /*padding: 2rem 10vw 2rem 10vw;*/
+  position: fixed;
+  /*top: 50%;*/
+  /*-ms-transform: translateY(-50%);*/
+  /*transform: translateY(-50%);*/
+  /*width: 80vw;*/
+
+  &:hover > .tile::after {opacity: 1;}
+}

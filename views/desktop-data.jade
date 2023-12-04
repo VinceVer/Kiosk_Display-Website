@@ -1,0 +1,76 @@
+doctype html
+html(lang='en')
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)
+    link(rel='stylesheet' href='/jquery/jquery-ui.min.css')
+    link(rel='stylesheet' href='/jquery/jquery-ui-timepicker-addon.min.css')
+    link(rel='stylesheet' href='/jquery/jquery-ui.theme.css')
+    link(rel='stylesheet' href='/stylesheets/desktop.css')
+    link(rel='stylesheet' href='/stylesheets/desktop-data.css')
+
+  body.fade
+    script(src='/jquery/jquery.min.js')
+    script(src='/jquery/jquery-ui.min.js')
+    script(src='/jquery/jquery-ui-timepicker-addon.js')
+
+    #brightnessFilter(style=`background-color: rgba(10, 10, 10, 0.8)`)
+
+    nav#header
+      button.HOME(onclick="location.href = '/desktop'") RETURN TO DISPLAY
+      a.navLink(href="/desktop/layout") Change Layout
+      a.navLink(href="/desktop/data") Data Analytics
+
+    #display(style="visibility: visible")
+      #options
+        #options_1
+          p What to include:
+        #options_2
+          p Start time:
+          input#start_time(type="text" autocomplete="off")
+        #options_3
+          p End time:
+          input#end_time(type="text" autocomplete="off")
+              
+      #footer
+
+    #alertBox
+      h2
+      h4
+      .flexBar
+      .blockActions
+
+    #templates(style="display: none")
+      button#optPanelButton
+        div
+          img(src="/images/MenuPointer.svg")
+          p Club
+        input(type="checkbox")
+      button#optButton
+        p CKB 01-02
+        input(type="checkbox")
+
+    #data_storage(data-config_data=config_data data-status_database=status_database data-misc_data=misc_data style="display: none")
+
+    style.
+      :root {
+        --tag-size: #{layout.tag_size / 20 + "rem"};
+        --tile-size: #{layout.tile_size / 20 + "rem"};
+        --label-locations: #{layout.label_locations === "true" ? "inline-block" : "none"};
+      }
+
+      body {
+        background-image: url(#{"/images/"+layout.background_file});
+      }
+
+      .kiosk.urgency_-1 {--identifier-opacity: #{layout.urgency_1_tag || 0};}
+      .kiosk.urgency_1 {--identifier-opacity: #{layout.urgency1_tag || 0};}
+      .kiosk.urgency_2 {--identifier-opacity: #{layout.urgency2_tag || 0};}
+      .kiosk.urgency_3 {--identifier-opacity: #{layout.urgency3_tag || 0};}
+      .kiosk.urgency_4 {--identifier-opacity: #{layout.urgency4_tag || 0};}
+      .kiosk.urgency_5 {--identifier-opacity: 1;}
+      .kiosk.urgency_12 {--identifier-opacity: max(#{layout.urgency1_tag || 0}, #{layout.urgency2_tag || 0});}
+      .kiosk.urgency_42 {--identifier-opacity: max(#{layout.urgency4_tag || 0}, #{layout.urgency2_tag || 0});}
+
+    script(src='/javascripts/general-functions.js')
+    script(src='/javascripts/desktop-data.js')

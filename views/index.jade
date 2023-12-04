@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    link(rel='stylesheet' href='/stylesheets/main.css')
+  body
+    #tiles
+      a.tile(href='/desktop')
+        .tile-content(style="background-image: url(/images/DesktopTile.jpg); background-size: contain;")
+      a.tile(href='/mobile')
+        .tile-content(style="background-image: url(/images/MobileTile.jpg); background-size: contain;")
+      a.tile(href='/settings')
+        .tile-content(style="background-image: url(/images/SettingsTile.jpg); background-size: contain;")
+    script(src='/javascripts/effects.js')
+    script.
+      if (/Mobi|Android/i.test(navigator.userAgent)) {
+        location.href = "/mobile"
+      }
