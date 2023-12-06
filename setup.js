@@ -91,8 +91,6 @@ async function Setup() {
     }
 };
 
-Setup();
-
 const setupNewFiles = () => {
     return new Promise(async resolve => {
         try {
@@ -133,3 +131,5 @@ function runStartFile() {
         console.error(`stderr: ${stderr}`);
     });
 }
+
+Setup();
