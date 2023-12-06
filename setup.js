@@ -9,11 +9,7 @@ const path = require('path');
  * Initialize information:
  */
 
-const yamlData = fs.readFileSync('../.database/bin/.imap-config.yaml', 'utf8');
-const imapConfig = yaml.load(yamlData);
-const config_data = JSON.parse(fs.readFileSync('./storage/config.json'));
-const oauth_data = JSON.parse(fs.readFileSync('./storage/oauth.json'));
-const promptTotal = 8;
+const promptTotal = 10;
 let promptCounter = 0;
 
 function promptAndSaveData(prompt) {
@@ -39,6 +35,11 @@ function promptAndSaveData(prompt) {
 async function Setup() {
     await setupNewFiles();
 
+    const yamlData = fs.readFileSync('../.database/bin/.imap-config.yaml', 'utf8');
+    const imapConfig = yaml.load(yamlData);
+    const config_data = JSON.parse(fs.readFileSync('./storage/config.json'));
+    const oauth_data = JSON.parse(fs.readFileSync('./storage/oauth.json'));
+
     const promptedData = {};
     process.stdout.write('\x1b[2J');
     process.stdout.write('\x1b[34m---------------------------------------------------------------------------\x1b[36m');
@@ -48,6 +49,8 @@ async function Setup() {
 
     promptedData.email = await promptAndSaveData(`Enter the email adress to fetch status updates from (example: email_adress@service.com):\nDefault = ${imapConfig.user}\n > `);
     promptedData.app_password = await promptAndSaveData(`Enter the app password for the email account (example: abcd efgh ijkl mnop):\nDefault = **** **** **** ****\n > `);
+    promptedData.host = await promptAndSaveData(`Enter the your email service host (example: imap-mail.outlook.com):\nDefault = ${imapConfig.host}\n > `);
+    promptedData.port = await promptAndSaveData(`Enter the IMAP port of your email service (gmail and outlook use 993 for secure connections):\nDefault = ${imapConfig.port}\n > `);
     promptedData.location = await promptAndSaveData(`Eter the location where the display will be used (example: Antarctica Airport):\nDefault = ${config_data.location}\n > `);
     promptedData.desktop_key = await promptAndSaveData(`Enter the password for the desktop version:\nDefault = ${oauth_data.passwords.desktop ? "*****" : "admin"}\n > `);
     promptedData.mobile_key = await promptAndSaveData(`Enter the password for the mobile version:\nDefault = ${oauth_data.passwords.mobile ? "*****" : "user"}\n > `);
@@ -60,6 +63,8 @@ async function Setup() {
     try {
         if (promptedData.email.replaceAll(" ","")) imapConfig.user = promptedData.email;
         if (promptedData.app_password.replaceAll(" ","")) imapConfig.password = promptedData.app_password;
+        if (promptedData.host.replaceAll(" ","")) imapConfig.host = promptedData.host;
+        if (!isNaN(Number(promptedData.port))) imapConfig.port = promptedData.port;
         if (promptedData.location.replaceAll(" ","")) config_data.location = promptedData.location;
         if (promptedData.desktop_key) oauth_data.passwords.desktop = promptedData.desktop_key;
         if (promptedData.mobile_key) oauth_data.passwords.mobile = promptedData.mobile_key;
