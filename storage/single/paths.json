@@ -1,0 +1,41 @@
+{
+    "add": [
+        {
+            "file": "config.json",
+            "path": ".website/storage"
+        },
+        {
+            "file": "misc.json",
+            "path": ".website/storage"
+        },
+        {
+            "file": "oauth.json",
+            "path": ".website/storage"
+        },
+        {
+            "file": "queue.json",
+            "path": ".website/storage"
+        },
+        {
+            "file": "status_database.json",
+            "path": ".database/bin"
+        },
+        {
+            "file": ".imap-config.yaml",
+            "path": ".database/bin"
+        },
+        {
+            "file": "favicon.ico",
+            "path": ".website"
+        },
+        {
+            "file": "www",
+            "path": ".website/bin"
+        },
+        {
+            "file": "hub-connection.txt",
+            "path": ".website/storage"
+        }
+    ],
+    "del": []
+}

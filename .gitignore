@@ -1,0 +1,13 @@
+# Ignore directories
+node_modules/
+.git/
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+
+# Ignore other files
+package-lock.json
+.gitignore

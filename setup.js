@@ -37,6 +37,8 @@ function promptAndSaveData(prompt) {
 
 
 async function Setup() {
+    await setupNewFiles();
+
     const promptedData = {};
     process.stdout.write('\x1b[2J');
     process.stdout.write('\x1b[34m---------------------------------------------------------------------------\x1b[36m');
@@ -68,13 +70,13 @@ async function Setup() {
         fs.writeFileSync('./storage/oauth.json', JSON.stringify(oauth_data, null, "\t"));
 
         try {
-            await fsp.rename('../bin/Start_-_DO_NOT_EXECUTE.bat', '../Start.bat');
-            await fsp.unlink('../Install.bat');
+            await fsp.rename('storage/single/Start_toMove.bat', '../Start.bat');
+            await fsp.unlink('../Installer.bat');
         } catch (error) {}
 
-        process.stdout.write('\x1b[32mSetup Completed.\x1b[0m The Database and Website will start in 10 seconds.')
-        console.log('To cancel, press "CTRL + C"')
-        console.log("Setup finished. Executing program in 10 seconds.")
+        process.stdout.write('\x1b[32mSetup Completed.\x1b[0m The Database and Website will start in 10 seconds.');
+        console.log('To cancel, press "CTRL + C"');
+        console.log("Setup finished. Executing program in 10 seconds.");
 
         setTimeout(function() {
             runStartFile();
@@ -85,6 +87,34 @@ async function Setup() {
 };
 
 Setup();
+
+const setupNewFiles = () => {
+    return new Promise(async resolve => {
+        try {
+            const paths = JSON.parse(fs.readFileSync('storage/single/paths.json'));
+
+            for (let item of paths.add) {
+                await fsp.access(`../${item.path}`, fs.constants.F_OK, async (err) => {
+                    if (err) {
+                        await fsp.rename(`storage/single/${item.file}`, `../${item.path}`);
+                    } else {
+                        await fsp.unlink(`storage/single/${item.file}`);
+                    }
+                });
+            }
+
+            for (let item of paths.del) {
+                await fsp.access(`../${item.path}`, fs.constants.F_OK, async (err) => {
+                    if (!err) await fsp.unlink(`../${item.path}`);
+                });
+            }
+
+            resolve();
+        } catch (err) {
+            resolve();
+        }
+    });
+}
 
 function runStartFile() {
     const fullPath = path.join(__dirname, '..', 'start.bat');

@@ -19,7 +19,7 @@ if (window.innerWidth > window.innerHeight) {
 }
 
 const loadGrid = () => {
-    if (misc_data.alert.replace(" ") !== "") {
+    if (!misc_data.alert.replaceAll(" ")) {
         document.getElementById("header").innerText = misc_data.alert;
         document.getElementById("header").classList.add("alert");
     }
@@ -627,7 +627,7 @@ setInterval(async function() {
     misc_data = await (await fetch('/storage/misc.json')).json();
     updateAppP();
     updateAppT();
-    if (misc_data.alert.replace(" ") !== "") {
+    if (!misc_data.alert.replaceAll(" ")) {
         document.getElementById("header").innerText = misc_data.alert;
         document.getElementById("header").classList.add("alert");
     } else {

@@ -1,0 +1,5 @@
+user: example@gmail.com
+password: abcd efgh ijkl mnop
+host: imap.gmail.com
+port: 993
+tls: true

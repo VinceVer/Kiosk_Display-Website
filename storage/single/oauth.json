@@ -1,0 +1,7 @@
+{
+	"passwords": {
+		"desktop": "admin",
+		"mobile": "user",
+		"settings": "admin"
+	}
+}

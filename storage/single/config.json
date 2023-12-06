@@ -1,0 +1,295 @@
+{
+	"location": "Antarctica",
+	"layout": {
+		"align_labels": true,
+		"background_file": "Background.png",
+		"background_opacity": 72,
+		"label_locations": true,
+		"tag_size": 30,
+		"theme": "dark",
+		"tile_animations": true,
+		"tile_size": 60
+	},
+	"applications": {},
+	"status_messages": {
+		"conn": {
+			"name": "Connection Status",
+			"codes": {
+				"0": {
+					"icon": "❔",
+					"default": "Unknown...",
+					"messages": [
+						"Unknown..."
+					],
+					"static": true
+				},
+				"1": {
+					"icon": "⚠️",
+					"default": "Status Inaccurate!",
+					"messages": [
+						"Status Inaccurate!"
+					]
+				},
+				"2": {
+					"icon": "🟢",
+					"default": "Online",
+					"messages": [
+						"Online"
+					]
+				},
+				"3": {
+					"icon": "🔴",
+					"default": "Offline",
+					"messages": [
+						"Offline"
+					]
+				},
+				"4": {
+					"icon": "🔴",
+					"default": "Power Off",
+					"messages": [
+						"Power Off"
+					]
+				},
+				"5": {
+					"icon": "🔴",
+					"default": "Unreachable",
+					"messages": [
+						"Unreachable"
+					]
+				}
+			}
+		},
+		"fault": {
+			"name": "Fault Status",
+			"codes": {
+				"1": {
+					"icon": "⚠️",
+					"default": "Status Inaccurate!",
+					"messages": [
+						"Status Inaccurate!"
+					]
+				},
+				"2": {
+					"icon": "🟢",
+					"default": "OK",
+					"messages": [
+						"OK"
+					]
+				},
+				"3": {
+					"icon": "🔴",
+					"default": "Error",
+					"messages": [
+						"Error"
+					]
+				}
+			}
+		},
+		"mediabin1": {
+			"name": "Mediabin1 Status",
+			"codes": {
+				"1": {
+					"icon": "⚠️",
+					"default": "Status Inaccurate!",
+					"messages": [
+						"Status Inaccurate!"
+					]
+				},
+				"2": {
+					"icon": "🟢",
+					"default": "OK",
+					"messages": [
+						"OK"
+					]
+				},
+				"3": {
+					"icon": "🟡",
+					"default": "Low on Paper",
+					"messages": [
+						"Low on Paper"
+					]
+				},
+				"4": {
+					"icon": "🔴",
+					"default": "No Paper",
+					"messages": [
+						"No Paper"
+					]
+				},
+				"5": {
+					"icon": "🔴",
+					"default": "Not Available",
+					"messages": [
+						"Not Available"
+					]
+				}
+			}
+		},
+		"app": {
+			"name": "Application Status",
+			"codes": {
+				"11": {
+					"urgency_level": 2,
+					"icon": "🟣",
+					"default": "Initializing",
+					"messages": [
+						"Initializing"
+					]
+				},
+				"12": {
+					"urgency_level": 1,
+					"icon": "🟡",
+					"default": "Suspended",
+					"messages": [
+						"Suspended"
+					]
+				},
+				"13": {
+					"urgency_level": 2,
+					"icon": "🟣",
+					"default": "Disabled",
+					"messages": [
+						"Disabled"
+					]
+				},
+				"14": {
+					"urgency_level": 2,
+					"icon": "🟣",
+					"default": "Unavailable",
+					"messages": [
+						"Unavailable"
+					]
+				},
+				"15": {
+					"urgency_level": -1,
+					"icon": "🟢",
+					"default": "Available",
+					"messages": [
+						"Available"
+					]
+				},
+				"16": {
+					"urgency_level": -1,
+					"icon": "🟢",
+					"default": "Active",
+					"messages": [
+						"Active"
+					]
+				},
+				"404": {
+					"urgency_level": 0,
+					"icon": "❔",
+					"static": true,
+					"messages": [
+						"Undefined Status"
+					]
+				},
+				"408": {
+					"urgency_level": 0,
+					"icon": "🔵",
+					"default": "Not Responding",
+					"messages": [
+						"Not Responding"
+					]
+				}
+			}
+		}
+	},
+	"groups": [
+		{
+			"name": "Example Group",
+			"locations": [
+				{
+					"name": "Example Location",
+					"selectors": [
+						"ACT1AKRC__",
+						"ACT1AKRC",
+						"(_ is optional)",
+						"You may_remove the_examples"
+					]
+				}
+			]
+		}
+	],
+	"table_naming": {
+		"conn_status": "_conn_status",
+		"device_name": "_device_name",
+		"device_status": "_device_status",
+		"execution_status": "execution_status",
+		"fault_status": "_fault_status",
+		"kiosk_name": "name",
+		"last_execution": "last_execution_time",
+		"last_seen": "last_seen",
+		"mediabin1_status": "_mediabin1_status",
+		"paper_jams": "paper_jam",
+		"running_app_list": "RunningAppList",
+		"service_connection": "_service_connection",
+		"tags_printed": "tags_printed",
+		"target_status": "target_status",
+		"unavailable_app_list": "UnavailableAppList"
+	},
+	"ignored_apps": [
+		"Example App"
+	],
+	"urgency_conditions": {
+		"0": {
+			"text": "🔵 Unknown value",
+			"inputs": []
+		},
+		"1": {
+			"text": "🟡 Low priority",
+			"inputs": [
+				{
+					"applies_to": [
+						"*"
+					],
+					"condition": "data[indices.mediabin1_status] === 3",
+					"name": "Default"
+				}
+			]
+		},
+		"3": {
+			"text": "🟠 Medium priority",
+			"inputs": []
+		},
+		"4": {
+			"text": "🔴 High priority",
+			"inputs": [
+				{
+					"applies_to": [
+						"BTP",
+						"GPP",
+						"LSR",
+						"OCR"
+					],
+					"condition": "data[indices.conn_status] > 2 || data[indices.fault_status] > 2 || data[indices.mediabin1_status] > 3",
+					"name": "Default"
+				},
+				{
+					"applies_to": [
+						"PMT"
+					],
+					"condition": "data[indices.device_status] !== 2 || data[indices.service_connection] !== 2",
+					"name": "Default: PMT"
+				}
+			]
+		},
+		"5": {
+			"text": "⚠️ Highest priority",
+			"inputs": [
+				{
+					"applies_to": [
+						"*"
+					],
+					"condition": "data[indices.conn_status] === 1 || data[indices.fault_status] === 1 || data[indices.mediabin1_status] === 1",
+					"name": "Default"
+				}
+			]
+		}
+	},
+	"misc_conditions": {
+		"database_filter$ALL": "!(data[indices.kiosk_name].includes(\"AMS\") && data[indices.device_name].includes(\".\"))",
+		"database_filter$APP": "data[indices.kiosk_name].includes(\"AMS\")"
+	}
+}
