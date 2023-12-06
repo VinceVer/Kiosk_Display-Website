@@ -91,32 +91,27 @@ async function Setup() {
     }
 };
 
-const setupNewFiles = () => {
-    return new Promise(async resolve => {
-        try {
-            const paths = JSON.parse(fs.readFileSync('storage/single/paths.json'));
+const setupNewFiles = async () => {
+    try {
+        const paths = JSON.parse(fs.readFileSync('storage/single/paths.json'));
 
-            for (let item of paths.add) {
-                await fsp.access(`../${item.path}`, fs.constants.F_OK, async (err) => {
-                    if (err) {
-                        await fsp.rename(`storage/single/${item.file}`, `../${item.path}`);
-                    } else {
-                        await fsp.unlink(`storage/single/${item.file}`);
-                    }
-                });
+        for (let item of paths.add) {
+            console.log(item)
+            try {
+                await fsp.access(`../${item.path}/${item.file}`, fs.constants.F_OK);
+                await fsp.unlink(`storage/single/${item.file}`);
+            } catch (error) {
+                await fsp.rename(`storage/single/${item.file}`, `../${item.path}/${item.file}`);
             }
-
-            for (let item of paths.del) {
-                await fsp.access(`../${item.path}`, fs.constants.F_OK, async (err) => {
-                    if (!err) await fsp.unlink(`../${item.path}`);
-                });
-            }
-
-            resolve();
-        } catch (err) {
-            resolve();
         }
-    });
+
+        for (let item of paths.del) {
+            try {
+                await fsp.access(`../${item.path}/${item.file}`, fs.constants.F_OK);
+                await fsp.unlink(`../${item.path}/${item.file}`);
+            } catch (error) {}
+        }
+    } catch (err) {}
 }
 
 function runStartFile() {
