@@ -500,6 +500,7 @@ button.HOME {
     justify-content: space-evenly;
     height: calc(100vh - 3rem);
     margin: -7.5rem 0 0 2rem;
+    overflow-y: auto;
     width: calc(100% - 4rem);
 }
 

@@ -64,7 +64,7 @@ async function Setup() {
         if (promptedData.email.replaceAll(" ","")) imapConfig.user = promptedData.email;
         if (promptedData.app_password.replaceAll(" ","")) imapConfig.password = promptedData.app_password;
         if (promptedData.host.replaceAll(" ","")) imapConfig.host = promptedData.host;
-        if (!isNaN(Number(promptedData.port))) imapConfig.port = promptedData.port;
+        if (!isNaN(Number(promptedData.port || undefined))) imapConfig.port = promptedData.port;
         if (promptedData.location.replaceAll(" ","")) config_data.location = promptedData.location;
         if (promptedData.desktop_key) oauth_data.passwords.desktop = promptedData.desktop_key;
         if (promptedData.mobile_key) oauth_data.passwords.mobile = promptedData.mobile_key;

@@ -2,6 +2,18 @@ doctype html
 html
   head
     link(rel='stylesheet' href='/stylesheets/main.css')
+    style.
+      #version_num {
+        color: #3e3e3e;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 3rem;
+        margin: 0;
+        position: fixed;
+        text-align: center;
+        top: calc(50vh + 15rem);
+        width: 100vw;
+      }
+
   body
     #tiles
       a.tile(href='/desktop')
@@ -10,6 +22,9 @@ html
         .tile-content(style="background-image: url(/images/MobileTile.jpg); background-size: contain;")
       a.tile(href='/settings')
         .tile-content(style="background-image: url(/images/SettingsTile.jpg); background-size: contain;")
+
+    h6#version_num Display Version #{version}
+
     script(src='/javascripts/effects.js')
     script.
       if (/Mobi|Android/i.test(navigator.userAgent)) {

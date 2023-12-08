@@ -5,6 +5,7 @@ var router = express.Router();
 const sqlite3 = require('sqlite3');
 const Database = new sqlite3.Database(__dirname+'/../../.database/bin/main-database.db');
 const oauthKeys = JSON.parse(fs.readFileSync(__dirname+'/../storage/oauth.json')).passwords;
+const websiteVersion = JSON.parse(fs.readFileSync(__dirname+'/../package.json')).version;
 
 const customStorage = (destination) => {
     return multer.diskStorage({
@@ -24,7 +25,9 @@ router.use(express.json());
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-    res.render('index');
+    res.render('index', {
+        version: websiteVersion
+    });
 });
 
 router.get('/status-database', (req, res) => {

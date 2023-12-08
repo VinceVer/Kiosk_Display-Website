@@ -4,6 +4,7 @@ let misc_data = JSON.parse(document.getElementById("data_storage").dataset.misc_
 const segment_contextMenu = document.getElementById("segment_CM");
 const overlay = document.getElementById("overlay");
 const settings = document.getElementById("settings");
+const searchInput = document.querySelector('#search input');
 let pressTimer;
 
 const clickEvent = new MouseEvent("click", {
@@ -15,11 +16,11 @@ const clickEvent = new MouseEvent("click", {
 if (window.innerWidth > window.innerHeight) {
     location.href = "/mobile/grid";
 } else {
-    document.getElementById("kiosk_table").style.height = window.innerHeight - document.getElementById("header").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    document.getElementById("kiosk_table").style.height = (window.innerHeight - document.getElementById("header").offsetHeight - document.getElementById("search").offsetHeight - document.getElementById("footer").offsetHeight) + "px";
 }
 
 const loadGrid = () => {
-    if (!misc_data.alert.replaceAll(" ")) {
+    if (misc_data.alert.replaceAll(" ", "")) {
         document.getElementById("header").innerText = misc_data.alert;
         document.getElementById("header").classList.add("alert");
     }
@@ -82,7 +83,6 @@ const loadGrid = () => {
     });
 
     document.getElementById("kiosk_table").addEventListener("scroll", function() {clearTimeout(pressTimer);})
-    document.getElementById("kiosk_table").style.height = window.innerHeight - document.getElementById("header").offsetHeight - document.getElementById("footer").offsetHeight + "px";
 
     document.getElementById("display").style.visibility = "visible";
 
@@ -148,7 +148,7 @@ const appendData = async (kiosk) => {
             for (let property in device) {
                 if (!property.includes("status_") && !property.includes("urgency_")) {
                     const text = document.createElement('h5');
-                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property] : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
+                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
                     querySelector('.content div').appendChild(text);
                 }
             }
@@ -211,7 +211,7 @@ const appendData = async (kiosk) => {
             for (let property in application) {
                 if (!property.includes("status_") && !property.includes("urgency_")) {
                     const text = document.createElement('h5');
-                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property] : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
+                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
                     querySelector('.content div').appendChild(text);
                 }
             }
@@ -529,6 +529,18 @@ document.querySelectorAll('.contextMenu').forEach(element => {
     });
 });
 
+searchInput.addEventListener('input', function() {
+    searchInput.value = searchInput.value.toUpperCase();
+
+    document.querySelectorAll('#kiosk_table table tbody tr').forEach(row => {
+        if (row.id.includes(searchInput.value)) {
+            row.style.display = "table-row";
+        } else {
+            row.style.display = "none"
+        }
+    });
+});
+
 setInterval(async function() {
     status_database = await (await fetch('/status-database')).json();
     
@@ -567,6 +579,8 @@ setInterval(async function() {
         document.querySelectorAll('tbody tr').forEach((item, index) => {
             if (index % 2 === 0) {
                 item.style.backgroundColor = "var(--gray40)";
+            } else {
+                item.style.removeProperty("background-color");
             }
         });
     } else {
@@ -590,7 +604,7 @@ setInterval(async function() {
                 for (let property in device) {
                     if (!property.includes("status_") && !property.includes("urgency_")) {
                         const text = document.createElement('h5');
-                        text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property] : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
+                        text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
                         querySelector('.content div').appendChild(text);
                     }
                 }
@@ -614,7 +628,7 @@ setInterval(async function() {
                 for (let property in application) {
                     if (!property.includes("status_") && !property.includes("urgency_")) {
                         const text = document.createElement('h5');
-                        text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property] : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
+                        text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
                         querySelector('.content div').appendChild(text);
                     }
                 }
@@ -627,7 +641,7 @@ setInterval(async function() {
     misc_data = await (await fetch('/storage/misc.json')).json();
     updateAppP();
     updateAppT();
-    if (!misc_data.alert.replaceAll(" ")) {
+    if (misc_data.alert.replaceAll(" ", "")) {
         document.getElementById("header").innerText = misc_data.alert;
         document.getElementById("header").classList.add("alert");
     } else {

@@ -677,6 +677,14 @@ button.HOME {
         line-height: 2rem;
     }
 
+    .center {
+        height: 3rem;
+        left: 50%;
+        margin: 0;
+        position: absolute;
+        translate: -50% 0;
+    }
+
     & h6 {
         color: var(--alert-color);
         font-size: 1.5rem;

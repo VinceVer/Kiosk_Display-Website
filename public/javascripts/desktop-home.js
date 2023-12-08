@@ -114,7 +114,7 @@ const appendData = async (kioskIndex) => {
                 if (!property.includes("status_")) {
                     const text = document.createElement('h5');
                     text.id = property;
-                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property] : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
+                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
                     querySelector('.content div').appendChild(text);
                 }
             }
@@ -156,7 +156,7 @@ const appendData = async (kioskIndex) => {
                 if (!property.includes("status_")) {
                     const text = document.createElement('h5');
                     text.id = property;
-                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property] : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
+                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
                     querySelector('.content div').appendChild(text);
                 }
             }
@@ -234,7 +234,7 @@ const appendData_GROUP = async (groupName) => {
                         for (let property in device) {
                             if (!property.includes("status_") && !property.includes("urgency_")) {
                                 const text = document.createElement('h5');
-                                text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property] : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
+                                text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
                                 querySelector('.content div').appendChild(text);
                             }
                         }
@@ -269,7 +269,7 @@ const appendData_GROUP = async (groupName) => {
                         for (let property in application) {
                             if (!property.includes("status_") && !property.includes("urgency_")) {
                                 const text = document.createElement('h5');
-                                text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property] : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
+                                text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
                                 querySelector('.content div').appendChild(text);
                             }
                         }
@@ -1074,7 +1074,7 @@ if (!location.href.includes("desktop/layout")) {
                             for (let property in device) {
                                 if (!property.includes("status_") && !property.includes("urgency_")) {
                                     const text = document.createElement('h5');
-                                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property] : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
+                                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
                                     querySelector('.content div').appendChild(text);
                                 }
                             }
@@ -1096,7 +1096,7 @@ if (!location.href.includes("desktop/layout")) {
                             for (let property in application) {
                                 if (!property.includes("status_") && !property.includes("urgency_")) {
                                     const text = document.createElement('h5');
-                                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property] : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
+                                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
                                     querySelector('.content div').appendChild(text);
                                 }
                             }

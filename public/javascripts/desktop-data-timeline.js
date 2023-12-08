@@ -1,118 +1,182 @@
 const config_data = JSON.parse(document.getElementById("data_storage").dataset.config_data);
 let status_database = JSON.parse(document.getElementById("data_storage").dataset.status_database);
 let misc_data = JSON.parse(document.getElementById("data_storage").dataset.misc_data);
-const dataBar = document.getElementById("dataBar");
-let groupedData = {};
-const groupedBy = "device_name";
+//const dataBar = document.getElementById("dataBar");
+let timeline_data, grouped_data = {};
+const maxRange = 86400;
 
 const loadGrid = async () => {
     const currentTime = new Date();
     const endTime = Math.floor(currentTime.getTime() / 1000);
-    const startTime = endTime - 80000;
-    const timeRange = endTime - startTime;
+    currentTime.setHours(0, 0, 0, 0);
+    const startTime = Math.floor(currentTime.getTime() / 1000);
 
-    const timeline_fields = await (await fetch(`/database?query=SELECT DISTINCT device_name FROM devicetimeline WHERE time BETWEEN ${startTime} AND ${endTime} ORDER BY device_name`)).json();
-    const timeline_data = await (await fetch(`/database?query=SELECT * FROM devicetimeline WHERE time BETWEEN ${startTime} AND ${endTime} ORDER BY device_name, time`)).json();
-    console.log(timeline_data.time)
+    timeline_data = (await (await fetch(`http://85.148.75.164:9000/database?query=SELECT time, kiosk_name, from_urgency_level, to_urgency_level FROM kiosktimeline WHERE time BETWEEN ${startTime} AND ${endTime} ORDER BY kiosk_name, time DESC`)).json()).data;
+    console.log(timeline_data);
 
-    for (let item of timeline_data.data) {
-        if (!groupedData[item[groupedBy]]) {
-            groupedData[item[groupedBy]] = [];
-
-            const timeline = dataBar.cloneNode(true);
-            timeline.id = item[groupedBy];
-            timeline.querySelector('.title').innerText = item[groupedBy];
-            document.getElementById("timeline").appendChild(timeline);
-        }
-        groupedData[item[groupedBy]].push(item);
+    for (let item of timeline_data) {
+        if (!grouped_data[item.kiosk_name]) grouped_data[item.kiosk_name] = [];
+        grouped_data[item.kiosk_name].push(item);
     }
 
-    console.log(groupedData);
+    for (let group of config_data.groups) {
+        const groupElement = document.createElement('div');
 
-    for (let groupName in groupedData) {
-        const group = groupedData[groupName];
-        const groupContainer = document.getElementById(groupName).querySelector('.info');
+        with (groupElement) {
+            id = group.name;
+            classList.add("group");
+            appendChild(document.createElement('h1'));
+            querySelector('h1').innerText = group.name;
+            querySelector('h1').addEventListener("click", () => {
+                history.pushState(null, null, `/desktop/g/${group.name}`);
+                appendData_GROUP(group.name);
+            });
 
-        for (let itemIndex in group) {
-            const timeBar = document.createElement('div');
-            const item = group[itemIndex];
-            const relativePosition = (item.time - startTime) / timeRange * 100;
+            for (let location of group.locations) {
+                const locationElement = document.createElement('div');
+                
+                with (locationElement) {
+                    id = location.name;
+                    classList.add("location");
+                    appendChild(document.createElement('h2'));
+                    querySelector('h2').innerText = location.name+":";
+                }
 
-            if (itemIndex === "0") {
-                const timeBarL = document.createElement('div');
-                timeBarL.style.marginLeft = "calc(var(--line-height) * -1)";
-                timeBarL.style.width = `calc(${relativePosition}% + var(--line-height) - 5px)`;
-                timeBarL.classList.add(`urgency_${item.from_urgency_level}`);
-
-                groupContainer.appendChild(timeBarL);
+                appendChild(locationElement);
             }
+        }
 
-            if (item.from_urgency_level === item.to_urgency_level) {
-                const lastBar = groupContainer.lastElementChild;
-                lastBar.style.width = itemIndex < (group.length - 1)
-                    ? `calc(${lastBar.offsetWidth}px + ${(group[Number(itemIndex)+1].time - item.time) / timeRange * 100}%)`
-                    : `calc(${lastBar.offsetWidth}px + ${100 - relativePosition}%)`;
+        document.getElementById("container").appendChild(groupElement);
+        sortItems(groupElement, '.location');
+    }
+
+    for (let kioskIndex in status_database) {
+        if (status_database[kioskIndex].location !== ".undefined" && document.getElementById(status_database[kioskIndex].location)) {
+            const div = document.createElement('div');
+
+            div.id = status_database[kioskIndex].id;
+            div.dataset.oldest_report = status_database[kioskIndex].oldest_report;
+            div.dataset.urgency_level = status_database[kioskIndex].urgency_level;
+            div.style.opacity = localStorage.getItem(`${div.id}.IGNORE`) === "true" ? 0.2 : 1;
+            div.appendChild(document.createElement('p'))
+            div.querySelector('p').innerText = status_database[kioskIndex].id.slice(-3);
+            div.classList.add("kiosk", "urgency_"+status_database[kioskIndex].urgency_level);
+            div.addEventListener("click", () => {
+                history.pushState(null, null, `/desktop/k/${kioskIndex}`);
+                appendData(kioskIndex);
+            });
+            div.addEventListener("contextmenu", (event) => {
+                loadContextMenu_TILE(event, div);
+            });
+
+            document.getElementById(status_database[kioskIndex].location).appendChild(div);
+        }
+    }
+
+    document.querySelectorAll('.location').forEach(location => sortTiles(location));
+
+    updateLocations();
+
+    document.getElementById("display").style.visibility = "visible";
+
+    if (location.href.includes("/k/")) appendData(location.href.split("/k/")[1]);
+    if (location.href.includes("/g/")) appendData_GROUP(location.href.split("/g/")[1]);
+
+    let background_file = getCookie("background_file");
+    console.log(background_file, "&", getCookie(`background_extension[${config_data.location}]`));
+    if (!background_file.includes(".")) background_file = `${background_file}.${getCookie(`background_extension[${config_data.location}]`)}`;
+    document.body.style.backgroundImage = `url(/images/${background_file})`;
+}
+
+const calculateSpan = (container) => {
+    document.querySelectorAll('.group').forEach(element => {
+        let maxSpan = 0;
+
+        if (getCookie("align_labels") === "true") {
+            container.querySelectorAll('.location').forEach(element => {
+                if (element.children.length !== 1) {
+                    const labelWidth = element.querySelector('h2').offsetWidth;
+                    if (labelWidth > maxSpan) {maxSpan = labelWidth};
+                }
+            });
+        } else {
+            maxSpan = null;
+        }
+
+        container.querySelectorAll('.location').forEach((element) => {
+            if (element.children.length !== 1) {
+                element.style.display = "grid";
+                const listWidth = element.parentNode.offsetWidth;
+                const labelWidth = maxSpan || element.querySelector('h2').offsetWidth;
+                const tileWidth = element.querySelector('div').offsetWidth + 4;
+                const tiles = element.children.length - 1;
+
+                const fitTiles = Math.round(labelWidth / tileWidth);
+                element.querySelector('h2').style.gridColumn = "span "+fitTiles;
+
+                const fitHeight = Math.ceil(tiles / (Math.floor(listWidth / tileWidth) - fitTiles))
+                element.querySelector('h2').style.gridRow = "span "+fitHeight;
+
+                element.dataset.tiles_per_row = Math.floor(listWidth / tileWidth) - fitTiles;
             } else {
-                timeBar.style.marginLeft = relativePosition + "%";
-                timeBar.style.width = itemIndex < (group.length - 1)
-                    ? `calc(${(group[Number(itemIndex)+1].time - item.time) / timeRange * 100}% - 5px)`
-                    : 100 - relativePosition + "%";
-                timeBar.classList.add(`urgency_${item.to_urgency_level}`);
-                groupContainer.appendChild(timeBar);
+                element.style.display = "none";
             }
-        }
-        if (!document.getElementById(groupName).querySelector('.info div:not(.urgency_-1):not(.infoBar)')) {
-            document.getElementById(groupName).style.display = "none";
-        }
-    }
-}
-
-const alert = (info) => {
-    console.log(info)
-    const alertBox = document.getElementById("alertBox");
-
-    with (alertBox) {
-        style.display = "flex";
-
-        querySelector('h2').style.display = info.title ? "inline" : "none";
-        querySelector('h2').innerHTML = info.title;
-
-        querySelector('h4').style.display = info.description ? "inline" : "none";
-        (info.description && info.description.includes("\n"))
-            ? querySelector('h4').innerText = info.description
-            : querySelector('h4').innerHTML = info.description;
-
-        querySelectorAll('.flexBar button').forEach(element => element.remove());
-        for (let buttonIndex in info.buttons) {
-            const button = document.createElement('button');
-            button.innerText = info.buttons[buttonIndex].text;
-            if (info.buttons[buttonIndex].invert) {button.style.filter = "invert("+ (isNaN(Number(button.invert)) ? "0.85" : String(button.invert)) +")"}
-            console.log("invert("+ isNaN(Number(button.invert)) ? "0.85" : String(button.invert) +")")
-            button.addEventListener("click", info.buttons[buttonIndex].action);
-            querySelector('.flexBar').appendChild(button);
-        }
-    }
-
-    document.body.querySelectorAll('nav, #display, #settingsInput').forEach(element => {
-        //element.classList.add("blur");
-        element.style.filter = "blur(3px) brightness(0.75)";
+        });
     });
-
-    setTimeout(() => {document.getElementById("alertBox").style.opacity = 1}, 100);
 }
 
-const getCookie = (cookieName) => {
-    const name = cookieName + "=";
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const cookieArray = decodedCookie.split(';');
-  
-    for (let i = 0; i < cookieArray.length; i++) {
-        let cookie = cookieArray[i].trim();
-        if (cookie.indexOf(name) === 0) {
-            return cookie.substring(name.length, cookie.length);
+const sortItems = (container, selector) => {
+    const locations = Array.from(container.querySelectorAll(selector));
+    
+    const quickSort = (arr) => {
+        if (arr.length <= 1) {
+            return arr;
         }
+        
+        const pivot = arr[Math.floor(arr.length / 2)].id;
+        const left = arr.filter(item => item.id < pivot);
+        const middle = arr.filter(item => item.id == pivot);
+        const right = arr.filter(item => item.id > pivot);
+        
+        return [...quickSort(left), ...middle, ...quickSort(right)];
     }
-    return null; // Return null if the cookie is not found
+
+    const sortedLocations = quickSort(locations);
+
+    // Clear the container
+    container.querySelectorAll(selector).forEach(location => location.remove())
+
+    // Append sorted tiles back to the container
+    for (const location of sortedLocations) {
+        container.appendChild(location);
+    }
+}
+
+const sortTiles = (container) => {
+    const tiles = Array.from(container.querySelectorAll('.kiosk'));
+    
+    const quickSort = (arr) => {
+        if (arr.length <= 1) {
+            return arr;
+        }
+        
+        const pivot = arr[Math.floor(arr.length / 2)].id.slice(-3);
+        const left = arr.filter(item => item.id.slice(-3) < pivot);
+        const middle = arr.filter(item => item.id.slice(-3) == pivot);
+        const right = arr.filter(item => item.id.slice(-3) > pivot);
+        
+        return [...quickSort(left), ...middle, ...quickSort(right)];
+    }
+
+    const sortedTiles = quickSort(tiles);
+
+    // Clear the container
+    container.querySelectorAll('.kiosk').forEach(tile => tile.remove())
+
+    // Append sorted tiles back to the container
+    for (const tile of sortedTiles) {
+        container.appendChild(tile);
+    }
 }
 
 const submitForm = (event, form, url, alertInfo) => {
@@ -156,4 +220,48 @@ const submitForm = (event, form, url, alertInfo) => {
     });
 }
 
+const updateGrid = (time) => {
+    const unixTimestamp = time + (new Date().setHours(0, 0, 0, 0) / 1000);
+    const currentTime = Math.floor((new Date).getTime() / 1000)
+
+    let currentUrgency, group;
+    for (let kioskName in grouped_data) {
+        currentUrgency = Number(document.getElementById(kioskName).dataset.urgency_level);
+        let found = false;
+
+        for (let item of grouped_data[kioskName]) {
+            if (item.time < unixTimestamp || unixTimestamp > currentTime) {
+                if (item.to_urgency_level !== currentUrgency) {
+                    updateUrgency(document.getElementById(kioskName), item.to_urgency_level);
+                }
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {updateUrgency(document.getElementById(kioskName), grouped_data[kioskName][grouped_data[kioskName].length-1].from_urgency_level)}
+    }
+}
+
+const updateLocations = () => {
+    document.querySelectorAll('.group').forEach(element => {
+        calculateSpan(element);
+    });
+}
+
+const updateUrgency = (tile, newUrgency) => {
+    tile.classList.forEach(className => {
+        if (className.includes("urgency_")) {
+            tile.classList.remove(className)
+        }
+    });
+    tile.classList.add("urgency_"+newUrgency);
+    tile.dataset.oldest_report = status_database[tile.id].oldest_report;
+    tile.dataset.urgency_level = newUrgency;
+}
+
 loadGrid();
+
+document.getElementById("time_slider").addEventListener('input', (e) => {
+    updateGrid(Number(e.target.value));
+});

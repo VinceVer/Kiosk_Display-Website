@@ -19,16 +19,12 @@ html(lang='en')
     nav#header
       button.HOME(onclick="location.href = '/'") MAIN MENU
       a.navLink(href="/desktop/layout") Change Layout
-      //a.navLink(href="/desktop/data/timeline") Timeline
+      a.navLink(href="/desktop/data/timeline") Timeline
       //a.navLink(href="/desktop/") Link 2
       //a.navLink(href="/desktop/") Link 3
 
       div#hookT1.hook(data-alt_align="start")
       div#hookT2.hook(data-alt_align="start")
-      //form#login(onsubmit="testPassword(this.parentNode.querySelector('input').value, event)")
-        input(type="password" placeholder=" Log in by entering the site key" required)
-        input#loginButton(type="submit" value="\u23CE")
-      //button#logout(onclick="testPassword('LOGOUT')") Click here to logout
 
     #display(style="visibility: hidden")
       .bar
@@ -53,7 +49,7 @@ html(lang='en')
 
         div#hookL.hook(data-alt_align="end")
         
-        h6#alert=misc_data.alert
+        input.center#time_slider(type="range" max=86400 value=(Math.floor((new Date() - new Date().setHours(0, 0, 0, 0)) / 1000)) step=900)
 
         div#hookR.hook(data-alt_align="end")
     
@@ -187,6 +183,10 @@ html(lang='en')
       .kiosk.urgency_12 {--identifier-opacity: max(#{layout.urgency1_tag || 0}, #{layout.urgency2_tag || 0});}
       .kiosk.urgency_42 {--identifier-opacity: max(#{layout.urgency4_tag || 0}, #{layout.urgency2_tag || 0});}
 
+      #time_slider {
+        width: 30vw;
+      }
+
     script(src='/javascripts/general-functions.js')
-    script(src='/javascripts/desktop-home.js')
+    script(src='/javascripts/desktop-data-timeline.js')
     script(src='/javascripts/desktop-home.anim.js')

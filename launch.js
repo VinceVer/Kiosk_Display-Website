@@ -111,7 +111,7 @@ const getLatestRelease = async () => {
 };
 
 const downloadFiles = (version, type) => {
-    setLine('\x1b[36mDownloading files...');
+    setLine('\x1b[36mDownloading files...\r');
     return new Promise(async (resolve, reject) => {
         try {
             const response = await axios({
@@ -142,7 +142,7 @@ const downloadFiles = (version, type) => {
 }
 
 const extractTarball = async (tarballPath, extractTo) => {
-    setLine('\x1b[36mExtracting files...');
+    setLine('\x1b[36mExtracting files...\r');
     try {
         // Create a read stream for the downloaded tarball
         const tarballReadStream = fs.createReadStream(tarballPath);
@@ -175,7 +175,7 @@ const extractTarball = async (tarballPath, extractTo) => {
 };
 
 const copyContents = async (source, destination) => {
-    setLine('\x1b[36mInstalling updated files...');
+    setLine('\x1b[36mInstalling updated files...\r');
     return new Promise(async (resolve, reject) => {
         try {
             // Copy all contents of the source directory to the destination directory
@@ -200,7 +200,7 @@ const copyContents = async (source, destination) => {
 };
 
 const setupNewFiles = () => {
-    setLine('\x1b[36mVerifying...');
+    setLine('\x1b[36mVerifying...\r');
     return new Promise(async resolve => {
         try {
             const paths = JSON.parse(fs.readFileSync('storage/single/paths.json'));

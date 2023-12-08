@@ -719,7 +719,7 @@ const refreshGradient = () => {
 
     document.querySelectorAll('.kiosk').forEach(tile => {
         //console.log(kioskData[tile.id], maxNetCoupons, 100);
-        tile.style.backgroundColor = mapNumberToHex((kioskData[tile.id].net_value - minValue) / maxValue * 100);
+        if (kioskData[tile.id]) tile.style.backgroundColor = mapNumberToHex((kioskData[tile.id].net_value - minValue) / maxValue * 100);
         setTimeout(function() {
             tile.style.opacity = 1;
         }, Math.random() * 1000);
