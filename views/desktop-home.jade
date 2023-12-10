@@ -19,7 +19,8 @@ html(lang='en')
     nav#header
       button.HOME(onclick="location.href = '/'") MAIN MENU
       a.navLink(href="/desktop/layout") Change Layout
-      //a.navLink(href="/desktop/data/timeline") Timeline
+      a.navLink(href="/desktop/data/gradient") Gradient
+      a.navLink(href="/desktop/data/timeline") Timeline
       //a.navLink(href="/desktop/") Link 2
       //a.navLink(href="/desktop/") Link 3
 
@@ -48,7 +49,7 @@ html(lang='en')
           button.appButton#app_5Button(onclick="openCloseApp('app_5', this)" class=`${layout.app_5_display === "block" ? "selected" : ""}`) ⚠
           button.appButton#app_TButton(onclick="openCloseApp('app_T', this)" class=`${layout.app_T_display === "block" ? "selected" : ""}`) ⧖
           button.appButton#app_HsButton(onclick="openCloseApp('app_Hs', this)" class=`${layout.app_Hs_display === "block" ? "selected" : ""}`) %
-          button.appButton#app_iButton(title="Infographic Overlay" onclick="openCloseApp('app_i', this)" class=`${layout.app_i_display === "block" ? "selected" : ""}`) i
+          //- button.appButton#app_iButton(title="Infographic Overlay" onclick="openCloseApp('app_i', this)" class=`${layout.app_i_display === "block" ? "selected" : ""}`) i
           //- button.appButton#app_RButton(onclick="openCloseApp('app_R', this)" class=`${layout.app_R_display === "block" ? "selected" : ""}`) R
 
         div#hookL.hook(data-alt_align="end")
@@ -79,22 +80,22 @@ html(lang='en')
         .flexBar(style="gap: 10px; margin: 10px 0 0 5px; width: fit-content")
           button Update
           button Remove
-    #app_i.app
-      .header Display Info
-        button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
-      .flexBar(style="margin: 10px 0 0 5px; width: fit-content")
-        select.i_type(style="margin-right: 5px" onchange="app_iHandler(this.parentNode)")
-          option(value="" selected disabled) Select Datatype
-          option(value="coupons_printed") Coupons Printed
-          option(value="tags_printed") Tags Printed
-          option(value="coupons_printed + tags_printed") Coupons + Tags Printed
-        select.i_time(onchange="app_iHandler(this.parentNode)")
-          option(value="" selected disabled) Select Time window
-          option(value="last24h") Last 24h
-          option(value="lastWeek") Last 7d
-          option(value="lastMonth") Last 30d
-          option(value="thisWeek") Current Week
-          option(value="thisMonth") Current Month
+    //- #app_i.app
+    //-   .header Display Info
+    //-     button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
+    //-   .flexBar(style="margin: 10px 0 0 5px; width: fit-content")
+    //-     select.i_type(style="margin-right: 5px" onchange="app_iHandler(this.parentNode)")
+    //-       option(value="" selected disabled) Select Datatype
+    //-       option(value="coupons_printed") Coupons Printed
+    //-       option(value="tags_printed") Tags Printed
+    //-       option(value="coupons_printed + tags_printed") Coupons + Tags Printed
+    //-     select.i_time(onchange="app_iHandler(this.parentNode)")
+    //-       option(value="" selected disabled) Select Time window
+    //-       option(value="last24h") Last 24h
+    //-       option(value="lastWeek") Last 7d
+    //-       option(value="lastMonth") Last 30d
+    //-       option(value="thisWeek") Current Week
+    //-       option(value="thisMonth") Current Month
 
     #alertBox
       h2

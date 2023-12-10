@@ -14,11 +14,25 @@ html(lang='en')
     nav#header
       button.HOME(onclick="location.href = '/desktop'") RETURN TO DISPLAY
       a.navLink(href="/desktop/layout") Change Layout
-      a.navLink(href="/desktop/data") Data Analytics
+      a.navLink.selected(href="/desktop/data/gradient") Gradient
+      a.navLink(href="/desktop/data/timeline") Timeline
       //a.navLink(href="/desktop/") Link 2
       //a.navLink(href="/desktop/") Link 3
 
-      div#hookT1.hook(data-alt_align="start")
+      div#hookT1S.hook_static(data-alt_align="start" style="transition: box-shadow 0.3s ease")
+        .flexBar(style="margin: 10px 0 0 5px; width: fit-content")
+          select.i_type(style="margin-right: 5px" onchange="app_iHandler(this.parentNode)")
+            option(value="" selected disabled) Select Datatype
+            option(value="coupons_printed") Coupons Printed
+            option(value="tags_printed") Tags Printed
+            option(value="paper_jams") Paper Jams (inverted)
+          select.i_time(onchange="app_iHandler(this.parentNode)")
+            option(value="" selected disabled) Select Time window
+            option(value="last_24h") Last 24h
+            option(value="last_Week") Last 7d
+            option(value="last_Month") Last 30d
+            option(value="this_Week") Current Week
+            option(value="this_Month") Current Month
       div#hookT2S.hook_static(name="gradient" data-alt_align="start" style=`background: linear-gradient(to right, rgb(${layout.gradient_start || "255, 0, 0"}), rgb(${layout.gradient_end || "0, 255, 0"}))`)
         .flexBar
           div
@@ -50,7 +64,7 @@ html(lang='en')
           button.appButton#app_5Button(onclick="openCloseApp('app_5', this)" class=`${layout.app_5_display === "block" ? "selected" : ""}`) ⚠
           button.appButton#app_TButton(onclick="openCloseApp('app_T', this)" class=`${layout.app_T_display === "block" ? "selected" : ""}`) ⧖
           button.appButton#app_HsButton(onclick="openCloseApp('app_Hs', this)" class=`${layout.app_Hs_display === "block" ? "selected" : ""}`) %
-          button.appButton#app_iButton(title="Infographic Overlay" onclick="openCloseApp('app_i', this)" class=`${layout.app_i_display === "block" ? "selected" : ""}`) i
+          //- button.appButton#app_iButton(title="Infographic Overlay" onclick="openCloseApp('app_i', this)" class=`${layout.app_i_display === "block" ? "selected" : ""}`) i
           //- button.appButton#app_RButton(onclick="openCloseApp('app_R', this)" class=`${layout.app_R_display === "block" ? "selected" : ""}`) R
 
         div#hookL.hook(data-alt_align="end")
@@ -75,22 +89,22 @@ html(lang='en')
       .header Alert options
         button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
       p(style=`color: var(--text-color2)`) Alert options is disabled
-    #app_i.app
-      .header Display Info
-        button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
-      .flexBar(style="margin: 10px 0 0 5px; width: fit-content")
-        select.i_type(style="margin-right: 5px" onchange="app_iHandler(this.parentNode)")
-          option(value="" selected disabled) Select Datatype
-          option(value="coupons_printed") Coupons Printed
-          option(value="tags_printed") Tags Printed
-          option(value="coupons_printed + tags_printed") Coupons + Tags Printed
-        select.i_time(onchange="app_iHandler(this.parentNode)")
-          option(value="" selected disabled) Select Time window
-          option(value="last24h") Last 24h
-          option(value="lastWeek") Last 7d
-          option(value="lastMonth") Last 30d
-          option(value="thisWeek") Current Week
-          option(value="thisMonth") Current Month
+    //- #app_i.app
+    //-   .header Display Info
+    //-     button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
+    //-   .flexBar(style="margin: 10px 0 0 5px; width: fit-content")
+    //-     select.i_type(style="margin-right: 5px" onchange="app_iHandler(this.parentNode)")
+    //-       option(value="" selected disabled) Select Datatype
+    //-       option(value="coupons_printed") Coupons Printed
+    //-       option(value="tags_printed") Tags Printed
+    //-       option(value="coupons_printed + tags_printed") Coupons + Tags Printed
+    //-     select.i_time(onchange="app_iHandler(this.parentNode)")
+    //-       option(value="" selected disabled) Select Time window
+    //-       option(value="last_24h") Last 24h
+    //-       option(value="last_Week") Last 7d
+    //-       option(value="last_Month") Last 30d
+    //-       option(value="this_Week") Current Week
+    //-       option(value="this_Month") Current Month
 
     #alertBox
       h2
@@ -102,6 +116,10 @@ html(lang='en')
       button.title
       button Open analytics
       button(name="online") Change to Online
+
+    .tooltip(for="tile")
+      .tooltip-content Date
+      .tooltip-arrow
 
     #templates(style="display: none")
       table
@@ -175,5 +193,5 @@ html(lang='en')
       }
 
     script(src='/javascripts/general-functions.js')
-    script(src='/javascripts/desktop-infographics.js')
+    script(src='/javascripts/desktop-data-gradient.js')
     script(src='/javascripts/desktop-home.anim.js')

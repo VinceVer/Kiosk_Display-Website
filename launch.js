@@ -18,6 +18,10 @@ const branch = 'master'
 const downloadPath = path.join(__dirname, 'storage', 'update.tar.gz');
 const extractTo = path.join(__dirname, 'storage', 'update');
 
+if (!fs.existsSync(__dirname+"/storage/update")) {
+    fs.mkdirSync(__dirname+"/storage/update", { recursive: true });
+}
+
 function promptAndSaveData(prompt) {
     return new Promise(resolve => {
         const rl = readline.createInterface({

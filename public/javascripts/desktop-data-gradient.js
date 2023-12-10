@@ -1,6 +1,6 @@
 const config_data = JSON.parse(document.getElementById("data_storage").dataset.config_data);
 let status_database = JSON.parse(document.getElementById("data_storage").dataset.status_database);
-let misc_data;
+let data, kioskData, misc_data;
 const segment_contextMenu = document.getElementById("segment_CM");
 const tile_contextMenu = document.getElementById("tile_CM");
 
@@ -19,10 +19,7 @@ const loadGrid = () => {
             classList.add("group");
             appendChild(document.createElement('h1'));
             querySelector('h1').innerText = group.name;
-            querySelector('h1').addEventListener("click", () => {
-                history.pushState(null, null, `/desktop/g/${group.name}`);
-                appendData_GROUP(group.name);
-            });
+            querySelector('h1').addEventListener("click", () => {appendData_GROUP(group.name)})
 
             for (let location of group.locations) {
                 const locationElement = document.createElement('div');
@@ -46,19 +43,20 @@ const loadGrid = () => {
         if (status_database[kioskIndex].location !== ".undefined" && document.getElementById(status_database[kioskIndex].location)) {
             const div = document.createElement('div');
 
-            div.id = status_database[kioskIndex].id;
-            div.dataset.oldest_report = status_database[kioskIndex].oldest_report;
-            div.style.opacity = localStorage.getItem(`${div.id}.IGNORE`) === "true" ? 0.2 : 1;
-            div.appendChild(document.createElement('p'))
-            div.querySelector('p').innerText = status_database[kioskIndex].id.slice(-3);
-            div.classList.add("kiosk", "urgency_"+status_database[kioskIndex].urgency_level);
-            div.addEventListener("click", () => {
-                history.pushState(null, null, `/desktop/k/${kioskIndex}`);
-                appendData(kioskIndex);
-            });
-            div.addEventListener("contextmenu", (event) => {
-                loadContextMenu_TILE(event, div);
-            });
+            with (div) {
+                id = status_database[kioskIndex].id;
+                dataset.oldest_report = status_database[kioskIndex].oldest_report;
+                //style.opacity = localStorage.getItem(`${div.id}.IGNORE`) === "true" ? 0.2 : 1;
+                style.opacity = 0; //--------------------//
+                appendChild(document.createElement('p'))
+                querySelector('p').innerText = status_database[kioskIndex].id.slice(-3);
+                classList.add("kiosk");
+                addEventListener("click", () => {appendData(kioskIndex);});
+                addEventListener("contextmenu", (event) => {
+                    loadContextMenu_TILE(event, div);
+                });
+                addEventListener("mouseover", () => {showTooltip(div);});
+            }
 
             document.getElementById(status_database[kioskIndex].location).appendChild(div);
         }
@@ -67,30 +65,38 @@ const loadGrid = () => {
     document.querySelectorAll('.location').forEach(location => sortTiles(location));
 
     updateLocations();
+    loadOverlay(getCookie("overlay"));
+    visualizeData();
 
     document.getElementById("display").style.visibility = "visible";
 
-    if (location.href.includes("/k/")) appendData(location.href.split("/k/")[1]);
-    if (location.href.includes("/g/")) appendData_GROUP(location.href.split("/g/")[1]);
-
-    let background_file = getCookie("background_file");
-    console.log(background_file, "&", getCookie(`background_extension[${config_data.location}]`));
-    if (!background_file.includes(".")) background_file = `${background_file}.${getCookie(`background_extension[${config_data.location}]`)}`;
-    document.body.style.backgroundImage = `url(/images/${background_file})`;
+    loadApps();
 }
 
 const app_iHandler = (bar) => {
     const type = bar.querySelector('.i_type').value,
-          time = bar.querySelector('.i_time').value;
+          time = bar.querySelector('.i_time').value.replaceAll("_","");
 
     if (type !== "" && time !== "") {
-        const condition = type.split(" + ").map(segment => segment + "%20IS%20NOT%20NULL").join("%20OR%20");
-        location.href = `/desktop/info?query=SELECT%20kiosk_name,%20device_name,%20start_value,%20end_value%20FROM%20(SELECT%20kiosk_name,%20device_name,%20FIRST_VALUE(${type})%20OVER%20(PARTITION%20BY%20device_name%20ORDER%20BY%20time%20ASC)%20AS%20start_value,%20FIRST_VALUE(${type})%20OVER%20(PARTITION%20BY%20device_name%20ORDER%20BY%20time%20DESC)%20AS%20end_value%20FROM%20devicetimeline%20WHERE%20time%20BETWEEN%20${getUnixTimestamp(time)}%20AND%20${getUnixTimestamp()}%20AND%20(${condition}))%20AS%20subquery%20GROUP%20BY%20device_name%20ORDER%20BY%20kiosk_name`;
+        const condition = type.split(" + ").map(segment => segment + "%20IS%20NOT%20NULL").join("%20AND%20");
+
+        document.querySelectorAll('.kiosk').forEach(tile => {
+            tile.style.transition = "opacity 1.5s ease"
+            setTimeout(function() {
+                tile.style.opacity = 0
+            }, Math.random() * 500);
+        });
+
+        setTimeout(function() {
+            history.pushState(null, null, `/desktop/data/gradient?query=SELECT%20kiosk_name,%20device_name,%20start_value,%20end_value%20FROM%20(SELECT%20kiosk_name,%20device_name,%20FIRST_VALUE(${type})%20OVER%20(PARTITION%20BY%20device_name%20ORDER%20BY%20time%20ASC)%20AS%20start_value,%20FIRST_VALUE(${type})%20OVER%20(PARTITION%20BY%20device_name%20ORDER%20BY%20time%20DESC)%20AS%20end_value%20FROM%20devicetimeline%20WHERE%20time%20BETWEEN%20${getUnixTimestamp(time)}%20AND%20${getUnixTimestamp()}%20AND%20${condition})%20AS%20subquery%20GROUP%20BY%20device_name%20ORDER%20BY%20kiosk_name`);
+            visualizeData();
+            document.getElementById("alert").innerHTML = `<span style="color: var(--text-color1)">Currently displaying:</span> <span class=t-stress>${type.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")} over ${bar.querySelector('.i_time').value.replaceAll("_"," ")}</span>`;
+        }, 2000);
     }
 }
 
 const appendData = async (kioskIndex) => {
-    const kiosk = status_database[kioskIndex];
+    const kiosk = status_database[kioskIndex]
 
     document.getElementById("devices").innerHTML = "<h2>Connected Devices</h2>";
     document.getElementById("applications").innerHTML = "<h2>Applications</h2>";
@@ -107,14 +113,14 @@ const appendData = async (kioskIndex) => {
             querySelector('h3').innerText = `${device.status_indicator} ${deviceName}`;
             querySelector('h4').innerText = device.status_message;
             querySelector('h5').innerText = device.urgency_level > 0
-                ? "Last Updated: " + getTimeSince(new Date() - new Date(device.last_update || devices.last_seen))
+                ? "Last Updated: " + getTimeSince(new Date() - new Date(device.last_update))
                 : "Last Seen: " + getTimeSince(new Date() - new Date(device.last_seen));
 
             for (let property in device) {
                 if (!property.includes("status_")) {
                     const text = document.createElement('h5');
                     text.id = property;
-                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
+                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property] : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
                     querySelector('.content div').appendChild(text);
                 }
             }
@@ -125,10 +131,6 @@ const appendData = async (kioskIndex) => {
                     classList.toggle("active");
                     style.height = classList.contains("active") ? querySelector('div').offsetHeight + "px" : 0;
                 }
-            });
-
-            addEventListener("contextmenu", (event) => {
-                loadContextMenu_SEGMENT(event, segment);
             });
         }
         
@@ -147,16 +149,13 @@ const appendData = async (kioskIndex) => {
             dataset.urgency_level = application.urgency_level;
             querySelector('h3').innerText = `${application.status_indicator} ${application.display_name || appName}`;
             querySelector('h4').innerText = application.status_message;
-            //querySelector('h5').innerText += getTimeSince(new Date() - new Date(application.last_seen));
-            querySelector('h5').innerText = application.urgency_level > -1
-                ? "Last Updated: " + getTimeSince(new Date() - new Date(application.last_update || application.last_seen))
-                : "Last Seen: " + getTimeSince(new Date() - new Date(application.last_seen));
+            querySelector('h5').innerText += getTimeSince(new Date() - new Date(application.last_seen));
 
             for (let property in application) {
                 if (!property.includes("status_")) {
                     const text = document.createElement('h5');
                     text.id = property;
-                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
+                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property] : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
                     querySelector('.content div').appendChild(text);
                 }
             }
@@ -168,10 +167,6 @@ const appendData = async (kioskIndex) => {
                     style.height = classList.contains("active") ? querySelector('div').offsetHeight + "px" : 0;
                 }
             });
-
-            addEventListener("contextmenu", (event) => {
-                loadContextMenu_SEGMENT(event, segment);
-            });
         }
         
         sortItems(segment.querySelector('.content div'), 'h5')
@@ -179,8 +174,8 @@ const appendData = async (kioskIndex) => {
     }
     /* ------------- */
 
-    sortItems(document.getElementById("devices"), '.segment')
-    sortItems(document.getElementById("applications"), '.segment')
+    sortItems(document.getElementById("devices"), '.segment');
+    sortItems(document.getElementById("applications"), '.segment');
     openOverlay();
 
     /* Images. */
@@ -234,7 +229,7 @@ const appendData_GROUP = async (groupName) => {
                         for (let property in device) {
                             if (!property.includes("status_") && !property.includes("urgency_")) {
                                 const text = document.createElement('h5');
-                                text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
+                                text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property] : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
                                 querySelector('.content div').appendChild(text);
                             }
                         }
@@ -269,7 +264,7 @@ const appendData_GROUP = async (groupName) => {
                         for (let property in application) {
                             if (!property.includes("status_") && !property.includes("urgency_")) {
                                 const text = document.createElement('h5');
-                                text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
+                                text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property] : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
                                 querySelector('.content div').appendChild(text);
                             }
                         }
@@ -363,8 +358,6 @@ const checkHookSnap = (x, y) => {
 }
 
 const closeOverlay = () => {
-    history.pushState(null, null, `/desktop`);
-
     document.getElementById("overlay").style.opacity = 0;
     document.querySelectorAll('.info div').forEach(element => {
         element.style.translate = "0 -100px";
@@ -426,6 +419,33 @@ const getTimeSince = (millisecondsDiff) => {
     return "Now.";
 }
 
+const hexToRgb = (hex) => {
+    // Remove the '#' if present
+    hex = hex.replace('#', '');
+
+    // Convert shorthand hex (#RGB) to full hex (#RRGGBB)
+    if (hex.length === 3) {
+        hex = hex
+            .split('')
+            .map(s => s + s)
+            .join('');
+    }
+
+    // Parse the hex values for red, green, blue, and alpha (if present)
+    var bigint = parseInt(hex, 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+
+    return {r: r, g: g, b: b};
+}
+
+const hideTooltip = () => {
+    const tooltip = document.querySelector('.tooltip[for=tile]');
+    tooltip.style.display = "none";
+    tooltip.dataset.for = null;
+}
+
 const loadApps = () => {
     let appID, checkSize;
     document.querySelectorAll('.hook').forEach(hook => {
@@ -437,8 +457,6 @@ const loadApps = () => {
     });
 
     document.querySelectorAll('.app').forEach(app => {
-        updateFontSize(app)
-
         const header = app.querySelector('.header');
         const button = document.getElementById(app.id+"Button");
         let isDragging = false;
@@ -522,8 +540,6 @@ const loadApps = () => {
 
                 lastWidth = currentWidth;
                 lastHeight = currentHeight;
-                
-                updateFontSize(app);
             }
         }
 
@@ -554,86 +570,6 @@ const loadApps = () => {
     });
 }
 
-const loadContextMenu_SEGMENT = (event, segment) => {
-    const statusButton = segment_contextMenu.querySelector('button[name=status]'),
-          onlineButton = segment_contextMenu.querySelector('button[name=online]');
-
-    event.preventDefault();
-
-    onlineButton.onclick = () => {
-        document.dispatchEvent(clickEvent);
-        alert({title: `Change <span style='color: var(--text-color1)'>${segment.id}</span> to "Online"?`, description: `Are you sure you want to update the status of <span style='color: var(--text-color1)'>${segment.id}</span>?`,
-            buttons: [{text: "Cancel", invert: 0.85, action: () => {location.reload()}}, {text: "Confirm", action: (event) => {
-                sendRequest(`/update/queue.json/${segment.id}`,{value: "ONLINE"});
-            }}]
-        });
-    }
-
-    /* Modify status messages. */
-    const kioskName = segment.id.split(".")[segment.id.split(".").length-1];
-    const kioskObject = status_database[kioskName];
-    const segmentName = segment.id.replace(`.${kioskName}`, "");
-    const segmentObject = kioskObject.devices[segmentName] || kioskObject.applications[segmentName];
-
-    let codeObject, statusObject;
-    for (let statusType in config_data.status_messages) {
-        statusObject = config_data.status_messages[statusType];
-
-        for (let statusCode in statusObject.codes) {
-            if (Number[statusCode] === segmentObject[statusType+"_status"] || Number[statusCode] === segmentObject[statusType+"_connection"]) {
-                codeObject = statusObject.codes[statusCode];
-                if (codeObject.messages.includes(segmentObject.status_message)) {
-                    statusButton.dataset.href =  codeObject.static ? "null" : `/settings/status/${statusType}/${statusCode}`;
-                };
-            }
-        }
-    }
-
-    statusButton.onclick = () => {
-        document.dispatchEvent(clickEvent);
-
-        location.href = statusButton.dataset.href;
-    }
-
-    if (statusButton.dataset.href === "null") {
-        statusButton.onclick = ()=>{}
-        statusButton.style.filter = "saturate(0.4) brightness(0.4)";
-    } else {
-        statusButton.style.removeProperty("filter");
-    }
-    /* ----------------------- */
-
-    /* Remove from database. */
-    segment_contextMenu.querySelector('button[name=remove]').onclick = () => {
-        document.dispatchEvent(clickEvent);
-        alert({title: `Remove <span style='color: var(--text-color1)'>${segment.id}</span>?`, description: `Are you sure you want to remove <span style='color: var(--text-color1)'>${segment.id}</span>?<br><span style='color: #A64141'>This action cannot be undone.</span>`,
-            buttons: [{text: "Cancel", invert: 0.85, action: () => {location.reload()}}, {text: "Confirm", action: (event) => {
-                sendRequest(`/update/queue.json/${segment.id}`,{value: "DELETE"});
-            }}]
-        });
-    }
-
-    if (segment.dataset.urgency_level === "-1") {
-        onlineButton.onclick = ()=>{};
-        onlineButton.style.filter = "saturate(0.4) brightness(0.4)"
-    } else {
-        onlineButton.style.removeProperty("filter");
-    }
-    /* --------------------- */
-
-    with (segment_contextMenu) {
-        querySelector('button.title').innerText = segment.id;
-        style.display = "flex";
-        style.left = event.pageX + "px";
-        style.top = event.pageY + "px";
-    }
-
-    setTimeout(() => {
-        segment_contextMenu.style.height = segment_contextMenu.scrollHeight + "px";
-        segment_contextMenu.style.opacity = 1;
-    }, 1);
-}
-
 const loadContextMenu_TILE = (event, tile) => {
     event.preventDefault();
     tile_contextMenu.querySelector('button[name=ignore]').onclick = () => {
@@ -642,43 +578,51 @@ const loadContextMenu_TILE = (event, tile) => {
         tile.style.opacity = localStorage.getItem(`${tile.id}.IGNORE`) === "true" ? 0.2 : 1;
     }
 
-    tile_contextMenu.querySelector('button[name=online]').onclick = () => {
-        document.dispatchEvent(clickEvent);
-        alert({title: `Change <span style='color: var(--text-color1)'>${tile.id}</span> to "Online"?`, description: `Are you sure you want to update the status of <span style='color: var(--text-color1)'>${tile.id}</span>?`,
-            buttons: [{text: "Cancel", invert: 0.85, action: () => {location.reload()}}, {text: "Confirm", action: (event) => {
-                sendRequest(`/update/queue.json/${tile.id}`,{value: "ONLINE"});
-            }}]
-        });
-    }
-
-    tile_contextMenu.querySelector('button[name=remove]').onclick = () => {
-        document.dispatchEvent(clickEvent);
-        alert({title: `Remove <span style='color: var(--text-color1)'>${tile.id}</span>?`, description: `Are you sure you want to remove <span style='color: var(--text-color1)'>${tile.id}</span>?<br><span style='color: #A64141'>This action cannot be undone.</span>`,
-            buttons: [{text: "Cancel", invert: 0.85, action: () => {location.reload()}}, {text: "Confirm", action: (event) => {
-                sendRequest(`/update/queue.json/${tile.id}`,{value: "DELETE"});
-            }}]
-        });
-    }
-
     with (tile_contextMenu) {
         querySelector('button.title').innerText = tile.id;
-        querySelector('button[name=ignore]').innerText = localStorage.getItem(`${tile.id}.IGNORE`) === "true" ? "Show status" : "Ignore status";
         style.display = 'flex';
         style.left = event.pageX + 'px';
         style.top = event.pageY + 'px';
-    }
-
-    if (tile.classList.contains("urgency_-1")) {
-        tile_contextMenu.querySelector('button[name=online]').onclick = () => {};
-        tile_contextMenu.querySelector('button[name=online]').style.filter = "saturate(0.4) brightness(0.4)"
-    } else {
-        tile_contextMenu.querySelector('button[name=online]').style.removeProperty("filter");
     }
 
     setTimeout(() => {
         tile_contextMenu.style.height = tile_contextMenu.scrollHeight + "px";
         tile_contextMenu.style.opacity = 1;
     }, 1);
+}
+
+const loadOverlay = (type) => {
+    function loadOverlay_Printed() {
+        document.querySelectorAll('.kiosk').forEach(tile => {
+            
+        });
+    }
+}
+
+const mapNumberToHex = (number) => {
+    // Define your number range
+    let minValue = 0;
+    let maxValue = 100;
+
+    // Define gradient start and end colors
+    let gradientStartColor = getCookie("gradient_start") ? Array.from(getCookie("gradient_start").split(",").map(item => Number(item))) : [255, 0, 0]; // Blue color
+    let gradientEndColor = getCookie("gradient_end") ? Array.from(getCookie("gradient_end").split(",").map(item => Number(item))) : [0, 255, 0];    // Red color
+
+    // Map the random number to the gradient
+    let normalizedValue = (number - minValue) / (maxValue - minValue);
+    //let position = normalizedValue * 100; // Gradient length is 100 (arbitrary value)
+
+    // Interpolate between start and end colors based on the position
+    let interpolatedColor = [];
+    for (let i = 0; i < 3; i++) {
+        interpolatedColor[i] = Math.round(gradientStartColor[i] + (gradientEndColor[i] - gradientStartColor[i]) * normalizedValue);
+    }
+
+    // Convert RGB values to hex format
+    let colorHex = '#' + interpolatedColor.map(c => c.toString(16).padStart(2, '0')).join('');
+
+    // Apply the color to the background of the element
+    return colorHex;
 }
 
 const minifyApp = (app, hook) => {
@@ -732,7 +676,6 @@ const openCloseApp = (id, button, close) => {
         document.cookie = `${id}_display=block; expires=${expirationDate.toUTCString()}; path=/`;
         app.style.display = "block";
         app.style.zIndex = 1;
-        updateFontSize(app);
 
         setTimeout(function () {
             app.style.top = app.offsetTop+"px";
@@ -770,6 +713,28 @@ const openOverlay = () => {
     }, 0);
 }
 
+const refreshGradient = () => {
+    console.log(`linear-gradient(to right, rgb(${getCookie("gradient_start") || "255, 0, 0"}), rgb(${getCookie("gradient_end") || "0, 255, 0"}))`);
+
+    let netValue, maxValue = 0, minValue = 1000000;
+    for (let kioskName in kioskData) {
+        netValue = kioskData[kioskName].end_value - kioskData[kioskName].start_value;
+        kioskData[kioskName].net_value = netValue;
+
+        if (netValue > maxValue) maxValue = netValue;
+        if (netValue < minValue) minValue = netValue;
+    }
+
+    document.querySelectorAll('.kiosk').forEach(tile => {
+        //console.log(kioskData[tile.id], maxNetCoupons, 100);
+        if (kioskData[tile.id]) tile.style.backgroundColor = mapNumberToHex((kioskData[tile.id].net_value - minValue) / maxValue * 100);
+        setTimeout(function() {
+            tile.style.opacity = 1;
+        }, Math.random() * 1000);
+        tile.querySelector('tooltip tooltip-content').textContent = kioskData[tile.id].net_value;
+    });
+}
+
 const resetAppCookies = (app) => {
     setTimeout(function() {
         app.querySelectorAll('table, p').forEach(element => {
@@ -787,6 +752,15 @@ const resetAppCookies = (app) => {
         document.cookie = `${app.id}_width=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
         document.cookie = `${app.id}_height=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
     }, 100);
+}
+
+const showTooltip = (tile) => {
+    const tooltip = document.querySelector('.tooltip[for=tile]');
+    tooltip.querySelector('.tooltip-content').textContent = tile.dataset.netValue;
+    tooltip.dataset.for = tile.id;
+    tooltip.style.display = "block";
+    tooltip.style.bottom = window.innerHeight - tile.offsetTop - 35 + "px";
+    tooltip.style.left = tile.offsetLeft + tile.offsetWidth / 2 + "px";
 }
 
 const sendRequest = (url, value, alertInfo) => {
@@ -902,64 +876,12 @@ const submitForm = (event, form, url, alertInfo) => {
     });
 }
 
-const updateApp5 = () => {
-    let app5_list = [];
-    const includedUrgencies = [1, 4, 5];
-    const tableRow = document.getElementById("app_5Row");
-    const hook = document.querySelector('.hook[data-hooked_app=app_5] table tbody');
+const updateGradient = (input) => {
+    const expirationDate = new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000);
+    const rgb = hexToRgb(input.value);
 
-    let devices;
-    for (let kioskName in status_database) {
-        devices = status_database[kioskName].devices
-        for (let deviceType in devices) {
-            if (includedUrgencies.includes(devices[deviceType].urgency_level)) {
-                app5_list.push({icon: devices[deviceType].status_indicator, name: devices[deviceType].device_name, time: new Date() - new Date(devices[deviceType].last_update)})
-            }
-        }
-    }
-
-    app5_list = app5_list.sort((a, b) => b.time - a.time)
-
-    document.querySelector('#app_5.app table tbody').innerHTML = "";
-    if (hook) {hook.innerHTML = "";}
-
-    for (let report of app5_list) {
-        const newRow = tableRow.cloneNode(true);
-        newRow.querySelector('.name').innerText = `${report.icon} ${report.name}`;
-        newRow.querySelector('.time').innerText = getTimeSince(report.time);
-        document.querySelector('#app_5.app table tbody').appendChild(newRow);
-        if (hook) {hook.appendChild(newRow.cloneNode(true))}
-    }
-}
-
-const updateAppP = () => {
-    document.querySelectorAll('.health_score').forEach(element => {
-        element.style.color = `hsl(${(misc_data.score-50)*2}, 100%, 65%)`;
-        element.innerText = `Health Score: ${misc_data.score}%`;
-    });
-}
-
-const updateAppT = () => {
-    if (misc_data.last_check === "Fetching...") {
-        document.querySelectorAll('.last_check').forEach(element => element.innerText = "Fetching...");
-    } else {
-        const millisecondsDiff = new Date() - new Date(misc_data.last_check);
-        document.querySelectorAll('.last_check').forEach(element => element.innerText = (millisecondsDiff > 600000 ? "⚠️ " : "") + "Last check: " + getTimeSince(millisecondsDiff));
-    }
-}
-
-const updateFontSize = (app) => {
-    switch(app.id) {
-        case "app_5":
-            app.querySelector('table').style.fontSize = `${(app.offsetWidth-20)/22}px`;
-            break;
-        case "app_Hs":
-            app.querySelector('p').style.fontSize = `${(app.offsetWidth-20)/10}px`;
-            break;
-        case "app_T":
-            app.querySelector('p').style.fontSize = `${(app.offsetWidth-20)/15}px`;
-            break;
-    }
+    document.cookie = `${input.name}=${rgb.r},${rgb.g},${rgb.b}; expires=${expirationDate.toUTCString()}; path=/`;
+    document.getElementById("hookT2S").style.background = `linear-gradient(to right, rgb(${getCookie("gradient_start") || "255, 0, 0"}), rgb(${getCookie("gradient_end") || "0, 255, 0"}))`;
 }
 
 const updateLocations = () => {
@@ -976,6 +898,44 @@ const updateUrgency = (tile, newUrgency) => {
     });
     tile.classList.add("urgency_"+newUrgency);
     tile.dataset.oldest_report = status_database[tile.id].oldest_report;
+}
+
+const visualizeData = async () => {
+    const response = await (await fetch('http://85.148.75.164:9000/database?query='+location.href.split("query=")[1])).json();
+    data = response.data
+    kioskData = {};
+
+    for (let row of data) {
+        if (kioskData[row.kiosk_name] === undefined) kioskData[row.kiosk_name] = {};
+        kioskData[row.kiosk_name].start_value = row.start_value;
+        kioskData[row.kiosk_name].end_value = row.end_value;
+    }
+
+    let netValue, maxValue = 0, minValue = 1000000;
+    for (let kioskName in kioskData) {
+        netValue = kioskData[kioskName].end_value - kioskData[kioskName].start_value;
+        kioskData[kioskName].net_value = netValue;
+
+        if (netValue > maxValue) maxValue = netValue;
+        if (netValue < minValue) minValue = netValue;
+    }
+
+    document.getElementById("min_data").innerText = minValue;
+    document.getElementById("max_data").innerText = maxValue;
+
+    document.querySelectorAll('.kiosk').forEach(tile => {
+        //console.log(kioskData[tile.id], maxNetCoupons, 100);
+        if (kioskData[tile.id]) {
+            tile.dataset.netValue = kioskData[tile.id].net_value;
+            tile.style.removeProperty("background");
+            tile.style.backgroundColor = mapNumberToHex((kioskData[tile.id].net_value - minValue) / maxValue * 100);
+            setTimeout(function() {
+                tile.style.opacity = 1;
+            }, Math.random() * 1000);
+        } else {
+            tile.style.background = "url(images/urgency_0.png)"
+        }
+    });
 }
 
 loadGrid();
@@ -1002,110 +962,20 @@ document.querySelectorAll('.contextMenu').forEach(element => {
     });
 });
 
-window.addEventListener('popstate', () => {
-    if (location.href.includes("/k/")) {appendData(location.href.split("/k/")[1]); return;}
-    if (location.href.includes("/g/")) {appendData_GROUP(location.href.split("/g/")[1]); return;}
-    if (document.getElementById("overlay").offsetHeight > 0) {closeOverlay(); return;}
-});
+document.querySelectorAll('.container, .group, .location, .tooltip-content').forEach(element => element.addEventListener('mouseover', (e) => {
+    if (e.target.classList.contains("kiosk") || e.target.parentNode.classList.contains("kiosk")) return;
+    hideTooltip()
+}))
 
-if (!location.href.includes("desktop/layout")) {
-    misc_data = JSON.parse(document.getElementById("data_storage").dataset.misc_data);
-
-    updateAppT();
-    updateApp5();
-    updateAppP();
-    loadApps();
-
-    setInterval(async function() {
-        if (!skipUpdate) {
-            status_database = await (await fetch('/status-database')).json();
-
-            updateApp5();
-            misc_data = await (await fetch('/storage/misc.json')).json();
-            updateAppP();
-            updateAppT();
-            document.getElementById("alert").innerText = misc_data.alert;
-
-            let fullGreen = true;
-            for (let kioskIndex in status_database) {
-                if (status_database[kioskIndex].urgency_level !== -1 && document.getElementById(kioskIndex)) {
-                    fullGreen = false;
-                    break;
-                }
-            }
-
-            if (misc_data.score < 100 || document.querySelector('.kiosk:not(.urgency_-1)')) {
-                if (document.getElementById("overlay").style.display !== "block") {
-                    let tile;
-                    for (let kioskIndex in status_database) {
-                        tile = document.getElementById(kioskIndex);
-                        if (tile && !tile.classList.contains("urgency_"+status_database[kioskIndex].urgency_level)) {
-                            animateTile(tile, status_database[kioskIndex].urgency_level, status_database[kioskIndex].last_update)
-                            /* OLD
-                            tile.classList.forEach(className => {
-                                if (className.includes("urgency_")) {
-                                    tile.classList.remove(className)
-                                }
-                            });
-                            tile.classList.add("urgency_"+status_database[kioskIndex].urgency_level);
-                            */
-                        }
-                    }
-
-                    document.querySelectorAll('.location').forEach(location => sortTiles(location));
-                } else {
-                    const kiosk = status_database[overlay.querySelector('h1').innerText]
-                    let application, device, segment;
-
-                    for (let deviceName in kiosk.devices) {
-                        device = kiosk.devices[deviceName];
-                        segment = document.getElementById(device.device_name);
-
-                        with (segment) {
-                            dataset.urgency_level = device.urgency_level;
-                            querySelector('h3').innerText = `${device.status_indicator} ${deviceName}`;
-                            querySelector('h4').innerText = device.status_message;
-                            querySelector('h5').innerText = device.urgency_level > 0
-                                ? getTimeSince(new Date() - new Date(device.last_update))
-                                : getTimeSince(new Date() - new Date(device.last_seen));
-
-                            segment.querySelector('.content div').innerHTML = "";
-
-                            for (let property in device) {
-                                if (!property.includes("status_") && !property.includes("urgency_")) {
-                                    const text = document.createElement('h5');
-                                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(device[property]) ? device[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${device[property]}</span>`}`;
-                                    querySelector('.content div').appendChild(text);
-                                }
-                            }
-                        }
-                    }
-
-                    for (let appName in status_database[overlay.querySelector('h1').innerText].applications) {
-                        application = kiosk.applications[appName];
-                        segment = document.getElementById(appName+"."+kiosk.id);
-
-                        with (segment) {
-                            dataset.urgency_level = application.urgency_level;
-                            querySelector('h3').innerText = `${application.status_indicator} ${application.display_name || appName}`;
-                            querySelector('h4').innerText = application.status_message;
-                            querySelector('h5').innerText += getTimeSince(new Date() - new Date(application.last_seen));
-
-                            segment.querySelector('.content div').innerHTML = "";
-
-                            for (let property in application) {
-                                if (!property.includes("status_") && !property.includes("urgency_")) {
-                                    const text = document.createElement('h5');
-                                    text.innerHTML = `<span class=t-stress>${property}</span>: ${isNaN(application[property]) ? application[property].replaceAll("undefined","<span style='color: var(--alert-color)'>undefined</span>") : `<span style='color: var(--link-color)'>${application[property]}</span>`}`;
-                                    querySelector('.content div').appendChild(text);
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                animatePlay_Green();
-            }
-        }
-    }, 15000);
-}
+setTimeout(function() {
+    document.getElementById("hookT1S").style.boxShadow = "0 0 15px 3px rgba(255, 255, 255, 0.8)";
+}, 1000);
+setTimeout(function() {
+    document.getElementById("hookT1S").style.removeProperty("box-shadow");
+}, 1500);
+setTimeout(function() {
+    document.getElementById("hookT1S").style.boxShadow = "0 0 15px 3px rgba(255, 255, 255, 0.8)";
+}, 3000);
+setTimeout(function() {
+    document.getElementById("hookT1S").style.removeProperty("box-shadow");
+}, 3500);
