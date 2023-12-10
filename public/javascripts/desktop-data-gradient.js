@@ -450,7 +450,7 @@ const loadApps = () => {
     let appID, checkSize;
     document.querySelectorAll('.hook').forEach(hook => {
         appID = getCookie(hook.id+"_app")
-        if (appID) {
+        if (appID && document.getElementById(appID)) {
             minifyApp(document.getElementById(appID), hook);
             document.getElementById(appID+"Button").classList.add("selected");
         }
@@ -901,7 +901,7 @@ const updateUrgency = (tile, newUrgency) => {
 }
 
 const visualizeData = async () => {
-    const response = await (await fetch('http://85.148.75.164:9000/database?query='+location.href.split("query=")[1])).json();
+    const response = await (await fetch('/database?query='+location.href.split("query=")[1])).json();
     data = response.data
     kioskData = {};
 
