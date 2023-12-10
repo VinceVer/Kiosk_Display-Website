@@ -52,12 +52,7 @@ const getLatestRelease = async () => {
     try {
         // Website:
         let currentTagName = "v"+JSON.parse(fs.readFileSync('package.json')).version;
-        let response = await axios.get(`https://api.github.com/repos/${repositoryOwner}/${repositoryName}-Website/releases/latest`, {
-            auth: {
-                username: username,
-                password: token
-            }
-        });
+        let response = await axios.get(`https://api.github.com/repos/${repositoryOwner}/${repositoryName}-Website/releases/latest`);
         let latestTagName = response.data.tag_name;
 
         if (latestTagName !== currentTagName && latestTagName > currentTagName) {
@@ -81,12 +76,7 @@ const getLatestRelease = async () => {
 
         // Database:
         currentTagName = "v"+JSON.parse(fs.readFileSync(__dirname+'/../.database/package.json')).version;
-        response = await axios.get(`https://api.github.com/repos/${repositoryOwner}/${repositoryName}-Database/releases/latest`, {
-            auth: {
-                username: username,
-                password: token
-            }
-        });
+        response = await axios.get(`https://api.github.com/repos/${repositoryOwner}/${repositoryName}-Database/releases/latest`);
         latestTagName = response.data.tag_name;
 
         if (latestTagName !== currentTagName && latestTagName > currentTagName) {
@@ -121,10 +111,7 @@ const downloadFiles = (version, type) => {
             const response = await axios({
                 method: 'get',
                 url: `https://api.github.com/repos/${repositoryOwner}/${repositoryName}-${type}/tarball/${branch}`,
-                responseType: 'stream',
-                headers: {
-                    Authorization: `token ${token}`
-                }
+                responseType: 'stream'
             });
     
             // Save the downloaded archive to a file
