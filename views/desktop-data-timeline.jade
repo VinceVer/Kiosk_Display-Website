@@ -15,8 +15,13 @@ html(lang='en')
     nav#header
       button.HOME(onclick="location.href = '/desktop'") RETURN TO DISPLAY
       a.navLink(href="/desktop/layout") Change Layout
-      a.navLink(href="/desktop/data/gradient") Gradient
-      a.navLink.selected(href="/desktop/data/timeline") Timeline
+      .dropdown.navLink(style="padding-bottom: 0;") Data Analytics
+        .content(style="margin-top: 7px;")
+          div
+            a.navLink.item(href="/desktop/data/gradient") Gradient Visualizer
+          div
+            a.navLink.item(href="/desktop/data/reports") Report Generator
+      a.navLink(href="/desktop/data/timeline") Timeline
       //a.navLink(href="/desktop/") Link 2
       //a.navLink(href="/desktop/") Link 3
 

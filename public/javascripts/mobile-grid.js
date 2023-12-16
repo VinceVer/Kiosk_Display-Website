@@ -170,7 +170,7 @@ const appendData = async (kioskIndex) => {
             querySelector('h3').innerText = `${application.status_indicator} ${application.display_name || appName}`;
             querySelector('h4').innerText = application.status_message;
             //querySelector('h5').innerText += getTimeSince(new Date() - new Date(application.last_seen));
-            querySelector('h5').innerText = application.urgency_level > -1
+            querySelector('h5').innerText = application.urgency_level > 0
                 ? "Last Updated: " + getTimeSince(new Date() - new Date(application.last_update || application.last_seen))
                 : "Last Seen: " + getTimeSince(new Date() - new Date(application.last_seen));
 

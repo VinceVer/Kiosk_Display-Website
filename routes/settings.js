@@ -77,7 +77,7 @@ router.get('/apps/:appCode?', function(req, res, next) {
 });
 
 router.get('/database/conditions/:type?', function(req, res, next) {
-	const data = JSON.parse(fs.readFileSync(__dirname+'/../storage/config.json'))
+	const data = JSON.parse(fs.readFileSync(__dirname+'/../storage/config.json'));
 
 	if (req.params.type === "add" && req.query.type) {
 		res.render('settings-database-conditions-add', getSendableData(req.cookies, {type: req.query.type, title: `Add a ${data.urgency_conditions[req.query.type].text} condition:`}));
@@ -114,7 +114,6 @@ router.get('/status/:type?/:code?/:message?', function(req, res, next) {
 		res.render('settings-edit', getSendableData(req.cookies, {title: "Add a status type:", type: "s_type_add"}));
 		next();
 	} else {
-
 		let pageType;
 
 		if (data.status_messages[statusType]) {
@@ -131,5 +130,17 @@ router.get('/status/:type?/:code?/:message?', function(req, res, next) {
 		}
 	}
 });
+
+// router.get('/schedules/:type?', async function(req, res, next) {
+// 	const schedule_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/schedules.json'));
+
+// 	switch (req.params.type) {
+// 		case "report":
+// 			res.render('settings-schedules-report', getSendableData(req.cookies, {index: req.query.index || schedule_data.reports.length, schedule_data: schedule_data, title: (req.query.index ? `Edit [Report] ${schedule_data.reports[req.query.index].file_name}` : "Add scheduled report")}));
+// 			break;
+// 		default:
+// 			res.render('settings-schedules', getSendableData(req.cookies, {schedule_data: schedule_data}));
+// 	}
+// });
 
 module.exports = router;

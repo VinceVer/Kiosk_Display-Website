@@ -1,11 +1,26 @@
 var express = require('express');
+const Excel = require('exceljs');
 var fs = require('fs');
 const multer = require('multer');
 var router = express.Router();
 const sqlite3 = require('sqlite3');
+const mail = require('./mail.js');
 const Database = new sqlite3.Database(__dirname+'/../../.database/bin/main-database.db');
 const oauthKeys = JSON.parse(fs.readFileSync(__dirname+'/../storage/oauth.json')).passwords;
 const websiteVersion = JSON.parse(fs.readFileSync(__dirname+'/../package.json')).version;
+
+const urgency_icons = {
+    _1: "🟢",
+    null: "❔",
+    0: "🔵",
+    1: "🟡",
+    2: "🟣",
+    3: "🟠",
+    4: "🔴",
+    5: "⚠️",
+    12: "🟣",
+    42: "🔴"
+}
 
 const customStorage = (destination) => {
     return multer.diskStorage({
@@ -52,6 +67,10 @@ router.get('/database', (req, res, next) => {
     }
 });
 
+router.post('/data/reports', (req, res) => {
+    const report = generateReport(req.body);
+});
+
 router.get('/storage/:file', (req, res) => {
     if (req.params.file === "config.json" || req.params.file === "misc.json") { 
         try {
@@ -60,7 +79,22 @@ router.get('/storage/:file', (req, res) => {
         } catch (error) {
             res.status(404).send({code: 404, message: "file not found"});
         }
-    } else {return res.render('error', {title:"Rejected", message:"Access denied by server", error: {status:403, stack:"Sensitive information."}})}
+    } else {return res.render('error', {title:"Rejected", message:"Access denied by server", error: {status:403, stack:"Possibly sensitive information."}})}
+});
+
+router.get('/download/:type/:file', (req, res) => {
+    if (req.params.type === "report") {
+        const filePath = __dirname+'/../storage/reports/'+req.params.file;
+
+        res.download(filePath, req.params.file, (err) => {
+            if (err) {
+                console.error('Error downloading file:', err);
+                res.status(404).send('File not found');
+            } else {
+                console.log('File sent successfully');
+            }
+        })
+    }
 });
 
 /* GET fileData. */
@@ -87,8 +121,6 @@ router.get('/fileData', (req, res, next) => {
 router.put('/update/:file/:type/:p1?/:p2?/:p3?/:p4?/:p5?', (req, res, next) => {
     const {file, type, ...properties} = req.params;
     const formData = req.body;
-
-    console.log(req.cookies)
 
     if (checkAccess(file, req.cookies)) {
         let propertiesArray = [type];
@@ -203,6 +235,9 @@ const checkAccess = (file, cookies) => {
         case "config.json":
             return (cookies.session_settings === oauthKeys.settings);
             break;
+        case "schedules.json":
+            return (cookies.session_desktop === oauthKeys.desktop);
+            break;
         case "misc.json":
             return (cookies.session_desktop === oauthKeys.desktop);
             break;
@@ -242,6 +277,141 @@ const deleteObject = (fileData, properties) => {
             console.log(properties[0])
             deleteObject(fileData[currentProperty], properties.slice(1))
         }
+    }
+}
+
+const generateReport = (settings) => {
+    const config_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/config.json'));
+
+    function stringToUnix(string) {
+        const [year, month, day] = string.split('-').map(Number);
+        return Math.floor((new Date(year, month - 1, day)).getTime() / 1000);
+    }
+
+    const start_timecode = stringToUnix(settings.time_start);
+    const end_timecode = stringToUnix(settings.time_end) + 86400;
+
+    console.log(`Generating report from ${start_timecode} to ${end_timecode}`);
+
+    const queryData = `SELECT * FROM devicetimeline WHERE time BETWEEN ${start_timecode} AND ${end_timecode} AND status_message LIKE "%[Manually Set]" ORDER BY time, kiosk_name ASC`;
+
+    /* Functions. */
+    function parseToCSV(rows) {
+        let outputString = "Time, Kiosk Name, Device Type, From Status, To Status\n";
+        for (let row of rows) {
+            outputString += `${row.last_seen.replace("T"," ")}, ${row.kiosk_name}, ${row.type}, ${urgency_icons[String(row.from_urgency_level).replace("-","_")]}, ${urgency_icons[String(row.to_urgency_level).replace("-","_")]}\n`;
+        }
+        return outputString || `[${new Date().toISOString()}]\nAn unexpected error occured during the generation of this report.`;
+    }
+
+    function parseToJSON(rows) {
+        let outputObject = [];
+        for (let row of rows) {
+            outputObject.push({
+                time: row.last_seen.replace("T"," "),
+                kiosk: row.kiosk_name,
+                device_type: row.type,
+                device_name: row.device_name,
+                from_urgency_level: urgency_icons[String(row.from_urgency_level).replace("-","_")],
+                to_urgency_level: urgency_icons[String(row.to_urgency_level).replace("-","_")]
+            });
+        }
+        return JSON.stringify(outputObject, null, "\t") || `[${new Date().toISOString()}]\nAn unexpected error occured during the generation of this report.`;
+    }
+
+    function parseToMD(rows) {
+        let outputString = `# ${config_data.location} Report Generator\n**[Generated at ${(new Date()).toISOString().slice(0, 19).replace("T"," ")}]**\n\nThis report contains data from ${settings.time_start} to ${settings.time_end}\nThe data in this report only includes manual changes.\n\n**Data:**\n`;
+        outputString += "| Time | Kiosk Name | Device Type | From Status | To Status |\n"
+        outputString += "| ----- | ----- | ----- | ----- | ----- |\n"
+        const data = [];
+
+        for (let row of rows) {
+            outputString += `| ${[
+                row.last_seen.replace("T"," "),
+                row.kiosk_name,
+                row.type,
+                urgency_icons[String(row.from_urgency_level).replace("-","_")],
+                urgency_icons[String(row.to_urgency_level).replace("-","_")]
+            ].join(" | ")} |\n`;
+        }
+
+        return outputString || `[${new Date().toISOString()}]\nAn unexpected error occured during the generation of this report.`;
+    }
+
+    function parseToTXT(rows) {
+        let outputString = `-------------------- ${config_data.location} Report Generator --------------------\n[Generated at ${(new Date()).toISOString().slice(0, 19).replace("T"," ")}]\n\nThis report contains data from ${settings.time_start} to ${settings.time_end}\nThe data in this report only includes manual changes.\n\n---------------------${"-".repeat(config_data.location.length)}--------------------------------------\n`;
+
+        for (let row of rows) {
+            outputString += `[${row.last_seen.replace("T"," ")}]: ${row.device_name} has been set to online. (${urgency_icons[String(row.from_urgency_level).replace("-","_")]} -> ${urgency_icons[String(row.to_urgency_level).replace("-","_")]})\n`;
+        }
+
+        outputString += `---------------------${"-".repeat(config_data.location.length)}--------------------------------------`;
+        return outputString || `[${new Date().toISOString()}]\nAn unexpected error occured during the generation of this report.`;
+    }
+
+    async function parseToXLSX(rows) {
+        const workbook = new Excel.Workbook();
+        const worksheet = workbook.addWorksheet('Report Data');
+
+        // Define your data
+        const data = [["Time", "Kiosk Name", "Device Type", "From Status", "To Status"]];
+        for (let row of rows) {
+            data.push([
+                row.last_seen.replace("T"," "),
+                row.kiosk_name,
+                row.type,
+                urgency_icons[String(row.from_urgency_level).replace("-","_")],
+                urgency_icons[String(row.to_urgency_level).replace("-","_")]
+            ]);
+        }
+
+        // Add data to the worksheet
+        data.forEach(row => {
+            worksheet.addRow(row);
+        });
+
+        // Save the workbook
+        return await workbook.xlsx.writeBuffer()
+    }
+    /* ---------- */
+    
+
+
+    try {
+        Database.all(queryData, async (err, rows) => {
+            if (err) {
+                console.error('Error querying the database:', err.message);
+            } else {
+                let output;
+                console.log(settings.format)
+                switch (settings.format) {
+                    case ".csv":
+                        output = parseToCSV(rows);
+                        break;
+                    case ".json":
+                        output = parseToJSON(rows);
+                        break;
+                    case ".md":
+                        output = parseToMD(rows);
+                        break;
+                    case ".txt":
+                        output = parseToTXT(rows);
+                        break;
+                    case ".xlsx":
+                        output = await parseToXLSX(rows);
+                        console.log(output)
+                        break;
+                }
+
+                fs.writeFileSync(__dirname+`/../storage/reports/${settings.name || "test"}${settings.format}`, output);
+                if (settings.email_output === "on") {
+                    mail.sendEmail(settings.email_recipient, settings.name || "test", parseToTXT(rows), __dirname+`/../storage/reports/${settings.name || "test"}${settings.format}`, settings.format);
+                }
+                //res.status(200).send({data: rows, time: (new Date() - startTime) / 1000})
+            }
+        });
+    } catch (error) {
+        console.log(error);
     }
 }
 

@@ -4,6 +4,7 @@ var router = express.Router();
 const sqlite3 = require('sqlite3');
 const desktopKey = JSON.parse(fs.readFileSync(__dirname+'/../storage/oauth.json')).passwords.desktop;
 const Database = new sqlite3.Database(__dirname+'/../../.database/bin/main-database.db');
+const path = require('path');
 
 /* GET home page. */
 router.get('/:p1?/:p2?', function(req, res, next) {
@@ -57,7 +58,7 @@ router.get('/layout', function(req, res, next) {
 	}
 
 	if (session_desktop !== desktopKey) {
-		res.render('login', {type: "desktop"})
+		res.render('login', {type: "desktop"});
 	} else {
 		if (reload) {
 			res.redirect('/desktop-layout');
@@ -71,24 +72,56 @@ router.get('/layout', function(req, res, next) {
 	}
 });
 
-router.get('/data/:type', function(req, res, next) {
+router.get('/data/:type', async function(req, res, next) {
 	let {session_desktop, ...layout} = req.cookies;
+	let other;
 
 	const config_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/config.json'));
 	const status_database = JSON.parse(fs.readFileSync(__dirname+'/../../.database/bin/status_database.json'));
 	const misc_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/misc.json'));
 
+	if (req.params.type === "reports") {
+		try {
+			const files = fs.readdirSync(__dirname+'/../storage/reports')
+			other = await sortFiles(files, __dirname+'/../storage/reports');
+		} catch (error) {
+			other = "[]";
+		}
+	}
+
 	if (session_desktop !== desktopKey) {
-		res.render('login', {type: "desktop"})
+		res.render('login', {type: "desktop"});
 	} else {
 		res.render('desktop-data-'+req.params.type, {
 			config_data: config_data,
 			status_database: status_database,
 			misc_data: misc_data,
-			layout: layout
+			layout: layout,
+			other: other
 		});
 	}
 });
+
+// router.get('/schedules/:type', async function(req, res, next) {
+// 	let {session_desktop, ...layout} = req.cookies;
+// 	let other;
+
+// 	const config_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/config.json'));
+// 	const status_database = JSON.parse(fs.readFileSync(__dirname+'/../../.database/bin/status_database.json'));
+// 	const schedule_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/schedules.json'));
+
+// 	if (session_desktop !== desktopKey) {
+// 		res.render('login', {type: "desktop"});
+// 	} else {
+// 		res.render('desktop-schedules-'+req.params.type, {
+// 			config_data: config_data,
+// 			status_database: status_database,
+// 			schedule_data: schedule_data,
+// 			layout: layout,
+// 			other: other
+// 		});
+// 	}
+// });
 
 router.get('/data', function(req, res, next) {
 	let {session_desktop, ...layout} = req.cookies;
@@ -164,3 +197,31 @@ router.get('/simple', function(req, res, next) {
 });
 
 module.exports = router;
+
+const sortFiles = (files, folderPath) => {
+	return new Promise(resolve => {
+		const fileDetails = [];
+
+		files.forEach((file) => {
+			const filePath = path.join(folderPath, file);
+		
+			// Get file stats:
+			fs.stat(filePath, (statErr, stats) => {
+				if (statErr) {
+					console.error('Error getting file stats:', statErr);
+					return;
+				}
+			
+				fileDetails.push({ name: file, createdAt: stats.birthtimeMs });
+			
+				// Check if all files have been processed
+				if (fileDetails.length === files.length) {
+					fileDetails.sort((a, b) => b.createdAt - a.createdAt);
+			
+					const sortedFiles = fileDetails.map((fileDetail) => fileDetail.name);
+					resolve(sortedFiles);
+				}
+			});
+		});
+	});
+}

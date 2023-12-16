@@ -72,7 +72,7 @@ body::after {
 
 form {width: fit-content}
 
-input[type=text], input[type=number] {
+input[type=text], input[type=number], input[type=date], input[type=time], input[type=email] {
     background-color: var(--gray40);
     border: 0;
     color: var(--text-color2);
@@ -87,6 +87,10 @@ input[type=text], input[type=number] {
         cursor: pointer;
         filter: invert(0.1);
     }
+}
+
+input[type=email] {
+    width: 20rem !important;
 }
 
 input[type=button] {

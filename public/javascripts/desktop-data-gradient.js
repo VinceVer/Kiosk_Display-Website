@@ -71,6 +71,11 @@ const loadGrid = () => {
     document.getElementById("display").style.visibility = "visible";
 
     loadApps();
+
+    let background_file = getCookie("background_file");
+    console.log(background_file, "&", getCookie(`background_extension[${config_data.location}]`));
+    if (!background_file.includes(".")) background_file = `${background_file}.${getCookie(`background_extension[${config_data.location}]`)}`;
+    document.body.style.backgroundImage = `url(/images/${background_file})`;
 }
 
 const app_iHandler = (bar) => {
@@ -450,7 +455,7 @@ const loadApps = () => {
     let appID, checkSize;
     document.querySelectorAll('.hook').forEach(hook => {
         appID = getCookie(hook.id+"_app")
-        if (appID && document.getElementById(appID)) {
+        if (appID) {
             minifyApp(document.getElementById(appID), hook);
             document.getElementById(appID+"Button").classList.add("selected");
         }

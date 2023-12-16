@@ -79,3 +79,25 @@ const getUnixTimestamp = (type) => {
             return Math.floor((currentDate.getTime() - (30 * 24 * 60 * 60 * 1000)) / 1000);
     }
 }
+
+document.querySelectorAll('.dropdown').forEach(element => {
+    //element.querySelector('.content').style.left = element.getBoundingClientRect().left + "px";
+    //element.querySelector('.content').style.top = element.getBoundingClientRect().top + element.offsetHeight + "px";
+
+    element.addEventListener('mouseover', () => {
+        element.querySelector('.content').style.height = element.querySelector('.content').scrollHeight + "px";
+        element.querySelector('.content').style.border = "var(--border)";
+    });
+    element.addEventListener('mouseout', (e) => {
+        const x = element.getBoundingClientRect().left;
+        const y = element.getBoundingClientRect().top;
+        if (e.clientX < x || e.clientX > x + element.offsetWidth || !(e.clientY > y && e.clientY <= y + element.offsetHeight + 15)) {
+            element.querySelector('.content').style.height = 0;
+            element.querySelector('.content').style.border = "none";
+        }
+    });
+
+    element.querySelectorAll('div').forEach(item => {
+        item.onclick = () => {item.querySelector('.item').click()};
+    })
+});

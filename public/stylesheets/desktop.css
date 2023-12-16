@@ -53,13 +53,13 @@ body {
     width: 100vw;
 }
 
-input[type=text], input[type=number] {
+input[type=text], input[type=number], input[type=email] {
     background-color: var(--gray40);
     border: none;
     color: var(--text-color2);
     font-size: 1.2rem;
     margin: 0 10px 0 10px;
-    padding: 2px 5px 2px 5px;
+    padding: 2px 5px 0px 5px;
     transform: translate(0, -3px);
     width: 15.75rem;
 
@@ -76,12 +76,13 @@ nav {
     height: 2.5rem;
     position: relative;
     width: 100vw;
+    z-index: 2;
 }
 
 p {color: var(--text-color1)}
 
 select {
-    background-color: var(--gray30);
+    background-color: var(--gray40);
     border: none;
     color: var(--text-color2);
     font-size: 1.2rem;
@@ -324,6 +325,45 @@ button.HOME {
     &::-webkit-scrollbar {display: none;}
 }
 
+.dropdown {
+    position: relative;
+}
+
+.dropdown .content {
+    background-color: var(--gray40);
+    border: none;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    transition: border 0.5s ease, height 0.3s ease;
+    width: fit-content;
+    z-index: 2;
+
+    & div {
+        margin: 0;
+        padding: 0;
+    }
+
+    & div:hover {
+        background-color: var(--gray60);
+        cursor: pointer;
+
+        & .item {
+            color: var(--text-color2);
+        }
+
+        & .item::after {
+            background-color: var(--text-color2);
+        }
+    }
+
+    & div> * {
+        margin: 5px 15px 10px 5px;
+        white-space: nowrap;
+    }
+}
+
 .flexBar {
     align-items: center;
     color: var(--text-color1);
@@ -331,6 +371,12 @@ button.HOME {
     font-size: 1.2rem;
     white-space: nowrap;
     width: 100%;
+
+    &.column {
+        flex-direction: column;
+        gap: 5px;
+        width: fit-content;
+    }
 }
 
 .group {
@@ -509,7 +555,7 @@ button.HOME {
         &::after {background-color: var(--text-color2)}
     }
 
-    &:hover {
+    &:hover:not(.item) {
         color: var(--text-color2);
         &::after {background-color: var(--text-color2)}
     }

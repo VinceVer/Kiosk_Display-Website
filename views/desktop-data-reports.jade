@@ -1,0 +1,121 @@
+doctype html
+html(lang='en')
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+
+    title Kiosk Info - #{config_data.location}
+
+    link#themeLink(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)
+    link(rel='stylesheet' href='/stylesheets/desktop.css')
+    link(rel='stylesheet' href='/stylesheets/desktop-data-reports.css')
+  body.fade
+    #brightnessFilter(style=`background-color: rgba(10, 10, 10, max(0.7, ${1 - layout.background_opacity / 100}))`)
+
+    nav#header
+      button.HOME(onclick="location.href = '/desktop'") RETURN TO DISPLAY
+      a.navLink(href="/desktop/layout") Change Layout
+      .dropdown.navLink(style="padding-bottom: 0;") Data Analytics
+        .content(style="margin-top: 7px;")
+          div
+            a.navLink.item(href="/desktop/data/gradient") Gradient Visualizer
+          div
+            a.navLink.item(href="/desktop/data/reports") Report Generator
+      a.navLink(href="/desktop/data/timeline") Timeline
+
+      //form#login(onsubmit="testPassword(this.parentNode.querySelector('input').value, event)")
+        input(type="password" placeholder=" Log in by entering the site key" required)
+        input#loginButton(type="submit" value="\u23CE")
+      //button#logout(onclick="testPassword('LOGOUT')") Click here to logout
+
+    #display(style="visibility: hidden")
+      .bar
+      #container
+        div.centered(name="panel0")
+          .flexBar.column(style="gap: 20px")
+            .flexBar.column.border.padded-hor#all_reports(style="max-height: 60vh; overflow: auto")
+              h1 All reports:
+            button(type="button" onclick="openPanel(1)") Go back
+        div.centered(name="panel1")
+          .flexBar.column(style="gap: 20px")
+            .flexBar.column.border.padded-hor#latest_reports
+              h1 Latest reports:
+            .flexBar
+              button(onclick="openPanel(0)") Find old report
+              button(onclick="openPanel(2)") Generate new report
+            //button(onclick="location.href = '/desktop/data/reports'") [Coming in future update]
+        div.centered(name="panel2")
+          form.flexBar.column(style="gap: 20px" onsubmit="submitSettings(event, this, '/data/reports')")
+            div.flexBar.column.border.padded-hor(style="gap: 20px")
+              h1 Settings:
+              .flexBar
+                .flexBar.column Start:
+                  input(type="date", name="time_start" required)
+                .flexBar.column End:
+                  input(type="date", name="time_end" value=(new Date().toISOString().split('T')[0]) required)
+              div(style="position: relative")
+                .flexBar File name:
+                  input(name="name" type="text" placeholder=(new Date().toISOString().replace("T", " ").split("Z")[0]))
+                label#extension_label(style="position: absolute; right: 15px; top: 2px") .txt
+              .flexBar(style="margin-bottom: 20px") Save as:
+                select#extension_select(oninput="this.parentNode.querySelector('input').value = this.value; ")
+                  option(value=".csv") .csv
+                  option(value=".html") .html (Webpage)
+                  option(value=".json") .json
+                  option(value=".md") .md
+                  option(value=".txt" selected) .txt (Plain text)
+                  option(value=".xlsx") .xlsx (Excel worksheet)
+                input(type="hidden" name="format" value=".txt")
+              .flexBar Email output:
+                input(name="email_output" type="checkbox" oninput="document.getElementById('email_recipient').classList.toggle('hidden'); document.getElementById('email_select').classList.toggle('hidden'); document.getElementById('email_recipient').required = !document.getElementById('email_recipient').classList.contains('hidden')")
+              input.hidden#email_recipient(name="email_recipient" type="email" multiple style="margin-top: -10px" placeholder="Seperate multiple emails using a comma")
+              select.hidden#email_select(style="margin-top: -10px" oninput="addRecipient(this.value)")
+            .flexBar
+              button(type="button" onclick="openPanel(1)") Cancel
+              button Generate
+      div.centered(name="loading" style="display: none")
+        img(src="/images/loading.svg" style="filter: invert(0.3)")
+
+    #alertBox
+      h2
+      h4
+      .flexBar
+      .blockActions
+
+    #segment_CM.contextMenu
+      button.title
+      button Open analytics
+      button(name="online") Change to Online
+
+    .tooltip(for="tile")
+      .tooltip-content Date
+      .tooltip-arrow
+
+    #templates(style="display: none")
+      table
+        tr#app_5Row
+          td.name
+          td.time
+      #segment.segment
+        .flexBar
+          h3
+          h4
+        .content
+          div
+        h5 Last seen: 
+      .file
+        img.icon(src="/images/file-icon.txt.svg")
+        p %name%.%extension%
+        img(src="/images/download-icon.svg" onclick="downloadReport(this.dataset.href)")
+
+    #data_storage(data-config_data=config_data data-misc_data=misc_data data-files=other style="display: none")
+
+    style.
+      :root {
+        --tag-size: #{layout.tag_size / 20 + "rem"};
+        --tile-size: #{layout.tile_size / 20 + "rem"};
+        --label-locations: #{layout.label_locations === "true" ? "inline-block" : "none"};
+        --identifier-opacity: 0;
+      }
+
+    script(src='/javascripts/general-functions.js')
+    script(src='/javascripts/desktop-data-reports.js')

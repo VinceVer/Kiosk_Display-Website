@@ -14,6 +14,7 @@ html(lang='en')
       a.navLink(href="/settings/database/conditions") Priority Conditions
       a.navLink(href="/settings/database/filters") Database Filters
       a.navLink(href="/settings/status") Status Messages
+      //a.navLink(href="/settings/schedules") Schedules
       form#login(onsubmit="testPassword(this.parentNode.querySelector('input').value, event)")
         input(type="password" placeholder=" Log in by entering the site key" required)
         input#loginButton(type="submit" value="\u23CE")
@@ -31,8 +32,6 @@ html(lang='en')
       h2.header Display Groups:
       .hideOnLoad
         #groupGrid.cardView(style="display: block")
-        //h2.header Display Layout:
-        //#layoutGrid.cardView
         h2.header Application Naming:
         #appGrid.cardView
         h2.header Status Messages:

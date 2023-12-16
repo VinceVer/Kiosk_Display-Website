@@ -2,6 +2,7 @@ const groupingURL = "/settings/grouping",
     layoutURL = "/settings/layout",
     appURL = "/settings/apps",
     statusURL = "/settings/status",
+    schedulesURL = "/settings/schedules"
     databaseURL = "/settings/database";
 let response, writeAccess;
 const tile_contextMenu = document.getElementById("tile_CM");
