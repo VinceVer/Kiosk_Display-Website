@@ -948,6 +948,20 @@ const updateAppT = () => {
     }
 }
 
+const updateAppS = () => {
+    // document.querySelectorAll('.standby_updated').forEach(element => {
+    //     element.innerText = "Stanby - " + misc_data
+    // });
+
+    if (!document.querySelector('.flexBar[for=standby]') || (document.querySelector('.flexBar[for=standby]').dataset.last_name === misc_data.standby.name && document.querySelector('.flexBar[for=standby]').dataset.last_phone === misc_data.standby.phone)) return;
+    document.querySelectorAll('.flexBar[for=standby]').forEach(element => {
+        element.dataset.last_name = misc_data.standby.name
+        element.dataset.last_phone = misc_data.standby.phone
+    });
+    document.querySelectorAll('.flexBar[for=standby] input[name=name]').forEach(element => element.value = misc_data.standby.name);
+    document.querySelectorAll('.flexBar[for=standby] input[name=phone]').forEach(element => element.value = misc_data.standby.phone);
+}
+
 const updateFontSize = (app) => {
     switch(app.id) {
         case "app_5":
@@ -1014,6 +1028,7 @@ if (!location.href.includes("desktop/layout")) {
     updateAppT();
     updateApp5();
     updateAppP();
+    updateAppS();
     loadApps();
 
     setInterval(async function() {
@@ -1023,6 +1038,7 @@ if (!location.href.includes("desktop/layout")) {
             updateApp5();
             misc_data = await (await fetch('/storage/misc.json')).json();
             updateAppP();
+            updateAppS();
             updateAppT();
             document.getElementById("alert").innerText = misc_data.alert;
 

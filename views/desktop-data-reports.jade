@@ -59,8 +59,8 @@ html(lang='en')
               .flexBar(style="margin-bottom: 20px") Save as:
                 select#extension_select(oninput="this.parentNode.querySelector('input').value = this.value; ")
                   option(value=".csv") .csv
-                  option(value=".html") .html (Webpage)
-                  option(value=".json") .json
+                  option(value=".html" disabled) .html (Webpage)
+                  option(value=".json" disabled) .json
                   option(value=".md") .md
                   option(value=".txt" selected) .txt (Plain text)
                   option(value=".xlsx") .xlsx (Excel worksheet)
@@ -72,8 +72,23 @@ html(lang='en')
             .flexBar
               button(type="button" onclick="openPanel(1)") Cancel
               button Generate
-      div.centered(name="loading" style="display: none")
+      div.centered_single(name="loading" style="display: none")
         img(src="/images/loading.svg" style="filter: invert(0.3)")
+      div.centered_single(name="success" style="display: none")
+        .flexBar.column(style="gap: 20px")
+          .flexBar.column.border.padded-hor#latest_reports
+            h1 Success!
+            label Your report has successfully been generated.
+            br
+            .file
+              img.icon(src="/images/file-icon.txt.svg")
+              p %name%.%extension%
+              img(src="/images/download-icon.svg" onclick="downloadReport(this.dataset.href)")
+            br
+            div(name="email_output" style="display: none")
+              label An email containing this file and a plain text variant has also been sent to:%recipients%
+          .flexBar
+            button(onclick="location.reload()") Back to start
 
     #alertBox
       h2

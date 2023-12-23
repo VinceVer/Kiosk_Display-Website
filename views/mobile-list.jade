@@ -5,10 +5,16 @@ html(lang='en')
     link(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)
     link(rel='stylesheet' href='/stylesheets/mobile.css')
   body.fade
-    button#settingsIcon(onclick="openSettings()")
+    //button#settingsIcon(onclick="openSettings()")
 
     #display(style="visibility: hidden")
       #header KIOSKS
+      #info
+        p Standby: 
+        p#standby
+          span= misc_data.standby.name
+            |  - 
+          a(name="standby-phone" href="tel:0630609675" onclick="event.preventDefault()")= misc_data.standby.phone
       #search.flexBar
         input(type="text" placeholder="Type to search...")
       #kiosk_table
@@ -71,6 +77,12 @@ html(lang='en')
       div
         button.title
         button(name="online") Change to Online
+
+    #phone_CM.contextMenu(style="height: 0px; opacity: 0; display: none;")
+      div
+        button.title
+        button(name="call") Make a call
+        button(name="cancel") Cancel
 
     #templates(style="display: none")
       table

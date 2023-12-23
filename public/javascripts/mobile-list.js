@@ -2,9 +2,11 @@ const config_data = JSON.parse(document.getElementById("data_storage").dataset.c
 let status_database = JSON.parse(document.getElementById("data_storage").dataset.status_database);
 let misc_data = JSON.parse(document.getElementById("data_storage").dataset.misc_data);
 const segment_contextMenu = document.getElementById("segment_CM");
+const phone_contextMenu = document.getElementById("phone_CM");
 const overlay = document.getElementById("overlay");
 const settings = document.getElementById("settings");
 const searchInput = document.querySelector('#search input');
+const phone_anchor = document.querySelector('a[name=standby-phone]');
 let pressTimer;
 
 const clickEvent = new MouseEvent("click", {
@@ -366,6 +368,29 @@ const getTimeSince = (millisecondsDiff) => {
     return "Now.";
 }
 
+const loadContextMenu_PHONE = (event, element) => {
+    event.preventDefault();
+    
+    phone_contextMenu.querySelector('button[name=call]').ontouchend = (e) => {
+        location.href = "tel:" + element.innerText;
+    }
+
+    phone_contextMenu.querySelector('button[name=cancel]').ontouchend = () => {
+        document.dispatchEvent(clickEvent);
+    }
+
+    with (phone_contextMenu) {
+        querySelector('button.title').innerText = element.parentNode.querySelector('span').innerText + element.innerText;
+        style.top = "30vh";
+        style.display = 'flex';
+    }
+
+    setTimeout(() => {
+        phone_contextMenu.style.height = phone_contextMenu.querySelector('div').scrollHeight + "px";
+        phone_contextMenu.style.opacity = 1;
+    }, 1);
+}
+
 const loadContextMenu_SEGMENT = (event, segment) => {
     event.preventDefault();
     const touch = event.touches[0];
@@ -493,6 +518,13 @@ const updateAppT = () => {
     }
 }
 
+const updateAppS = () => {
+    with (document.getElementById("standby")) {
+        querySelector('span').innerText = misc_data.standby.name + " - ";
+        querySelector('a').innerText = misc_data.standby.phone;
+    }
+}
+
 loadGrid();
 updateAppT();
 
@@ -512,7 +544,8 @@ addEventListener("resize", (event) => {
 
 document.addEventListener('click', (e) => {
     if (!e.target.parentNode.classList.contains("contextMenu")) {
-        document.querySelectorAll(`tr, .data h2, .segment`).forEach(element => element.style.removeProperty("filter"))
+        document.querySelectorAll(`tr, .data h2, .segment`).forEach(element => element.style.removeProperty("filter"));
+        phone_anchor.style.removeProperty("filter");
         document.querySelectorAll('.contextMenu').forEach(element => {
             element.style.height = 0;
             element.style.opacity = 0;
@@ -539,6 +572,21 @@ searchInput.addEventListener('input', function() {
             row.style.display = "none"
         }
     });
+});
+
+phone_anchor.addEventListener("touchstart", function (event) {
+    event.preventDefault();
+    pressTimer = setTimeout(function () {
+        document.querySelectorAll(`tr`).forEach(element => element.style.filter = "brightness(0.2)");
+        phone_anchor.style.filter = "brightness(1.5)";
+        loadContextMenu_PHONE(event, phone_anchor);
+        if ("vibrate" in navigator) {
+            navigator.vibrate([50, 1, 1, 1, 50]);
+        }
+    }, 500);
+});
+phone_anchor.addEventListener("touchend", function (event) {
+    clearTimeout(pressTimer);
 });
 
 setInterval(async function() {
@@ -641,6 +689,7 @@ setInterval(async function() {
     misc_data = await (await fetch('/storage/misc.json')).json();
     updateAppP();
     updateAppT();
+    updateAppS();
     if (misc_data.alert.replaceAll(" ", "")) {
         document.getElementById("header").innerText = misc_data.alert;
         document.getElementById("header").classList.add("alert");

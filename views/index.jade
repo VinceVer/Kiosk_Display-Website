@@ -5,6 +5,7 @@ html
     style.
       #version_num {
         color: #3e3e3e;
+        cursor: pointer;
         font-family: Arial, Helvetica, sans-serif;
         font-size: 3rem;
         margin: 0;
@@ -12,6 +13,10 @@ html
         text-align: center;
         top: calc(50vh + 15rem);
         width: 100vw;
+
+        &:hover {
+          filter: brightness(1.5);
+        }
       }
 
   body
@@ -23,7 +28,7 @@ html
       a.tile(href='/settings')
         .tile-content(style="background-image: url(/images/SettingsTile.jpg); background-size: contain;")
 
-    h6#version_num Display Version #{version}
+    h6#version_num(onclick="location.href='/changelog'") Display Version #{version}
 
     script(src='/javascripts/effects.js')
     script.

@@ -11,7 +11,7 @@ const load = async () => {
 
         const fileBar = document.querySelector('#templates .file').cloneNode(true);
         fileBar.querySelector('img.icon').src = `/images/file-icon.${fileExtension}.svg`;
-        if (fileName.length > 20) {fileName = fileName.slice(0,18).trim()+".."}
+        if (fileName.length > 17) {fileName = fileName.slice(0,15).trim()+".."}
         fileBar.querySelector('p').innerText = fileName+"."+fileExtension;
         fileBar.querySelector('img:not(.icon)').dataset.href = file;
 
@@ -104,7 +104,7 @@ const openPanel = (panel) => {
 const submitSettings = (event, form, url, alertInfo) => {
     event.preventDefault();
     document.getElementById("container").style.display = "none";
-    document.querySelector('div[name=loading]').style.display = "block";
+    document.querySelector('div[name=loading]').style.display = "flex";
 
     const formData = new FormData(form);
 
@@ -125,6 +125,8 @@ const submitSettings = (event, form, url, alertInfo) => {
         };
     });
 
+    if (putData.name.replaceAll(" ","") === "") putData.name = document.querySelector('input[name=name]').placeholder;
+
     console.log(putData)
 
     fetch(url, {
@@ -136,10 +138,16 @@ const submitSettings = (event, form, url, alertInfo) => {
     })
     .then(response => response.json())
     .then(data => {
-        alert({title: `Success`, description: `The report has successfully been generated.`,
-            buttons: [{text: "Close", invert: 0.85, action: () => {location.reload()}},
-            {text: "Download", action}]
-        });
+        console.log(data);
+        document.querySelector('div[name=loading]').style.display = "none";
+        with (document.querySelector('div[name=success]')) {
+            style.display = "flex";
+            querySelector('.file p').innerText = (data.name.length > 17 ? data.name.slice(0,15).trim()+".." : data.name)+data.extension;
+            querySelector('.file .icon').src = `/images/file-icon${data.extension}.svg`;
+            querySelector('.file img:not(.icon)').dataset.href = data.name+data.extension;
+            querySelector('div[name=email_output]').style.display = document.querySelector('input[name=email_output]').value === "on" ? "block" : "none";
+            querySelector('div[name=email_output] label').innerHTML = querySelector('div[name=email_output] label').innerHTML.replace("%recipients%", `<br>${data.recipients.join("<br>")}`)
+        }
     })
     .catch(error => {
         console.error('Error:', error);
@@ -151,3 +159,6 @@ load();
 document.getElementById("extension_select").addEventListener('input', () => {
     document.getElementById("extension_label").innerText = document.getElementById("extension_select").value
 });
+
+document.querySelector('input[name=name]').addEventListener('input', (e) => e.target.value = e.target.value.replace(/[<>:"/\\|?*\x00-\x1F]/g, " "))
+document.querySelector('input[name=name]').placeholder = document.querySelector('input[name=name]').placeholder.replace(/[<>:"/\\|?*\x00-\x1F]/g, " ")

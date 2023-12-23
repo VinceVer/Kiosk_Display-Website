@@ -45,6 +45,13 @@ router.get('/', (req, res, next) => {
     });
 });
 
+/* GET home page. */
+router.get('/changelog', (req, res, next) => {
+    res.render('changelog', {
+        version: websiteVersion
+    });
+});
+
 router.get('/status-database', (req, res) => {
     const data = JSON.parse(fs.readFileSync(__dirname+`/../../.database/bin/status_database.json`));
     res.send(data);
@@ -68,7 +75,7 @@ router.get('/database', (req, res, next) => {
 });
 
 router.post('/data/reports', (req, res) => {
-    const report = generateReport(req.body);
+    generateReport(req.body, res);
 });
 
 router.get('/storage/:file', (req, res) => {
@@ -255,12 +262,10 @@ const modifyObject = (fileData, properties, value) => {
 
     } else {
         const currentProperty = properties[0];
-        if (typeof fileData[currentProperty] === 'object') {
-            modifyObject(fileData[currentProperty], properties.slice(1), value)
-        } else if (properties.length === 2) {
-            fileData[currentProperty] = {}
-            modifyObject(fileData[currentProperty], properties.slice(1), value)
+        if (typeof fileData[currentProperty] !== 'object' || fileData[currentProperty] === null) {
+            fileData[currentProperty] = {};
         }
+        modifyObject(fileData[currentProperty], properties.slice(1), value)
     }
 }
 
@@ -280,7 +285,7 @@ const deleteObject = (fileData, properties) => {
     }
 }
 
-const generateReport = (settings) => {
+const generateReport = (settings, res) => {
     const config_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/config.json'));
 
     function stringToUnix(string) {
@@ -403,11 +408,14 @@ const generateReport = (settings) => {
                         break;
                 }
 
-                fs.writeFileSync(__dirname+`/../storage/reports/${settings.name || "test"}${settings.format}`, output);
+                fs.writeFileSync(__dirname+`/../storage/reports/${settings.name.replace(/[<>:"/\\|?*\x00-\x1F]/g, " ")}${settings.format}`, output);
                 if (settings.email_output === "on") {
-                    mail.sendEmail(settings.email_recipient, settings.name || "test", parseToTXT(rows), __dirname+`/../storage/reports/${settings.name || "test"}${settings.format}`, settings.format);
+                    mail.sendEmail(settings.email_recipient, settings.name.replace(/[<>:"/\\|?*\x00-\x1F]/g, " "), parseToTXT(rows), __dirname+`/../storage/reports/${settings.name}${settings.format}`, settings.format);
                 }
-                //res.status(200).send({data: rows, time: (new Date() - startTime) / 1000})
+                
+                if (res) {
+                    res.status(201).send({name: settings.name.replace(/[<>:"/\\|?*\x00-\x1F]/g, " "), extension: settings.format, recipients: settings.email_recipient.split(",")});
+                }
             }
         });
     } catch (error) {

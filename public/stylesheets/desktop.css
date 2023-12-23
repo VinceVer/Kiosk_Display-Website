@@ -53,7 +53,7 @@ body {
     width: 100vw;
 }
 
-input[type=text], input[type=number], input[type=email] {
+input[type=text], input[type=number], input[type=email], input[type=tel] {
     background-color: var(--gray40);
     border: none;
     color: var(--text-color2);
@@ -68,6 +68,10 @@ input[type=text], input[type=number], input[type=email] {
         cursor: pointer;
         filter: invert(0.1);
     }
+}
+
+input[type=tel] {
+    width: 10rem !important;
 }
 
 nav {

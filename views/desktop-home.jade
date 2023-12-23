@@ -52,6 +52,7 @@ html(lang='en')
           button.appButton#app_5Button(onclick="openCloseApp('app_5', this)" class=`${layout.app_5_display === "block" ? "selected" : ""}`) ⚠
           button.appButton#app_TButton(onclick="openCloseApp('app_T', this)" class=`${layout.app_T_display === "block" ? "selected" : ""}`) ⧖
           button.appButton#app_HsButton(onclick="openCloseApp('app_Hs', this)" class=`${layout.app_Hs_display === "block" ? "selected" : ""}`) %
+          button.appButton#app_SButton(onclick="openCloseApp('app_S', this)" class=`${layout.app_S_display === "block" ? "selected" : ""}`) S
           //- button.appButton#app_iButton(title="Infographic Overlay" onclick="openCloseApp('app_i', this)" class=`${layout.app_i_display === "block" ? "selected" : ""}`) i
           //- button.appButton#app_RButton(onclick="openCloseApp('app_R', this)" class=`${layout.app_R_display === "block" ? "selected" : ""}`) R
 
@@ -83,6 +84,15 @@ html(lang='en')
         .flexBar(style="gap: 10px; margin: 10px 0 0 5px; width: fit-content")
           button Update
           button Remove
+    #app_S.app
+      .header.standby_updated Standby
+        button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
+      form(onsubmit="submitForm(event, this, '/update/misc.json/standby')")
+        .flexBar(for="standby" style="justify-content: stretch; margin: 10px 0 0 5px; width: fit-content") Standby:
+          input(type="text", name="name" placeholder="Name" required style="width: 12rem" value=misc_data.standby.name)
+          input(type="tel", name="phone" placeholder="Phone Number" required value=misc_data.standby.phone)
+        .flexBar(style="gap: 10px; margin: 10px 0 0 5px; width: fit-content")
+          button Update
     //- #app_i.app
     //-   .header Display Info
     //-     button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
@@ -179,6 +189,14 @@ html(lang='en')
         left: #{layout.app_i_left || "10px"};
         bottom: #{layout.app_i_bottom || "calc(var(--footer-height) + 10px)"};
         width: #{layout.app_i_width || "fit-content"};
+      }
+
+      #app_S {
+        display: #{layout.app_S_display || "none"};
+        height: #{layout.app_S_height || "fit-content"};
+        left: #{layout.app_S_left || "10px"};
+        bottom: #{layout.app_S_bottom || "calc(var(--footer-height) + 10px)"};
+        width: #{layout.app_S_width || "fit-content"};
       }
 
       .kiosk.urgency_-1 {--identifier-opacity: #{layout.urgency_1_tag || 0};}

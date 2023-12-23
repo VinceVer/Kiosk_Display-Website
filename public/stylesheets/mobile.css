@@ -30,6 +30,10 @@ h3 {
 }
 h5 {color: var(--text-color1)}
 
+a {
+    color: var(--text-color1);
+}
+
 body {
     background-color: var(--gray20);
     background-position: center;
@@ -347,6 +351,16 @@ button.HOME {
     }
 }
 
+#info {
+    display: flex;
+    translate: 0 -10px;
+
+    &> p {
+        translate: 10px 0;
+        white-space: wrap;
+    }
+}
+
 #kiosk_table {
     /* height: calc(100vh - 40rem); */
     overflow-y: auto;
@@ -525,4 +539,9 @@ button.HOME {
     right: 2rem;
     top: 2rem;
     z-index: 1;
+}
+
+#standby {
+    text-align: center;
+    width: 100%;
 }

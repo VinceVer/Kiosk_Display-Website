@@ -1,0 +1,120 @@
+:root {
+  --bg-color: rgb(20, 20, 20);
+  --bg-color-alt: rgb(40, 40, 40);
+  --card-color: rgb(23, 23, 23);
+  --color: rgb(150, 150, 150);
+
+  color: var(--color);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  color: var(--color)
+}
+
+a[href="#bug_tracker"] {
+  background-color: var(--card-color);
+  border-radius: 5px;
+  scale: 0.9;
+  text-align: center;
+  text-indent: 0 !important;
+}
+
+body {
+  background-color: var(--bg-color);
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  width: 100vw;
+}
+
+button.HOME {
+  aspect-ratio: 6/1;
+  background: url(/images/HomeButton.png) no-repeat;
+  background-color: var(--card-color);
+  background-size: cover;
+  border: 0;
+  color: var(--text-color2);
+  font-size: 1rem;
+  height: 1.5rem;
+  margin: 0 0.25rem 0 0.25rem;
+  position: relative;
+  text-align: start;
+
+  &:hover {
+      -webkit-filter: invert(0.1);
+      cursor: pointer;
+      filter: invert(0.1);
+  }
+}
+
+h1 {
+  color: white;
+  margin-bottom: -10px;
+  margin-top: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+h2 {
+  padding-left: 20px;
+}
+
+.version, #bug_tracker {
+  align-items: center;
+  /* background-color: var(--bg-color-alt);
+  border: solid 1px var(--color); */
+  /* border-radius: 40px; */
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  translate: 0 -5rem;
+  width: 100vw;
+}
+
+/* #bug_tracker .content {
+  align-items: center;
+  background-color: var(--bg-color-alt);
+  border: solid 1px var(--color);
+  border-radius: 40px;
+  display: flex;
+  gap: 10px;
+  height: 80%;
+  justify-content: center;
+  width: 80%;
+} */
+
+#sidebar {
+  background-color: var(--bg-color-alt);
+  border-right: solid 1px var(--color);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  height: 100vh;
+  padding: 5px 0 0 0;
+  position: fixed;
+  top: 0;
+  width: 10rem;
+  z-index: 1;
+}
+
+#sidebar a {
+  color: white;
+  display: inline-block;
+  font-size: 1.2rem;
+  padding: 2px 0 2px 0;
+  text-decoration: none;
+  text-indent: 10px;
+  width: 100%;
+
+  &:hover {
+    color: var(--color);
+  }
+}
+
+#container {
+  font-size: 20px;
+  height: 100vh;
+  position: absolute;
+  width: 100vw;
+}

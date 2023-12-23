@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 var fs = require('fs');
+var yaml = require('js-yaml');
 
 const saveEmail = (to) => {
     const misc_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/misc.json'));
@@ -15,9 +16,9 @@ const saveEmail = (to) => {
 }
 
 const sendEmail = (to, subject, text, file, extension) => {
-    saveEmail();
+    saveEmail(to);
 
-    const yamlData = fs.readFileSync('../../.database/bin/.imap-config.yaml', 'utf8');
+    const yamlData = fs.readFileSync(__dirname+'/../../.database/bin/.imap-config.yaml', 'utf8');
     const imapConfig = yaml.load(yamlData);
     const config_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/config.json'));
 
@@ -25,14 +26,14 @@ const sendEmail = (to, subject, text, file, extension) => {
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: imapConfig.email, // Your email address
-            pass: imapConfig.app_password // Your password
+            user: imapConfig.user, // Your email address
+            pass: imapConfig.password // Your password
         }
     });
 
     // Define the email content
     let mailOptions = {
-        from: 'cutemonitordev@gmail.com', // Sender address
+        from: imapConfig.user, // Sender address
         to: to.replaceAll(" ","").split(","), // List of recipients
         subject: `[Report] ${subject}`, // Subject line
         text: `This email was generated and sent using the ${config_data.location} Report Generator.\n\n${text}`, // Plain text body

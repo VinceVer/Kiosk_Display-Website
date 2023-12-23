@@ -36,7 +36,18 @@ div[name=loading] {
     padding: 50px;
 }
 
-.centered button, input[type=date] {
+.centered_single {
+    align-items: center;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+}
+
+.centered button, .centered_single button, input[type=date] {
     background-color: var(--gray40);
     border: none;
     color: var(--text-color2);
@@ -50,7 +61,7 @@ div[name=loading] {
     }
 }
 
-.centered button {
+.centered button, .centered_single button {
     font-size: 1.2rem;
     width: 15.75rem;
 }
