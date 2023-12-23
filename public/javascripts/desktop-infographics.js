@@ -442,7 +442,7 @@ const loadApps = () => {
     let appID, checkSize;
     document.querySelectorAll('.hook').forEach(hook => {
         appID = getCookie(hook.id+"_app")
-        if (appID) {
+        if (appID && document.getElementById(appID)) {
             minifyApp(document.getElementById(appID), hook);
             document.getElementById(appID+"Button").classList.add("selected");
         }
