@@ -115,9 +115,9 @@ const setupNewFiles = async () => {
 }
 
 function runStartFile() {
-    const fullPath = path.join(__dirname, '..', 'start.bat');
+    const fullPath = path.join(__dirname, 'bin', 'start.bat');
 
-    exec(`start cmd /c start.bat`, (error, stdout, stderr) => {
+    exec(`start cmd /c ${fullPath}`, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing .bat file: ${error}`);
             return;

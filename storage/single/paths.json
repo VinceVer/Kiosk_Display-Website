@@ -35,6 +35,10 @@
         {
             "file": "hub-connection.txt",
             "path": ".website/storage"
+        },
+        {
+            "file": "Force shutdown.bat",
+            "path": ""
         }
     ],
     "del": []

@@ -66,7 +66,7 @@ const getLatestRelease = async () => {
                 const folderName = await extractTarball(downloadPath, extractTo);
                 console.log(folderName)
                 await fsp.unlink(downloadPath);
-                await copyContents(path.join(extractTo, folderName), '../.website');
+                await copyContents(path.join(extractTo, folderName), __dirname);
                 setupNewFiles();
             } else {
                 console.log("Skipping update...");
@@ -89,10 +89,10 @@ const getLatestRelease = async () => {
                 await downloadFiles(latestTagName, "Database");
                 const folderName = await extractTarball(downloadPath, extractTo);
                 await fsp.unlink(downloadPath);
-                await copyContents(path.join(extractTo, folderName), '../.database');
+                await copyContents(path.join(extractTo, folderName), __dirname+'/../.database');
                 setupNewFiles();
             } else {
-                console.log("okay");
+                console.log("Skipping update...");
                 // runStartFile();
             }
         }
@@ -197,12 +197,12 @@ const setupNewFiles = () => {
             const paths = JSON.parse(fs.readFileSync('storage/single/paths.json'));
 
             for (let item of paths.add) {
-                await fsp.access(`../${item.path}`, fs.constants.F_OK, async (err) => {
+                await fsp.access(__dirname+`/../${item.path}`, fs.constants.F_OK, async (err) => {
                     if (err) {
                         console.log("Adding file: ", item.file);
-                        await fsp.rename(`storage/single/${item.file}`, `../${item.path}/${item.file}`);
+                        await fsp.rename(__dirname+`/storage/single/${item.file}`, `../${item.path}/${item.file}`);
                     } else {
-                        await fsp.unlink(`storage/single/${item.file}`);
+                        await fsp.unlink(__dirname+`/storage/single/${item.file}`);
                     }
                 });
             }
@@ -211,7 +211,7 @@ const setupNewFiles = () => {
                 await fsp.access(`../${item.path}`, fs.constants.F_OK, async (err) => {
                     if (!err) {
                         console.log("Removing old file: ", item.path)
-                        await fsp.unlink(`../${item.path}`);
+                        await fsp.unlink(__dirname+`/../${item.path}`);
                     }
                 });
             }
@@ -226,7 +226,7 @@ const setupNewFiles = () => {
 getLatestRelease();
 
 function runStartFile() {
-    const fullPath = path.join(__dirname, 'bin', 'Start.bat');
+    const fullPath = path.join(__dirname, 'bin', 'start.bat');
 
     exec(`start cmd /c ${fullPath}`, (error, stdout, stderr) => {
         if (error) {

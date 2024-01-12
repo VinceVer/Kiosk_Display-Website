@@ -441,4 +441,17 @@ process.on('SIGINT', () => {
         }
     });
 });
+
+router.get('/shutdown', (req, res) => {
+    const ip = req.ip || req.connection.remoteAddress;
+  
+    // Check if the request is from localhost
+    if (ip === "127.0.0.1" || ip === "::1" || ip === "::ffff:127.0.0.1") {
+        fs.writeFile(__dirname+'/../shutdown.event', "EXIT(0)", () => {});
+        res.send('Shutting down the server...');
+    } else {
+        // If not localhost, deny access
+        res.status(403).send('Access denied');
+    }
+});
 /* ---------- */

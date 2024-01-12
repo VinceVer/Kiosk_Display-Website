@@ -7,6 +7,9 @@
 var app = require('../app');
 var debug = require('debug')('express:server');
 var http = require('http');
+const fs = require('fs');
+
+fs.writeFile('shutdown.event', "START", () => {});
 
 /**
  * Get port from environment and store in Express.
@@ -88,3 +91,17 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+/**
+ * Listen for shutdown.
+ */
+
+fs.watch('shutdown.event', () => {
+  fs.readFile('shutdown.event', 'utf-8', (error, data) => {
+    console.log(data)
+    if (data === "EXIT(0)") {
+      console.warn("Shutting down...");
+      process.exit(0);
+    }
+  });
+});
