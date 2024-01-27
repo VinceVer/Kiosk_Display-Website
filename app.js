@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
+var fs = require('fs');
 
 var indexRouter = require('./routes/index');
 var settingsRouter = require("./routes/settings");
@@ -11,6 +12,28 @@ var desktopRouter = require("./routes/desktop");
 var mobileRouter = require("./routes/mobile");
 
 var app = express();
+
+// file verification to avoid errors
+(function verifyFiles() {
+  fs.readFile(__dirname+'/storage/misc.json', 'utf-8', (err, data) => {
+    if (err) {
+      console.error('Error reading misc.json: ',err);
+      return;
+    }
+    try {
+      const jsonData = JSON.parse(data);
+      if (!jsonData.standby) {
+        jsonData.standby = {
+          name: "Example",
+          phone: 0
+        }
+        fs.writeFileSync(__dirname+'/storage/misc.json', JSON.stringify(jsonData, null, "\t"));
+      }
+    } catch (parseError) {
+      console.error('Error parsing misc.json: ', parseError);
+    }
+  })
+})();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

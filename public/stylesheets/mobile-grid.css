@@ -500,12 +500,13 @@ button.HOME {
     justify-content: space-evenly;
     height: calc(100vh - 3rem);
     margin: -7.5rem 0 0 2rem;
-    overflow-y: auto;
+    overflow: visible;
     width: calc(100% - 4rem);
 }
 
 #display {
     height: calc(100vh - var(--footer-height));
+    overflow-y: scroll;
     position: relative;
     width: 100vw;
 

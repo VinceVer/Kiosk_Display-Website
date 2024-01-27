@@ -124,6 +124,16 @@ router.get('/fileData', (req, res, next) => {
     res.send(JSON.stringify({data: data, write: false}));
 });
 
+/* GET personal access token */
+router.get('/token', (req, res, next) => {
+    try {
+        const data = fs.readFileSync(__dirname+'/../storage/token', 'utf-8');
+        res.status(200).send(JSON.stringify({error: false, url: data.split("\n")[0], token: data.split("\n")[1]}));
+    } catch (error) {
+        res.status(500).send(JSON.stringify({error: true, token: error}));
+    }
+});
+
 /* PUT config update. */
 router.put('/update/:file/:type/:p1?/:p2?/:p3?/:p4?/:p5?', (req, res, next) => {
     const {file, type, ...properties} = req.params;
@@ -229,6 +239,15 @@ router.put('/hub-connection', (req, res) => {
         res.status(200).send({location: JSON.parse(fs.readFileSync(__dirname+`/../storage/config.json`)).location, data: JSON.parse(fs.readFileSync(__dirname+`/../storage/misc.json`))})
     } catch (error) {
         res.status(500).send({message:"Error", error: {status:500, stack: error}})
+    }
+});
+
+router.post('/issue/submit', (req, res) => {
+    try {
+        success = submitReport();
+        res.status(201).send({success: success});
+    } catch(error) {
+        res.status(500).send({success: false});
     }
 });
 
@@ -440,18 +459,5 @@ process.on('SIGINT', () => {
             process.exit(0);
         }
     });
-});
-
-router.get('/shutdown', (req, res) => {
-    const ip = req.ip || req.connection.remoteAddress;
-  
-    // Check if the request is from localhost
-    if (ip === "127.0.0.1" || ip === "::1" || ip === "::ffff:127.0.0.1") {
-        fs.writeFile(__dirname+'/../shutdown.event', "EXIT(0)", () => {});
-        res.send('Shutting down the server...');
-    } else {
-        // If not localhost, deny access
-        res.status(403).send('Access denied');
-    }
 });
 /* ---------- */

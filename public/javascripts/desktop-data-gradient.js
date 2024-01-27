@@ -529,7 +529,7 @@ const loadApps = () => {
             const expirationDate = new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000);
             document.cookie = `${app.id}_left=${app.style.left}; expires=${expirationDate.toUTCString()}; path=/`;
             document.cookie = `${app.id}_bottom="calc(100vh - ${app.style.top} - ${app.offsetHeight}px)"; expires=${expirationDate.toUTCString()}; path=/`;
-        })
+        });
 
         let lastWidth;
         let lastHeight;
@@ -919,7 +919,7 @@ const visualizeData = async () => {
     let netValue, maxValue = 0, minValue = 1000000;
     for (let kioskName in kioskData) {
         netValue = kioskData[kioskName].end_value - kioskData[kioskName].start_value;
-        kioskData[kioskName].net_value = netValue;
+        kioskData[kioskName].net_value = netValue > 0 ? netValue : kioskData[row.kiosk_name].end_value;
 
         if (netValue > maxValue) maxValue = netValue;
         if (netValue < minValue) minValue = netValue;

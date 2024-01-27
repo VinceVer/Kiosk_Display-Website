@@ -1,6 +1,22 @@
 {
 	"alert": "",
-	"score": 0,
+	"score": 100,
 	"last_check": "1970-01-01T00:00:00.000",
-	"groups": {}
+	"standby": {
+		"name": "Example",
+		"phone": 0
+	},
+	"groups": {
+		"Example Group": {
+			"number_of_locations": 1,
+			"number_of_kiosks": 0,
+			"number_of_devices": {
+				"total": 0
+			},
+			"number_of_applications": {
+				"total": 0
+			},
+			"health_score": null
+		}
+	}
 }

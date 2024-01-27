@@ -3,52 +3,22 @@ html
   head
     link(rel='stylesheet' href='/stylesheets/changelog.css')
     style.
-      #version_num {
-        color: #3e3e3e;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 3rem;
-        margin: 0;
-        position: fixed;
-        text-align: center;
-        top: calc(50vh + 15rem);
-        width: 100vw;
-      }
+      
 
   body
     nav#sidebar
       button.HOME(onclick="location.href = '/'") MAIN MENU
     #container
-      #2_5_0.version(data-for="Web")
+      #bug_tracker.tab
         .content
-          h1 Website Version 2.5.0
-          h2 Added: 
-          ul 
-            li This changelog page 
-            li Report generator on 
-              a(href="/desktop/data/reports") /desktop/data/reports
-            li Standby information on 
-              a(href="/mobile") /mobile
-            li Standby settings window on 
-              a(href="/desktop") /desktop
-          h2 Updated: 
-          ul 
-            li Fixed the download buttons at 
-              a(href="/desktop/data/reports") /desktop/data/reports
-            li Back-end reliability improvements 
-      #2_1_2.version(data-for="Db")
-        .content
-          h1 Database Version 2.1.3
-          h2 Updated: 
-          ul 
-            li Processed emails will be permanently removed instead of marked as read.
-      #bug_tracker
-        .content
-          h1 Nothing to see here (yet)
-          h2 If you can't track the bug, it doesn't exist.
+          h1 Issue Tracker
+          .table
+            .body
+          div(style="margin-top: 100px; font-weight: bold;") Report or update an issue:
+            br
+            textarea#report_text(name="message" style="color: white; width: 100%; margin-top: 2px; min-height: 4rem; translate: -2px; background-color: var(--bg-color-alt); font-family: Arial, Helvetica, sans-serif; resize: vertical;" placeholder="Describe the issue as detailed as possible.\n\nIf you want to update an existing issue, please note the id as well.\n(The id can be found below the title and always directly follows \"#\")")
+            button#report_submit(onclick='submitReport(document.getElementById("report_text").value)') Submit
+            h6(style="display: inline-block; width: 10px; white-space: nowrap; margin: 0")
+              span#result(style="font-size: 0.9rem; margin-left: 10px; font-weight: normal;") Note: Your report will be reviewed manually before it is shown on this page.
 
-    script.
-      const sidebar = document.getElementById("sidebar");
-      document.querySelectorAll('.version').forEach(element => {
-        sidebar.innerHTML += `<a href=#${element.id}>${element.dataset.for} v${element.id.replaceAll("_",".")}</a>`;
-      });
-      sidebar.innerHTML += `<a href=#bug_tracker>Bug Tracker</a>`;
+    script(src="/javascripts/changelog.js")

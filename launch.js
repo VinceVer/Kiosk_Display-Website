@@ -101,6 +101,8 @@ const getLatestRelease = async () => {
         runStartFile();
     } catch (error) {
         console.error('Error fetching latest release:', error.message);
+        console.log('Starting the program anyway...');
+        runStartFile();
     }
 };
 
