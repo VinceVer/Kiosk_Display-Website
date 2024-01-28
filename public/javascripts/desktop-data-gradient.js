@@ -919,10 +919,10 @@ const visualizeData = async () => {
     let netValue, maxValue = 0, minValue = 1000000;
     for (let kioskName in kioskData) {
         netValue = kioskData[kioskName].end_value - kioskData[kioskName].start_value;
-        kioskData[kioskName].net_value = netValue > 0 ? netValue : kioskData[row.kiosk_name].end_value;
+        kioskData[kioskName].net_value = netValue > 0 ? netValue : kioskData[kioskName].end_value;
 
         if (netValue > maxValue) maxValue = netValue;
-        if (netValue < minValue) minValue = netValue;
+        if (netValue < minValue && netValue >= 0) minValue = netValue;
     }
 
     document.getElementById("min_data").innerText = minValue;

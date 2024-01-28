@@ -17,6 +17,10 @@
             "path": ".website/storage"
         },
         {
+            "file": "token",
+            "path": ".website/storage"
+        },
+        {
             "file": "status_database.json",
             "path": ".database/bin"
         },
