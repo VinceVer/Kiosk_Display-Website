@@ -146,12 +146,14 @@ const submitReport = (text) => {
                 } else {
                     resultNotification("An unexpected error occurred. Please try again later or contact 'service.vanced08@gmail.com' directly.", true);
                 }
+            } else {
+              resultNotification("Your report has been sent successfully.");
             }
             return response.json()
         })
         .then(data => {
             if (data.success) {
-                resultNotification("Your report has been sent successfully.");
+              resultNotification("Your report has been sent successfully.");
             }
         })
         .catch(error => {

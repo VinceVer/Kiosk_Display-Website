@@ -4,7 +4,7 @@ var fs = require('fs');
 const multer = require('multer');
 var router = express.Router();
 const sqlite3 = require('sqlite3');
-const mail = require('./mail.js');
+const {sendEmail, submitReport} = require('./mail.js');
 const Database = new sqlite3.Database(__dirname+'/../../.database/bin/main-database.db');
 const oauthKeys = JSON.parse(fs.readFileSync(__dirname+'/../storage/oauth.json')).passwords;
 const websiteVersion = JSON.parse(fs.readFileSync(__dirname+'/../package.json')).version;
@@ -244,7 +244,7 @@ router.put('/hub-connection', (req, res) => {
 
 router.post('/issue/submit', (req, res) => {
     try {
-        success = submitReport();
+        success = submitReport(req.body.text);
         res.status(201).send({success: success});
     } catch(error) {
         res.status(500).send({success: false});

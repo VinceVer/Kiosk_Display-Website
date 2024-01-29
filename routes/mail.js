@@ -95,5 +95,6 @@ const submitReport = (text) => {
 }
 
 module.exports = {
-    sendEmail: sendEmail
+    sendEmail: sendEmail,
+    submitReport: submitReport
 }
