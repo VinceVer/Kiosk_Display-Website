@@ -23,16 +23,14 @@ html(lang='en')
         .content(style="margin-top: 7px;")
           div
             a.navLink.item(href="/desktop/data/gradient") Gradient Visualizer
+          //div
+            a.navLink.item(href="/desktop/data/logs") Event Logs
           div
             a.navLink.item(href="/desktop/data/reports") Report Generator
       a.navLink(href="/desktop/data/timeline") Timeline
 
       div#hookT1.hook(data-alt_align="start")
       div#hookT2.hook(data-alt_align="start")
-      //form#login(onsubmit="testPassword(this.parentNode.querySelector('input').value, event)")
-        input(type="password" placeholder=" Log in by entering the site key" required)
-        input#loginButton(type="submit" value="\u23CE")
-      //button#logout(onclick="testPassword('LOGOUT')") Click here to logout
 
     #display(style="visibility: hidden")
       .bar
@@ -93,22 +91,6 @@ html(lang='en')
           input(type="tel", name="phone" placeholder="Phone Number" required value=misc_data.standby.phone)
         .flexBar(style="gap: 10px; margin: 10px 0 0 5px; width: fit-content")
           button Update
-    //- #app_i.app
-    //-   .header Display Info
-    //-     button(onclick="openCloseApp(this.parentNode.parentNode.id, document.getElementById(this.parentNode.parentNode.id+'Button'), true)") X
-    //-   .flexBar(style="margin: 10px 0 0 5px; width: fit-content")
-    //-     select.i_type(style="margin-right: 5px" onchange="app_iHandler(this.parentNode)")
-    //-       option(value="" selected disabled) Select Datatype
-    //-       option(value="coupons_printed") Coupons Printed
-    //-       option(value="tags_printed") Tags Printed
-    //-       option(value="coupons_printed + tags_printed") Coupons + Tags Printed
-    //-     select.i_time(onchange="app_iHandler(this.parentNode)")
-    //-       option(value="" selected disabled) Select Time window
-    //-       option(value="last24h") Last 24h
-    //-       option(value="lastWeek") Last 7d
-    //-       option(value="lastMonth") Last 30d
-    //-       option(value="thisWeek") Current Week
-    //-       option(value="thisMonth") Current Month
 
     #alertBox
       h2

@@ -3,6 +3,13 @@ let status_database = JSON.parse(document.getElementById("data_storage").dataset
 let data, kioskData, misc_data;
 const segment_contextMenu = document.getElementById("segment_CM");
 const tile_contextMenu = document.getElementById("tile_CM");
+let query = "";
+
+const query_types = {
+    coupons_printed: "SELECT kiosk_name, SUM(value_diff) AS value FROM (SELECT earliest.kiosk_name, earliest.device_name, (latest.${type} - earliest.${type}) AS value_diff FROM (SELECT device_name, kiosk_name, ${type}, MIN(time) as time FROM devicetimeline WHERE time BETWEEN ${start_time} AND ${end_time} GROUP BY device_name) AS earliest JOIN (SELECT device_name, ${type}, MAX(time) as time FROM devicetimeline WHERE time BETWEEN ${start_time} AND ${end_time} GROUP BY device_name) AS latest ON earliest.device_name = latest.device_name) AS subquery GROUP BY kiosk_name;",
+    tags_printed: "SELECT kiosk_name, SUM(value_diff) AS value FROM (SELECT earliest.kiosk_name, earliest.device_name, (latest.${type} - earliest.${type}) AS value_diff FROM (SELECT device_name, kiosk_name, ${type}, MIN(time) as time FROM devicetimeline WHERE time BETWEEN ${start_time} AND ${end_time} GROUP BY device_name) AS earliest JOIN (SELECT device_name, ${type}, MAX(time) as time FROM devicetimeline WHERE time BETWEEN ${start_time} AND ${end_time} GROUP BY device_name) AS latest ON earliest.device_name = latest.device_name) AS subquery GROUP BY kiosk_name;",
+    paper_jams: "SELECT kiosk_name, SUM(value_diff) AS value FROM (SELECT earliest.kiosk_name, earliest.device_name, (latest.${type} - earliest.${type}) AS value_diff FROM (SELECT device_name, kiosk_name, ${type}, MIN(time) as time FROM devicetimeline WHERE time BETWEEN ${start_time} AND ${end_time} GROUP BY device_name) AS earliest JOIN (SELECT device_name, ${type}, MAX(time) as time FROM devicetimeline WHERE time BETWEEN ${start_time} AND ${end_time} GROUP BY device_name) AS latest ON earliest.device_name = latest.device_name) AS subquery GROUP BY kiosk_name;",
+}
 
 const clickEvent = new MouseEvent("click", {
     bubbles: true,
@@ -66,7 +73,6 @@ const loadGrid = () => {
 
     updateLocations();
     loadOverlay(getCookie("overlay"));
-    visualizeData();
 
     document.getElementById("display").style.visibility = "visible";
 
@@ -83,20 +89,20 @@ const app_iHandler = (bar) => {
           time = bar.querySelector('.i_time').value.replaceAll("_","");
 
     if (type !== "" && time !== "") {
-        const condition = type.split(" + ").map(segment => segment + "%20IS%20NOT%20NULL").join("%20AND%20");
+        query = type.split(" + ").map(segment => segment + "%20IS%20NOT%20NULL").join("%20AND%20");
 
         document.querySelectorAll('.kiosk').forEach(tile => {
-            tile.style.transition = "opacity 1.5s ease"
+            tile.style.transition = "opacity 0.5s ease";
             setTimeout(function() {
-                tile.style.opacity = 0
-            }, Math.random() * 500);
+                tile.style.opacity = 0;
+            }, Math.random() * 100);
         });
 
         setTimeout(function() {
-            history.pushState(null, null, `/desktop/data/gradient?query=SELECT%20kiosk_name,%20device_name,%20start_value,%20end_value%20FROM%20(SELECT%20kiosk_name,%20device_name,%20FIRST_VALUE(${type})%20OVER%20(PARTITION%20BY%20device_name%20ORDER%20BY%20time%20ASC)%20AS%20start_value,%20FIRST_VALUE(${type})%20OVER%20(PARTITION%20BY%20device_name%20ORDER%20BY%20time%20DESC)%20AS%20end_value%20FROM%20devicetimeline%20WHERE%20time%20BETWEEN%20${getUnixTimestamp(time)}%20AND%20${getUnixTimestamp()}%20AND%20${condition})%20AS%20subquery%20GROUP%20BY%20device_name%20ORDER%20BY%20kiosk_name`);
-            visualizeData();
+            history.pushState(null, null, `/desktop/data/gradient?type=${type}&range=${time}`);
+            visualizeData(type, time);
             document.getElementById("alert").innerHTML = `<span style="color: var(--text-color1)">Currently displaying:</span> <span class=t-stress>${type.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")} over ${bar.querySelector('.i_time').value.replaceAll("_"," ")}</span>`;
-        }, 2000);
+        }, 600);
     }
 }
 
@@ -761,7 +767,7 @@ const resetAppCookies = (app) => {
 
 const showTooltip = (tile) => {
     const tooltip = document.querySelector('.tooltip[for=tile]');
-    tooltip.querySelector('.tooltip-content').textContent = tile.dataset.netValue;
+    tooltip.querySelector('.tooltip-content').textContent = tile.dataset.netValue === "undefined" ? "No Data" : tile.dataset.netValue;
     tooltip.dataset.for = tile.id;
     tooltip.style.display = "block";
     tooltip.style.bottom = window.innerHeight - tile.offsetTop - 35 + "px";
@@ -898,49 +904,53 @@ const updateLocations = () => {
 const updateUrgency = (tile, newUrgency) => {
     tile.classList.forEach(className => {
         if (className.includes("urgency_")) {
-            tile.classList.remove(className)
+            tile.classList.remove(className);
         }
     });
     tile.classList.add("urgency_"+newUrgency);
     tile.dataset.oldest_report = status_database[tile.id].oldest_report;
 }
 
-const visualizeData = async () => {
-    const response = await (await fetch('/database?query='+location.href.split("query=")[1])).json();
-    data = response.data
-    kioskData = {};
-
-    for (let row of data) {
-        if (kioskData[row.kiosk_name] === undefined) kioskData[row.kiosk_name] = {};
-        kioskData[row.kiosk_name].start_value = row.start_value;
-        kioskData[row.kiosk_name].end_value = row.end_value;
+const visualizeData = async (type, time) => {
+    const query = query_types[type].replaceAll("${type}",type).replaceAll("${start_time}", getUnixTimestamp(time)).replaceAll("${end_time}", getUnixTimestamp());
+    const response = await (await fetch('http://85.148.75.164:9000/database?query='+query)).json();
+    data = response.data;
+    if (data.length === 0) {
+        return;
     }
 
-    let netValue, maxValue = 0, minValue = 1000000;
-    for (let kioskName in kioskData) {
-        netValue = kioskData[kioskName].end_value - kioskData[kioskName].start_value;
-        kioskData[kioskName].net_value = netValue > 0 ? netValue : kioskData[kioskName].end_value;
+    let maxValue = data[0].value, minValue = data[0].value;
 
-        if (netValue > maxValue) maxValue = netValue;
-        if (netValue < minValue && netValue >= 0) minValue = netValue;
+    document.querySelectorAll('.kiosk').forEach(tile => {
+        tile.style.background = ""
+        tile.dataset.netValue = undefined;
+    });
+
+    for (let row of data) {
+        if (row.value < 0) {
+            row.value = 0;
+        }
+        if (row.value > maxValue) {maxValue = row.value; continue};
+        if (row.value < minValue) {minValue = row.value};
+    }
+
+    let tile;
+    for (let row of data) {
+        tile = document.getElementById(row.kiosk_name);
+        if (tile) {
+            tile.dataset.netValue = row.value;
+            tile.style.backgroundImage = "url(/images/tileOverlay.png)";
+            tile.style.backgroundColor = mapNumberToHex((row.value - minValue) / maxValue * 100);
+            (function(currentTile) {
+                setTimeout(function() {
+                    currentTile.style.opacity = 1;
+                }, Math.random() * 500);
+            })(tile);
+        }
     }
 
     document.getElementById("min_data").innerText = minValue;
     document.getElementById("max_data").innerText = maxValue;
-
-    document.querySelectorAll('.kiosk').forEach(tile => {
-        //console.log(kioskData[tile.id], maxNetCoupons, 100);
-        if (kioskData[tile.id]) {
-            tile.dataset.netValue = kioskData[tile.id].net_value;
-            tile.style.removeProperty("background");
-            tile.style.backgroundColor = mapNumberToHex((kioskData[tile.id].net_value - minValue) / maxValue * 100);
-            setTimeout(function() {
-                tile.style.opacity = 1;
-            }, Math.random() * 1000);
-        } else {
-            tile.style.background = "url(images/urgency_0.png)"
-        }
-    });
 }
 
 loadGrid();

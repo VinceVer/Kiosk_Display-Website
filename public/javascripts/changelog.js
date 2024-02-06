@@ -23,13 +23,9 @@ const hexToRgba = (hex, a, dark) => {
 
 const loadSidebar = async () => {
     const sidebar = document.getElementById("sidebar");
-    const data = await fetchToken();
+    const data = await fetchRepo();
 
-    fetch(data.url+"/releases", {
-      headers: {
-        Authorization: 'token '+data.token
-      }
-    })
+    fetch(data.url+"/releases")
     .then(response => response.json())
     .then(releases => {
       for (let release of releases) {
@@ -43,7 +39,12 @@ const loadSidebar = async () => {
           </div>`;
         document.getElementById("container").insertBefore(newTab, document.getElementById("bug_tracker"));
 
-        sidebar.innerHTML += `<a onclick='switchTab("${newTab.id}")'>Web ${release.name}</a>`;
+        sidebar.innerHTML += `<a id='${newTab.id+"_nav"}' onclick='switchTab("${newTab.id}")'>Web ${release.name}</a>`;
+
+        if (release.name.replace("v","") === document.getElementById("data_storage").dataset.version) {
+          newTab.style.display = "flex";
+          document.getElementById(newTab.id+"_nav").classList.add("selected");
+        }
       }
       sidebar.innerHTML += `<a id=bug_a onclick='switchTab("bug_tracker")'>Issue Tracker</a>`;
     });
@@ -51,21 +52,18 @@ const loadSidebar = async () => {
 
 const switchTab = (id) => {
     document.querySelectorAll(`.tab`).forEach(element => element.style.display = "none");
+    document.querySelectorAll(`nav a`).forEach(element => element.classList.remove("selected"));
     document.getElementById(id).style.display = "flex";
+    document.getElementById(id+"_nav").classList.add("selected");
 }
 
 const fetchIssues = async () => {
-    const data = await fetchToken();
+    const data = await fetchRepo();
 
-    fetch(data.url+"/issues?state=all", {
-      headers: {
-        Authorization: 'token '+data.token
-      }
-    })
+    fetch(data.url+"/issues?state=all")
     .then(response => response.json())
     .then(issues => {
       for (let issue of issues) {
-        console.log(issue)
         document.querySelector('#bug_tracker .content .table .body').innerHTML += `
           <div id=${issue.number}>
             ${issue.state === "open"
@@ -92,8 +90,8 @@ const fetchIssues = async () => {
     .catch(error => console.log(error));
 }
 
-const fetchToken = async () => {
-    const response = await fetch('/token');
+const fetchRepo = async () => {
+    const response = await fetch('/repo');
     return response.json();
 }
 

@@ -100,7 +100,57 @@ router.get('/download/:type/:file', (req, res) => {
             } else {
                 console.log('File sent successfully');
             }
-        })
+        });
+    }
+});
+
+router.get('/file/:name', (req, res) => {
+    try {
+        if (req.query.action === "size") {
+            switch (req.params.name) {
+                case "config.json":
+                case "misc.json":
+                    res.status(200).send({size: fs.statSync(__dirname+`/../storage/${req.params.name}`).size});
+                    break;
+                case "status_database.json":
+                case "main-database.db":
+                    res.status(200).send({size: fs.statSync(__dirname+`/../../.database/bin/${req.params.name}`).size});
+                    break;
+                default:
+                    res.status(400);
+                    break
+            }
+        } else if (req.query.action === "download") {
+            switch (req.params.name) {
+                case "config.json":
+                case "misc.json":
+                    res.download(__dirname+`/../storage/${req.params.name}`, req.params.name, (err) => {
+                        if (err) {
+                            console.error('Error downloading file:', err);
+                            res.status(404).send('File not found');
+                        } else {
+                            console.log('File sent successfully');
+                        }
+                    });
+                    break;
+                case "status_database.json":
+                case "main-database.db":
+                    res.download(__dirname+`/../../.database/bin/${req.params.name}`, req.params.name, (err) => {
+                        if (err) {
+                            console.error('Error downloading file:', err);
+                            res.status(404).send('File not found');
+                        } else {
+                            console.log('File sent successfully');
+                        }
+                    });
+                    break;
+                default:
+                    res.status(400);
+                    break;
+            }
+        }
+    } catch (error) {
+        res.status(500);
     }
 });
 
@@ -125,10 +175,10 @@ router.get('/fileData', (req, res, next) => {
 });
 
 /* GET personal access token */
-router.get('/token', (req, res, next) => {
+router.get('/repo', (req, res, next) => {
     try {
-        const data = fs.readFileSync(__dirname+'/../storage/token', 'utf-8');
-        res.status(200).send(JSON.stringify({error: false, url: data.split("\n")[0], token: data.split("\n")[1]}));
+        const data = fs.readFileSync(__dirname+'/../storage/repo', 'utf-8');
+        res.status(200).send(JSON.stringify({error: false, url: data.split("\n")[0]}));
     } catch (error) {
         res.status(500).send(JSON.stringify({error: true, token: error}));
     }

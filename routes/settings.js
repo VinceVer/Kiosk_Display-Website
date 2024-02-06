@@ -17,7 +17,6 @@ const getSendableData = (cookies, customData) => {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	const data = JSON.parse(fs.readFileSync(__dirname+'/../storage/config.json'));
   	res.render('settings-home', getSendableData(req.cookies));
 });
 
@@ -54,12 +53,8 @@ router.get('/grouping/:group?/:location?/:selector?', function(req, res, next) {
 	}
 });
 
-router.get('/layout', function(req, res, next) {
-	const data = JSON.parse(fs.readFileSync(__dirname+'/../storage/config.json'));
-	let {background_opacity, tile_size, show_labels, align_labels} = data.layout;
-	//show_labels = show_labels ? "on" : "off";
-	//align_labels = align_labels ? "on" : "off";
-	res.render('settings-layout', getSendableData(req.cookies, {background_opacity: background_opacity, tile_size: tile_size, show_labels: show_labels, align_labels: align_labels}));
+router.get('/downloads', function(req, res, next) {
+	res.render('settings-downloads', getSendableData(req.cookies));
 });
 
 router.get('/apps/:appCode?', function(req, res, next) {
@@ -130,17 +125,5 @@ router.get('/status/:type?/:code?/:message?', function(req, res, next) {
 		}
 	}
 });
-
-// router.get('/schedules/:type?', async function(req, res, next) {
-// 	const schedule_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/schedules.json'));
-
-// 	switch (req.params.type) {
-// 		case "report":
-// 			res.render('settings-schedules-report', getSendableData(req.cookies, {index: req.query.index || schedule_data.reports.length, schedule_data: schedule_data, title: (req.query.index ? `Edit [Report] ${schedule_data.reports[req.query.index].file_name}` : "Add scheduled report")}));
-// 			break;
-// 		default:
-// 			res.render('settings-schedules', getSendableData(req.cookies, {schedule_data: schedule_data}));
-// 	}
-// });
 
 module.exports = router;

@@ -18,14 +18,11 @@ html(lang='en')
         .content(style="margin-top: 7px;")
           div
             a.navLink.item(href="/desktop/data/gradient") Gradient Visualizer
+          //div
+            a.navLink.item(href="/desktop/data/logs") Event Logs
           div
             a.navLink.item(href="/desktop/data/reports") Report Generator
       a.navLink(href="/desktop/data/timeline") Timeline
-
-      //form#login(onsubmit="testPassword(this.parentNode.querySelector('input').value, event)")
-        input(type="password" placeholder=" Log in by entering the site key" required)
-        input#loginButton(type="submit" value="\u23CE")
-      //button#logout(onclick="testPassword('LOGOUT')") Click here to logout
 
     #display(style="visibility: hidden")
       .bar

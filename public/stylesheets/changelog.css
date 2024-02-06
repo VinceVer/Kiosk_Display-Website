@@ -183,7 +183,7 @@ ul {
   white-space: nowrap;
   width: calc(100%-20px);
 
-  &:hover {
+  &:hover, &.selected {
     color: var(--color);
 
     &:not(#bug_a) {

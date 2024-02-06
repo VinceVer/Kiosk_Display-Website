@@ -73,8 +73,9 @@ const createTile = (info, chip) => {
 }
 
 const load = async () => {
-    data = JSON.parse(document.getElementById("data_storage").dataset.config_data);
+    try{data = JSON.parse(document.getElementById("data_storage").dataset.config_data);} catch (error) {console.warn(error)}
     writeAccess = document.getElementById("data_storage").dataset.write === "true" ? true : false;
+    console.log(writeAccess)
 
     try {loadHEAD();} catch (error) {console.warn(error)}
 
