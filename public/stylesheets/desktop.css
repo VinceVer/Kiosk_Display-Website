@@ -485,7 +485,7 @@ button.HOME {
     }
 }
 
-.info {
+.info:not(.ico) {
     display: flex;
     flex-direction: column;
     width: min(calc(100vh - 5rem / 1.5), 40rem);
