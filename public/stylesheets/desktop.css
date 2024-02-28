@@ -508,7 +508,7 @@ button.HOME {
     &> p {
         color: white;
         font-weight: bold;
-        font-size: var(--tag-size);
+        font-size: var(--tile-tag-size);
         height: 100%;
         line-height: var(--tile-size);
         margin: 0 0 0 50%;
@@ -531,7 +531,7 @@ button.HOME {
 
     &> h2 {
         color: white;
-        display: var(--label-locations);
+        display: var(--display-location-labels);
         font-size: calc(var(--tile-size) / 2);
         grid-column: 2;
         height: fit-content;
@@ -620,7 +620,7 @@ button.HOME {
     border: var(--border);
     box-shadow: 0 0 10px 5px rgba(0, 0, 0, 1);
     color: var(--text-color1);
-    font-size: var(--tag-size);
+    font-size: var(--tile-tag-size);
     padding: 5px 10px 5px 10px;
     border-radius: 3px;
     position: absolute;
