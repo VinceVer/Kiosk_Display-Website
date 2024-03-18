@@ -913,7 +913,7 @@ const updateUrgency = (tile, newUrgency) => {
 
 const visualizeData = async (type, time) => {
     const query = query_types[type].replaceAll("${type}",type).replaceAll("${start_time}", getUnixTimestamp(time)).replaceAll("${end_time}", getUnixTimestamp());
-    const response = await (await fetch('http://85.148.75.164:9000/database?query='+query)).json();
+    const response = await (await fetch('/database?query='+query)).json();
     data = response.data;
     if (data.length === 0) {
         return;
