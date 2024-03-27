@@ -1,0 +1,56 @@
+// Background:
+background_color
+background_opacity
+background_file
+background_extension[{Site}]
+
+// App Windows:
+apps.{id}.display
+apps.{id}.top
+apps.{id}.left
+apps.{id}.height
+apps.{id}.width
+
+// App Hooks:
+hooks.{id}.app
+
+// Animations:
+anims.tile.update_anims
+anims.tile.hover_effect
+
+// Colors:
+color.gradient.start
+color.gradient.end
+
+// Layout - Page Design:
+layout.visor_position
+layout.location.display
+layout.tile.align
+layout.tile.size
+layout.tile.tag_size
+layout.icons
+layout.yellow_first
+layout.nav.height
+layout.nav.align
+
+// Layout - Identifier Tags:
+layout.tag.urgency.-1
+layout.tag.urgency.null
+layout.tag.urgency.0
+layout.tag.urgency.1
+layout.tag.urgency.2
+layout.tag.urgency.3
+layout.tag.urgency.4
+layout.tag.urgency.5
+
+// Page Specific:
+preferences.left
+title.size [mobile]
+
+// Mobile:
+mobile.search.selected
+mobile.search.sort
+mobile.search.filter
+mobile.scalable
+mobile.scale
+mobile.contextmenu.trigger

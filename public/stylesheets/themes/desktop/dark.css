@@ -1,0 +1,60 @@
+:root {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+
+    /* Colors */
+    --text-color1: rgb(150, 150, 150);
+    --text-color2: rgb(255, 255, 255);
+
+    color: var(--text-color1);
+    --default-background-color: rgba(30, 30, 30, 1);
+    --input-background-color: rgba(40, 40, 40, 1);
+    --overlay-background-color: rgba(20, 20, 20, 1);
+    --overlay-content-background-color: rgba(10, 10, 10, 1);
+
+    --app-header-color: rgba(30, 30, 30, 1);
+
+    --button-hover-background-color: rgba(80, 80, 80, 1);
+    --input-hover-background-color: rgba(50, 50, 50, 1);
+
+    --link-color: rgb(76, 198, 255);
+    --alert-color: rgb(240, 83, 83);
+    --home-button-color: rgba(40, 40, 40, 1);
+    --home-button-hover-color: rgba(10, 10, 10, 1);
+    --nav-detail-color: rgba(100, 100, 100, 1);
+
+    /* Sizes */
+    --header-height: 2.5rem;
+    --footer-height: 3rem;
+
+    /* Borders */
+    --default-border-color: rgb(60, 60, 60);
+    --default-border-type: solid;
+    --default-border-width: 3px;
+    --default-border: var(--default-border-width) var(--default-border-type) var(--default-border-color);
+
+    --alt-border-color: rgb(60, 60, 60);
+    --alt-border-type: solid;
+    --alt-border-width: 1px;
+    --alt-border: var(--alt-border-width) var(--alt-border-type) var(--alt-border-color);
+
+    --input-border: var(--alt-border);
+
+    /* Visor */
+    --display-visor-color: rgba(10, 10, 10, 0.8);
+
+    /* Other */
+    --default-shadow-color: rgba(10, 10, 10, 0.5);
+}
+
+/* Alt. Button */
+button:hover {
+    background-color: var(--button-hover-background-color);
+    color: var(--text-color1)
+}
+
+/* Alt. Input/Select */
+input:hover, select:hover {
+    background-color: var(--input-hover-background-color);
+    cursor: pointer;
+}

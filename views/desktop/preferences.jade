@@ -1,0 +1,243 @@
+-
+  var settings = [
+    {
+      title: "Page Design",
+      fields: [
+        {
+          cookie: "layout.visor_position",
+          var: "--display-visor-offset",
+          title: "Visor Position",
+          items: [{value: -2, label: "High"}, {value: -1.5, label: "Half"}, {value: -1, label: "Low"}],
+          default: -1
+        },
+        {
+          cookie: "layout.location.display",
+          var: "--location-labels-display",
+          title: "Display Location Labels",
+          type: "checkbox",
+          settings: {true: "inline-block", false: "none"},
+          default: "inline-block"
+        },
+        {
+          cookie: "layout.tile.align",
+          title: "Align Location Labels",
+          type: "checkbox",
+          default: true
+        },
+        {
+          cookie: "layout.tile.gap",
+          var: "--tile-gap",
+          title: "Tile Gap",
+          type: "range",
+          settings: {min: 0, max: 10, step: 1},
+          default: 4,
+          suffix: "px"
+        },
+        {
+          cookie: "layout.tile.size",
+          var: "--tile-size",
+          title: "Tile Size",
+          type: "range",
+          settings: {min: 0, max: 5, step: 0.05},
+          default: 3,
+          suffix: "rem"
+        },
+        {
+          cookie: "layout.tile.tag_size",
+          var: "--tile-tag-size",
+          title: "Identifier Tag Size",
+          type: "range",
+          settings: {min: 0, max: 5, step: 0.05},
+          default: 1.5,
+          suffix: "rem"
+        },
+        {
+          cookie: "layout.icons",
+          title: "Render Icons",
+          type: "checkbox",
+          default: "true"
+        },
+        {
+          cookie: "theme",
+          title: "Theme",
+          items: [],
+          info: "incomplete"
+        }
+      ]
+    },
+    {
+      title: "Identifier Tags",
+      fields: [
+        {
+          cookie: "layout.tag.urgency.-1",
+          var: "--urgency_-1-opacity",
+          title: "No Issues",
+          icon: "check-circle", color: "#57c543",
+          type: "checkbox",
+          settings: {true: 1, false: 0},
+          default: 1
+        },
+        {
+          cookie: "layout.tag.urgency.null",
+          var: "--urgency_null-opacity",
+          title: "No Response (Device)",
+          icon: "question-mark-circle", color: "#e4e4e4",
+          type: "checkbox",
+          settings: {true: 1, false: 0},
+          default: 1
+        },
+        {
+          cookie: "layout.tag.urgency.0",
+          var: "--urgency_0-opacity",
+          title: "No Response (App)",
+          icon: "question-mark-circle", color: "#4f6af0",
+          type: "checkbox",
+          settings: {true: 1, false: 0},
+          default: 1
+        },
+        {
+          cookie: "layout.tag.urgency.2",
+          var: "--urgency_2-opacity",
+          title: "App Issue",
+          icon: "terminal", color: "#b56fe9",
+          type: "checkbox",
+          settings: {true: 1, false: 0},
+          default: 1
+        },
+        {
+          cookie: "layout.tag.urgency.1",
+          var: "--urgency_1-opacity",
+          title: "Low Priority",
+          icon: "dots-circle-horizontal", color: "#e8c048",
+          type: "checkbox",
+          settings: {true: 1, false: 0},
+          default: 1
+        },
+        {
+          cookie: "layout.tag.urgency.3",
+          var: "--urgency_3-opacity",
+          title: "Medium Priority",
+          icon: "exclamation-circle", color: "#e98b55",
+          type: "checkbox",
+          settings: {true: 1, false: 0},
+          default: 1
+        },
+        {
+          cookie: "layout.tag.urgency.4",
+          var: "--urgency_4-opacity",
+          title: "High Priority",
+          icon: "x-circle", color: "#f03e3e",
+          type: "checkbox",
+          settings: {true: 1, false: 0},
+          default: 1
+        }
+      ]
+    },
+    {
+      title: "Animations",
+      fields: [
+        {
+          cookie: "anims.tile.hover_effect",
+          var: "--tile-hover-inset",
+          title: "Tile Hover Effect",
+          items: [{value: "105% 105%", label: "Disabled"}, {value: "105% 80%", label: "Subtle"}, {value: "105% 0", label: "Max"}],
+          default: "105% 105%"
+        },
+        {
+          cookie: "anims.tile.update_anims",
+          title: "Tile Transitions",
+          items: [{value: "none", label:"Disabled"}, {value: "subtle", label: "Subtle"}, {value: "most", label: "Most"}, {value: "all", label: "All"}],
+          default: "most",
+          info: "Tile transition are only visible on the live display."
+        }
+      ]
+    }
+  ];
+
+doctype html
+html(lang='en')
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+
+    title Settings - #{config_data.location}
+
+    link#themeLink(rel='stylesheet' href=`/stylesheets/themes/desktop/${cookies.theme || "dark"}.css`)
+    link(rel='stylesheet' href='/stylesheets/desktop/preferences.css')
+    link(rel='stylesheet' href='/stylesheets/desktop/general.css')
+    include variables
+
+  body.fade
+    #brightnessFilter
+
+    header
+      nav
+        button.HOME(onclick="location.href = '/desktop'") RETURN TO DISPLAY
+        include default/navigation
+
+    #display(style="visibility: hidden")
+      div
+      #container
+    
+    footer
+      h6#alert.center THIS PAGE DOES NOT REPRESENT LIVE DATA
+      svg(xmlns="http://www.w3.org/2000/svg" style="display: none;")
+        symbol(id="info" viewBox="0 0 24 24")
+          path(d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z")
+
+    #settingsPanel(style=`left: calc(10px + ${cookies['preferences.left'] || 0}vw)`)
+      div
+        .settingsGroup Background
+          h2
+          .settingsItem.row.cen Color Filter:
+            input(name="background_color" type="color" value=cookies.background_color data-var="--background-color")
+            
+          .settingsItem Opacity:
+            input(name="background_opacity" type="range" value=cookies.background_opacity min=0 max=1 step=0.01 data-var="--background-opacity")
+
+          .settingsItem(for="background-image" onclick="querySelector('input').click()") Image File:
+            label Click here or drop a file to upload.
+            span
+              i.ico(data-type="information-circle")
+              span The file will be stored anonymously on the server.
+            input(name="background-image" type="file" hidden)
+          button(type="save").cen2
+            i.ico(data-type="cloud-upload")
+            span Upload and Use
+
+        each group in settings
+          .settingsGroup= group.title
+            h2
+            each field in group.fields
+              -
+                var valueOfCookie = cookies[field.cookie] // Value of the field is either the cookie of default.
+                    ? cookies[field.cookie].replace(field.suffix, "")
+                    : field.default;
+
+              div
+                .settingsItem(class=field.classes)
+                  p
+                    if field.icon 
+                      // Custom icon in front of text. 
+                      i.ico(data-type=field.icon data-color=field.color)
+                    span #{field.title+":"}
+                  if field.items
+                    // Field is a select element. 
+                    select(name=field.cookie data-var=field.var data-suffix=field.suffix)
+                      each item in field.items
+                        - var isSelected = cookies[field.cookie] === String(item.value)
+                        option(value=item.value selected=isSelected)= item.label
+                  else
+                    // Field is an input element. 
+                    - var set = field.settings || {};
+                    - var isChecked = valueOfCookie === String(set.true || true);
+                    input(name=field.cookie data-var=field.var data-suffix=field.suffix data-true=set.true data-false=set.false type=field.type min=set.min, max=set.max, step=set.step value=valueOfCookie checked=isChecked)
+                if field.info
+                  span
+                    i.ico(data-type="information-circle")
+                    span #{field.info}
+
+    #data_storage(data-config_data=config_data data-status_database=status_database style="display: none")
+
+    //script(type='module' src='/javascripts/modules/iconHandler.js')
+    script(type='module' src='/javascripts/desktop/grid.js')
+    script(type='module' src='/javascripts/desktop/preferences.js')

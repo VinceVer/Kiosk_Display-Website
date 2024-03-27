@@ -1,0 +1,62 @@
+// Format: <--variable-name>: #{cookies['<cookie.name>'] || <default-value>};
+style.
+    :root {
+        --background-color: #{cookies['background_color'] || "#0a0a0a"};
+        --background-opacity: 0.5;
+
+        --location-labels-display: #{cookies['layout.location.display'] || "inline-block"};
+        --tile-size: #{cookies['layout.tile.size'] || "1.75rem"};
+        --tile-tag-size: #{cookies['layout.tile.tag_size'] || "1rem"};
+        --tile-gap: #{cookies['layout.tile.gap'] || "4px"};
+
+        --title-font-size: #{cookies['title.size'] || "7rem"};
+
+        --urgency_-1-opacity: #{cookies['layout.tag.urgency.-1'] || 0};
+        --urgency_null-opacity: #{cookies['layout.tag.urgency.null'] || 0};
+        --urgency_0-opacity: #{cookies['layout.tag.urgency.0'] || 0};
+        --urgency_1-opacity: #{cookies['layout.tag.urgency.1'] || 0};
+        --urgency_2-opacity: #{cookies['layout.tag.urgency.2'] || 0};
+        --urgency_3-opacity: #{cookies['layout.tag.urgency.3'] || 0};
+        --urgency_4-opacity: #{cookies['layout.tag.urgency.4'] || 0};
+
+        --urgency_12-opacity: max(var(--urgency_1-opacity), var(--urgency_2-opacity));
+        --urgency_42-opacity: max(var(--urgency_4-opacity), var(--urgency_2-opacity));
+
+        --nav-align: #{cookies['layout.nav.align'] || "center"};
+        --nav-height: #{cookies['layout.nav.height'] || "6rem"};
+        --font-size-scale: #{cookies['mobile.scale'] || 1.5};
+        --table-row-padding: #{cookies['layout.table.row_padding'] || "0"};
+    }
+
+    #list {
+        left: #{cookies['mobile.current_page'] === "preferences" ? "-100vw" : 0}
+    }
+
+    #preferences {
+        left: #{cookies['mobile.current_page'] === "preferences" ? "0" : "100vw"}
+    }
+
+    /* Tag Visibility */
+    .kiosk.urgency_-1> p {opacity: var(--urgency_-1-opacity); --identifier-opacity: var(--urgency_-1-opacity);}
+    .kiosk.urgency_null> p {opacity: var(--urgency_null-opacity); --identifier-opacity: var(--urgency_null-opacity);}
+    .kiosk.urgency_0> p {opacity: var(--urgency_0-opacity); --identifier-opacity: var(--urgency_0-opacity);}
+    .kiosk.urgency_1> p {opacity: var(--urgency_1-opacity); --identifier-opacity: var(--urgency_1-opacity);}
+    .kiosk.urgency_2> p {opacity: var(--urgency_2-opacity); --identifier-opacity: var(--urgency_2-opacity);}
+    .kiosk.urgency_3> p {opacity: var(--urgency_3-opacity); --identifier-opacity: var(--urgency_3-opacity);}
+    .kiosk.urgency_4> p {opacity: var(--urgency_4-opacity); --identifier-opacity: var(--urgency_4-opacity);}
+    .kiosk.urgency_12> p {opacity: var(--urgency_12-opacity); --identifier-opacity: var(--urgency_12-opacity);}
+    .kiosk.urgency_42> p {opacity: var(--urgency_42-opacity); --identifier-opacity: var(--urgency_42-opacity);}
+    /* -------------- */
+
+    /* Tile State */
+    .kiosk.urgency_-1 {background-image: url(/images/urgency-1.png);}
+    .kiosk.urgency_null {background-image: url(/images/urgencynull.png);}
+    .kiosk.urgency_0 {background-image: url(/images/urgency0.png);}
+    .kiosk.urgency_1 {background-image: url(/images/urgency1.png);}
+    .kiosk.urgency_2 {background-image: url(/images/urgency2.png);}
+    .kiosk.urgency_3 {background-image: url(/images/urgency3.png);}
+    .kiosk.urgency_4 {background-image: url(/images/urgency4.png);}
+    .kiosk.urgency_5 {background-image: url(/images/urgency5.png);}
+    .kiosk.urgency_12 {background-image: url(/images/urgency12.png);}
+    .kiosk.urgency_42 {background-image: url(/images/urgency42.png);}
+    /* ---------- */

@@ -1,0 +1,71 @@
+doctype html
+html(lang='en')
+  head(data-page=pageType)
+    link(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)
+    link(rel='stylesheet' href='/stylesheets/settings.css')
+    link(rel='stylesheet' href='/stylesheets/elements.css')
+  body
+    nav
+      button.HOME(onclick="location.href = '/settings'") HOME
+      a.navLink(href="/settings/grouping") Display Groups
+      //a.navLink(href="/settings/layout") Display Layout
+      a.navLink(href="/settings/apps") Application Naming
+      a.navLink(href="/settings/database/conditions") Priority Conditions
+      a.navLink.selected(href="/settings/database/filters") Database Filters
+      a.navLink(href="/settings/status") Status Messages
+      a.navLink(href="/settings/downloads") Downloads
+      //a.navLink(href="/settings/schedules") Schedules
+      form#login(onsubmit="testPassword(this.parentNode.querySelector('input').value, event)")
+        input(type="password" placeholder=" Log in by entering the site key" required)
+        input#loginButton(type="submit" value="\u23CE")
+      button#logout(onclick="testPassword('LOGOUT')") Click here to logout
+
+    #display
+      .flexBar
+        h1 Location: 
+          span.t-stress= location
+        #syncType.chip-data
+      #hrefBar
+        | > 
+        a(href='/settings') Settings
+        |  / 
+        a(href='/settings') Database
+        |  / 
+        a(href='/settings/database/conditions') Conditions
+
+      #conditions(style="padding-bottom: 100px")
+        h2.header Email filters:
+        div#GridEmail.cardView
+        h2.header Ignored devices and applications:
+        div#GridIgnored.cardView
+        form(onsubmit="submitIgnoredApp(event)" style=`display: ${write === "true" ? "block" : "none"}`)
+          h3(style="color: var(--text-color1); margin-top: -2px") Ignore device or app:
+          select#add_toIgnore
+            option(value="" oninput="this.parentNode.parentNode.querySelector('input[name=value]').value = this.value") Select an item...
+            optgroup(name="devices" label="Device Types")
+            optgroup(name="apps" label="Applications")
+          input(type="submit" style="margin-top: 15px")
+          input(type="hidden" name="value" placeholder="Start typing here..." oninput="this.value = this.value.toUpperCase()" required)
+
+    #alertBox
+      h2
+      h4
+      .flexBar
+      .blockActions
+
+    #tile_CM.contextMenu
+      button.title
+      button(name="open") Open
+      button(name="remove") Remove from configuration
+
+    #data_storage(data-config_data=config_data style="display: none" data-status_database=status_database data-write=write)
+
+    script(src='/javascripts/settings/settings-database-filters.js')
+    script(src='/javascripts/settings/settings-functions.js')
+
+    #templates(style="display: none")
+      button#gridTile.gridTile
+        .flexBar
+          h3
+          .chip(style="display:none") Conflict
+        p

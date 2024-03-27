@@ -1,0 +1,131 @@
+:root {
+    --group-title-height: 2.5rem;
+    --group-visor-offset: -0.3rem;
+}
+
+button {
+    background-color: var(--default-border-color);
+    border: none;
+    color: var(--text-color1);
+    font-size: 1.2rem;
+}
+
+
+
+/* Main panel */
+#settingsPanel {
+    --height: calc(100vh - var(--header-height) - var(--footer-height) - 12px);
+
+    align-items: center;
+    aspect-ratio: 9/16;
+    background-color: var(--default-background-color);
+    border: var(--default-border);
+    border-bottom: none;
+    border-radius: 25px 25px 0 0;
+    display: flex;
+    flex-direction: column;
+    height: var(--height);
+    overflow-y: auto;
+    position: fixed;
+    bottom: var(--footer-height);
+    transition: left 0.05s ease;
+}
+#settingsPanel::before, #settingsPanel::after {
+    background-color: var(--gray100);
+    border-radius: 5px;
+    content: '';
+    height: 80%;
+    mix-blend-mode: color-dodge;
+    position: absolute;
+    top: 10%;
+    width: 9px;
+}
+#settingsPanel::before {left: 22px;}
+#settingsPanel::after {right: 22px;}
+
+/* Inner div */
+#settingsPanel> div {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    height: calc(100% - 30px);
+    padding: 30px 0 150px 0;
+    width: fit-content;
+}
+
+
+
+/* Div representing each group */
+.settingsGroup {
+    color: var(--text-color1);
+    display: flex;
+    flex-direction: column;
+    font-size: var(--group-title-height);
+    font-weight: bold;
+    gap: 5px;
+    text-align: center;
+    width: 100%;
+}
+.settingsGroup::before {
+    background-color: var(--display-visor-color);
+    content: '';
+    height: calc(var(--group-title-height) + 1rem);
+    left: 50%;
+    position: absolute;
+    translate: -50% var(--group-visor-offset);
+    width: 100%;
+    z-index: -1;
+}
+
+
+
+/* Div representing each item */
+.settingsGroup> div {
+    border-bottom: 2px solid var(--default-border-color);
+    font-size: 1.2rem;
+    font-weight: normal;
+    text-align: start;
+}
+.settingsGroup> div> span {
+    translate: 10px;
+}
+.settingsItem {
+    align-items: center;
+    color: var(--text-color2);
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    justify-content: space-between;
+    padding: 7px 1rem 7px 0;
+    text-align: start;
+    text-indent: 1rem;
+}
+.settingsItem> * {
+    color: var(--text-color1);
+    margin-left: 1rem;
+    text-indent: 0;
+}
+.settingsItem p {color: var(--text-color2) !important;}
+.settingsItem> label, .settingsItem> span {
+    align-self: center;
+}
+.settingsGroup> div> span, .settingsItem> span {
+    font-size: 1rem;
+    padding-bottom: 5px;
+}
+
+
+
+/* Input fields and containers */
+input[type=color] {
+    background: none;
+}
+input[type=range] {
+    width: 20rem;
+}
+.settingsItem[for=background-image] {
+    align-items: start;
+    border: 2px dashed var(--default-border-color);
+    flex-direction: column !important;
+}

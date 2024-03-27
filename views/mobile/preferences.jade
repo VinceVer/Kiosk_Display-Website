@@ -1,0 +1,124 @@
+-
+    var settings = [
+        {
+            title: "General Preferences",
+            fields: [
+                {
+                    cookie: "layout.yellow_first",
+                    title: "Priority Order",
+                    items: [{value: "false", label: "Purple above Yellow"}, {value: "true", label: "Yellow above Purple"}],
+                    default: "false"
+                },
+                {
+                    cookie: "layout.icons",
+                    title: "Render Icons",
+                    type: "checkbox",
+                    default: "true"
+                },
+                {
+                    cookie: "mobile.scalable",
+                    title: "Enable Manual Scaling",
+                    type: "checkbox",
+                    default: "false",
+                    info: "Enabling this will increase loading times on some devices."
+                }
+            ]
+        },
+        {
+            title: "Page Design",
+            fields: [
+                {
+                    cookie: "mobile.scale",
+                    var: "--font-size-scale",
+                    title: "Webpage Scale",
+                    type: "number",
+                    settings: {min: 0.5, max: 2, step: 0.05},
+                    default: 1.5
+                },
+                {
+                    cookie: "layout.table.row_padding",
+                    var: "--table-row-padding",
+                    title: "Table Row Padding",
+                    type: "range",
+                    settings: {min: 0, max: 10, step: 0.1},
+                    default: 0,
+                    suffix: "rem"
+                },
+                {
+                    cookie: "layout.nav.height",
+                    var: "--nav-height",
+                    title: "Navigation Bar Height",
+                    type: "range",
+                    settings: {min: 0, max: 12, step: 0.1},
+                    default: 6,
+                    suffix: "rem"
+                },
+                {
+                    cookie: "layout.nav.align",
+                    var: "--nav-align",
+                    title: "Navigation Bar Alignment",
+                    items: [{value: "start", label: "Top"}, {value: "center", label: "Center"}, {value: "end", label: "Bottom"}],
+                    default: "center"
+                }
+            ]
+        },
+        {
+            title: "Contextmenu Triggers",
+            fields: [
+                {
+                    cookie: "mobile.contextmenu.hold",
+                    title: "Touch and Hold",
+                    type: "checkbox",
+                    default: "true"
+                },
+                {
+                    cookie: "mobile.contextmenu.right",
+                    title: "Swipe Right",
+                    type: "checkbox",
+                    default: "true"
+                },
+                {
+                    cookie: "mobile.contextmenu.left",
+                    title: "Swipe Left",
+                    type: "checkbox",
+                    default: "false"
+                }
+            ]
+        }
+    ];
+
+.display#preferences
+    div
+    #settings
+        each group in settings
+            div.head
+                .settingsItem
+                    p= group.title
+            each field in group.fields
+                -
+                    var valueOfCookie = cookies[field.cookie] // Value of the field is either the cookie of default.
+                        ? cookies[field.cookie].replace(field.suffix, "")
+                        : field.default;
+
+                div
+                    .settingsItem(class=field.classes)
+                        p
+                            if field.icon 
+                                // Custom icon in front of text. 
+                                i.ico(data-type=field.icon data-color=field.color)
+                            span #{field.title+":"}
+                        if field.items
+                            // Field is a select element. 
+                            select(name=field.cookie data-var=field.var data-suffix=field.suffix)
+                                each item in field.items
+                                    - var isSelected = cookies[field.cookie] === String(item.value)
+                                    option(value=item.value selected=isSelected)= item.label
+                        else
+                            // Field is an input element. 
+                            - var set = field.settings || {};
+                            - var isChecked = valueOfCookie === String(set.true || true);
+                            input(name=field.cookie data-var=field.var data-suffix=field.suffix data-true=set.true data-false=set.false type=field.type min=set.min, max=set.max, step=set.step value=valueOfCookie checked=isChecked)
+                    if field.info
+                        span
+                            i.ico(data-type="information-circle")
+                            span #{field.info}

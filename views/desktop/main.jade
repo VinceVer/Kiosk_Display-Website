@@ -1,0 +1,62 @@
+doctype html
+html(lang='en')
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+
+    title Kiosk Display - #{config_data.location}
+
+    link#themeLink(rel='stylesheet' href=`/stylesheets/themes/desktop/${cookies.theme || "dark"}.css`)
+    link(rel='stylesheet' href='/stylesheets/desktop/overlay.css')
+    link(rel='stylesheet' href='/stylesheets/desktop/general.css')
+    link(rel='stylesheet' href='/stylesheets/desktop.anim.css')
+    include variables
+
+  body.fade
+    #brightnessFilter
+    #anim_100_counter
+      div.number(data-iterations=1 data-end=1) 0
+      div.number(data-iterations=1 data-end=10) 0
+      div.number(data-iterations=10 data-end=100) 0
+      span %
+
+    header
+      nav
+        button.HOME(onclick="location.href = '/'") MAIN MENU
+        include default/navigation
+        #hookT1.hook(data-alt_align="start")
+      div
+        #hookT2.hook(data-alt_align="start")
+
+    #display(style="visibility: hidden")
+      div
+      #container
+      include default/kioskOverlay
+
+    footer
+      div
+        #appButtons
+          include default/appButtons
+        #hookL.hook(data-alt_align="end")
+        
+      h6#alert.center=misc_data.alert
+
+      #hookR.hook.abs(data-alt_align="end")
+
+
+    include default/appWindows
+
+    #alertBox
+      h2
+      h4
+      .flexBar
+      .blockActions
+    
+    include templates/contextMenus
+    include templates/overlaySegment
+
+    #data_storage(data-config_data=config_data data-status_database=status_database data-misc_data=misc_data style="display: none")
+
+    script(src='/socket.io/socket.io.js')
+    script(type='module' src='/javascripts/desktop/liveData.js')
+    script(type='module' src='/javascripts/desktop/grid.js')
+    script(type='module' src='/javascripts/modules/appHandler.js')

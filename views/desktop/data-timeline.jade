@@ -1,0 +1,107 @@
+doctype html
+html(lang='en')
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+
+    title Kiosk Display - #{config_data.location}
+
+    link#themeLink(rel='stylesheet' href=`/stylesheets/themes/desktop/${cookies.theme || "dark"}.css`)
+    link(rel='stylesheet' href='/stylesheets/desktop/overlay.css')
+    link(rel='stylesheet' href='/stylesheets/desktop/general.css')
+    include variables
+
+  body.fade
+    #brightnessFilter
+
+    header
+      nav
+        button.HOME(onclick="location.href = '/desktop'") RETURN TO DISPLAY
+        include default/navigation
+
+    #display(style="visibility: hidden")
+      div
+      #container
+      include default/kioskOverlay
+
+    footer
+      div#hookL.hook(data-alt_align="end")
+        
+      #time_selectors.center
+        button(title="Move a day backwards" data-multiplier="-1") &lt;
+        input#time_slider(type="range" min=(new Date().setHours(0, 0, 0, 0) / 1000) max=((new Date().setHours(0, 0, 0, 0) / 1000) + 86400) value=(Math.floor((new Date()).getTime() / 1000)) step=300)
+        button(title="Move a day forwards" data-multiplier="1") &gt;
+
+      div#hookR.hook(data-alt_align="end")
+
+    #alertBox
+      h2
+      h4
+      .flexBar
+      .blockActions
+
+    include templates/tooltip
+    include templates/overlaySegment
+
+    #data_storage(data-config_data=config_data data-status_database=status_database data-misc_data=misc_data style="display: none")
+
+    script(type='module' src='/javascripts/desktop/grid.js')
+    script(type='module' src='/javascripts/desktop/data.timeline.js')
+
+    style.
+      #time_selectors {
+        align-items: center;
+        bottom: 0;
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+
+        & button {
+          aspect-ratio: 4/5;
+          background-color: var(--input-background-color);
+          border: var(--alt-border);
+          border-radius: 3px;
+          color: var(--text-color1);
+          width: fit-content;
+
+          &:hover {
+            filter: invert(0.1);
+          }
+        }
+      }
+
+      #text_overlay {
+        color: var(--gray10);
+        font-size: 45rem;
+        font-weight: bold;
+        height: 100vh;
+        left: 0;
+        line-height: 100vh;
+        opacity: 0.2;
+        pointer-events: none;
+        position: fixed;
+        text-align: center;
+        top: 0;
+        whitespace: nowrap;
+        width: fit-content;
+        z-index: 1;
+      }
+
+      :root {
+        --tag-size: #{cookies.tag_size / 20 + "rem"};
+        --tile-size: #{cookies.tile_size / 20 + "rem"};
+        --label-locations: #{cookies.label_locations === "true" ? "inline-block" : "none"};
+      }
+
+      .kiosk.urgency_-1 {--identifier-opacity: #{cookies.urgency_1_tag || 0};}
+      .kiosk.urgency_0 {--identifier-opacity: #{cookies.urgency0_tag || 0};}
+      .kiosk.urgency_1 {--identifier-opacity: #{cookies.urgency1_tag || 0};}
+      .kiosk.urgency_2 {--identifier-opacity: #{cookies.urgency2_tag || 0};}
+      .kiosk.urgency_3 {--identifier-opacity: #{cookies.urgency3_tag || 0};}
+      .kiosk.urgency_4 {--identifier-opacity: #{cookies.urgency4_tag || 0};}
+      .kiosk.urgency_5 {--identifier-opacity: 1;}
+      .kiosk.urgency_12 {--identifier-opacity: max(#{cookies.urgency1_tag || 0}, #{cookies.urgency2_tag || 0});}
+      .kiosk.urgency_42 {--identifier-opacity: max(#{cookies.urgency4_tag || 0}, #{cookies.urgency2_tag || 0});}
+
+      #time_slider {
+        width: 30vw;
+      }

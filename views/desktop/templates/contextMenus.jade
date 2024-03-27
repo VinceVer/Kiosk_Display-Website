@@ -1,0 +1,17 @@
+// Each contextmenu must contain a button.title element.
+
+div.templates(for="contextmenus")
+    template#cm_tile
+        div.contextMenu
+            button.title
+            button(name="ignore") Ignore status
+            button(name="online") Change to Online
+            button(name="remove") Remove from database
+
+    template#cm_segment
+        div.contextMenu
+            button.title
+            //button Open analytics
+            button(name="online") Change to Online
+            button(name="status") Modify status messages
+            button(name="remove") Remove from database

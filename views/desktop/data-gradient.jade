@@ -1,0 +1,73 @@
+doctype html
+html(lang='en')
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+
+    title Gradient Display - #{config_data.location}
+
+    link#themeLink(rel='stylesheet' href=`/stylesheets/themes/desktop/${cookies.theme || "dark"}.css`)
+    link(rel='stylesheet' href='/stylesheets/desktop/apps.css')
+    link(rel='stylesheet' href='/stylesheets/desktop/overlay.css')
+    link(rel='stylesheet' href='/stylesheets/desktop/general.css')
+    include variables
+
+  body.fade
+    #brightnessFilter
+
+    header
+      nav
+        button.HOME(onclick="location.href = '/desktop'") RETURN TO DISPLAY
+        include default/navigation
+        div#hookT1S.hook_static(data-alt_align="start" style="transition: box-shadow 0.3s ease")
+          .flexBar(style="margin: 10px 0 0 5px; width: fit-content")
+            select.i_type(style="margin-right: 5px")
+              option(value="" selected disabled) Select Datatype
+              option(value="coupons_printed") Coupons Printed
+              option(value="tags_printed") Tags Printed
+              option(value="paper_jams") Paper Jams (inverted)
+              option(value="time_since_last_problem") Time Since Problem
+            select.i_time
+              option(value="" selected disabled) Select Time window
+              option(value="last_24h") Last 24h
+              option(value="last_Week") Last 7d
+              option(value="last_Month") Last 30d
+              option(value="last_Year") Last 365d
+              option(value="this_Week") Current Week
+              option(value="this_Month") Current Month
+              option(value="this_Year") Current Year
+      div
+        div#hookT2S.hook_static(name="gradient" data-alt_align="start" style=`background: linear-gradient(to right, ${cookies["color.gradient_start"]}, ${cookies["color.gradient_end"]})`)
+          .flexBar
+            div
+              p#min_data(style="margin-right: 15rem" onclick="this.parentNode.querySelector('input').click()")
+              input(name="gradient_start" type="color" value=cookies["color.gradient_start"])
+            div
+              p#max_data(onclick="this.parentNode.querySelector('input').click()")
+              input(name="gradient_end" type="color" value=cookies["color.gradient_end"])
+
+    #display(style="visibility: hidden")
+      div
+      #container
+      include default/kioskOverlay
+
+    footer
+      h6#alert.center THIS PAGE DOES NOT UPDATE AUTOMATICALLY
+
+    #alertBox
+      h2
+      h4
+      .flexBar
+      .blockActions
+
+    include templates/tooltip
+    include templates/overlaySegment
+
+    #data_storage(data-config_data=config_data data-status_database=status_database data-misc_data=misc_data style="display: none")
+
+    script(type='module' src='/javascripts/desktop/grid.js')
+    script(type='module' src='/javascripts/desktop/data.gradient.js')
+
+    style.
+      .kiosk {
+        background-image: url(/images/tileOverlay.png) !important;
+      }

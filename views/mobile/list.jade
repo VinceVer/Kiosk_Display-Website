@@ -1,0 +1,46 @@
+.display#list
+  #search
+    div
+      - var selectedField = cookies['mobile.search.selected'] || "search";
+
+      div(class=(selectedField==="sort-descending" ? "selected" : ""))
+        div.hitbox
+        i.ico(data-type="sort-descending" data-field="sort")
+        div.input
+          - var selectedOption = cookies['mobile.search.sort'] || "all";
+          select(name="sort" value=selectedOption)
+            option(disabled) Sort by...
+            option(value="data-urgency,desc") Priority - Red to Green
+            option(value="data-urgency,asc") Priority - Green to Red
+            option(value="id,asc") Name - A to Z
+            option(value="id,desc") Name - Z to A
+
+      div(class=(selectedField==="search" ? "selected" : ""))
+        div.hitbox
+        i.ico(data-type="search")
+        div.input
+          input(name="search" type="search" placeholder="Type to search...")
+
+      div(class=(selectedField==="selector" ? "selected" : ""))
+        div.hitbox
+        i.ico(data-type="selector" data-field="filter")
+        div.input
+          - var selectedOption = cookies['mobile.search.filter'];
+          select(name="filter" value=selectedOption)
+            option(selected=selectedOption==="" value="") Show all Kiosks
+            option(disabled) Only show...
+            if config_data.groups.length === 1
+              each location in config_data.groups[0].locations
+                option(selected=selectedOption===location.name value=location.name.toUpperCase())= location.name
+            else
+              each group in config_data.groups
+                option(selected=selectedOption===group.name value=group.name.toUpperCase())= group.name
+    
+
+  #kiosk_table
+    table
+      thead
+        tr
+          th Name:
+          th Note:
+      tbody

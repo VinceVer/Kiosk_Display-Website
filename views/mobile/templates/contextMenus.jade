@@ -1,0 +1,18 @@
+// Each contextmenu must contain a button.title element.
+
+div.templates(for="contextmenus")
+    template#cm_row
+        div.contextMenu
+            div
+                button.title
+                button(name="online") Change devices to Online
+                button(name="cancel") Cancel
+
+    template#cm_segment
+        div.contextMenu
+            div
+                button.title
+                //button Open analytics
+                button(name="online") Change to Online
+                button(name="checked") Mark as Checked
+                button(name="cancel") Cancel

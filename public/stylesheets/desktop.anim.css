@@ -134,18 +134,18 @@
 }
 
 /* Apply the animation to an element */
-.fall {animation: fall 4s ease-in both;}
-.grow {animation: grow 15s ease-in both;}
-.nod {animation: nod 1s ease both;}
-.push_A {animation: push_A 5s ease-in both;}
-.push_B {animation: push_B 5s ease-in both;}
-.shake {animation: shake 1s ease both;}
-.spin {animation: spin 1s ease both;}
-.stomp_A {animation: stomp_A 2s ease both;}
-.stomp_B {animation: stomp_B 2s ease both;}
-.walk_wiggle {animation: walk_wiggle 5s ease-in both;}
+.anim_fall {animation: fall 4s ease-in both;}
+.anim_grow {animation: grow 15s ease-in both;}
+.anim_nod {animation: nod 1s ease both;}
+.anim_pushA {animation: push_A 5s ease-in both;}
+.anim_pushB {animation: push_B 5s ease-in both;}
+.anim_shake {animation: shake 1s ease both;}
+.anim_spin {animation: spin 1s ease both;}
+.anim_stompA {animation: stomp_A 2s ease both;}
+.anim_stompB {animation: stomp_B 2s ease both;}
+.anim_walk {animation: walk_wiggle 5s ease-in both;}
 
-.return {animation: return 1s ease both;}
+.anim_return {animation: return 1s ease both;}
 
 #anim_100_counter {
     align-items: start;

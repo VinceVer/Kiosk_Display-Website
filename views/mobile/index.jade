@@ -1,0 +1,50 @@
+doctype html
+html(lang='en')
+  head
+    meta(name='apple-mobile-web-app-capable' content='yes')
+    if cookies['mobile.scalable'] === "true"
+      meta(name='viewport' content='width=device-width, initial-scale=0.5, user-scalable=yes')
+    else
+      meta(name='viewport' content='width=device-width, initial-scale=0.5, user-scalable=no')
+    link(rel='manifest' href='/manifest.json')
+    link(rel='stylesheet' href=`/stylesheets/themes/mobile/${cookies.theme || "dark"}.css`)
+    link(rel='stylesheet' href='/stylesheets/mobile/overlay.css')
+    link(rel='stylesheet' href='/stylesheets/mobile/preferences.css')
+    link(rel='stylesheet' href='/stylesheets/mobile/general.css')
+    include variables
+
+  body
+    #vertical
+      .fade
+      .header
+        div
+          h1=config_data.location.toUpperCase()
+        #standby Standby:
+          p
+            span= misc_data.standby.name
+              |  - 
+            a(name="standby-phone" href="tel:#" onclick="event.preventDefault()")= misc_data.standby.phone
+
+      include list
+      include preferences
+
+      #connection_status.footer.cen2
+        i.ico(data-type="")
+      include default/navigation
+
+    #horizontal
+      include grid
+
+    include default/kioskOverlay
+    include templates/overlaySegment
+    include templates/contextMenus
+
+    #data_storage(data-config_data=config_data data-status_database=status_database data-misc_data=misc_data data-hub_adress=hub_adress style="display: none")
+
+    script(src='/socket.io/socket.io.js')
+    script(type='module' src='/javascripts/mobile/liveData.js')
+    script(type='module' src='/javascripts/mobile/index.js')
+    script(type='module' src='/javascripts/mobile/list.js')
+    script(type='module' src='/javascripts/mobile/preferences.js')
+    script(type='module' src='/javascripts/desktop/grid.js')
+    script(type='module' src='/javascripts/modules/iconHandler.js')

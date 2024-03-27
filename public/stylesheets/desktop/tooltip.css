@@ -1,0 +1,48 @@
+.tooltip {
+    bottom: 50px;
+    cursor: text;
+    left: 50%;
+    position: fixed;
+}
+
+/* Content. */ 
+.tooltip-content {
+    background-color: var(--input-background-color);
+    border: var(--alt-border);
+    border-radius: 3px;
+    bottom: calc(100% + 8px);
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 1) !important;
+    color: var(--text-color1);
+    font-size: var(--tag-size);
+    left: 50%;
+    padding: 5px 10px 5px 10px;
+    position: absolute;
+    text-align: center;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    width: fit-content;
+    z-index: 1;
+}
+
+.tooltip-content, .tooltip-content span {
+    user-select: all;
+}
+
+.tooltip-content span:hover {
+    color: var(--text-color2);
+}
+
+/* Arrow. */
+.tooltip::after {
+    content: '';
+    border-color: var(--input-background-color) transparent transparent transparent;
+    border-style: solid;
+    border-width: 8px 8px 0 8px;
+    bottom: 0;
+    height: 0;
+    left: calc(50% - 8px);
+    position: absolute;
+    translate: 0 -1px;
+    width: 0;
+    z-index: 2;
+}

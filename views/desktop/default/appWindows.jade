@@ -1,0 +1,37 @@
+link(rel='stylesheet' href='/stylesheets/desktop/apps.css')
+
+#app_5.app
+    .header Reported Problems
+        button X
+    table
+        tbody
+
+#app_A.app
+    .header Alert options
+        button X
+    form(onsubmit="submitForm(event, this, '/update/misc.json/alert')")
+        .flexBar(style="margin: 10px 0 0 5px; width: fit-content") Enter an alert:
+            input(type="text", name="value" required)
+        .flexBar(style="gap: 10px; margin: 10px 0 0 5px; width: fit-content")
+            button Update
+            button Remove
+
+#app_Hs.app(style="aspect-ratio: 4")
+    .header
+        button X
+    p.health_score(style=`color: hsl(${misc_data.score-50 < 0 ? 0 : (misc_data.score-50)*2}, 100%, 65%)`) Health Score: #{misc_data.score}%
+
+#app_S.app
+    .header.standby_updated Standby
+        button X
+    form(onsubmit="submitForm(event, this, '/update/misc.json/standby')")
+        .flexBar(for="standby" style="justify-content: stretch; margin: 10px 0 0 5px; width: fit-content") Standby:
+            input(type="text", name="name" placeholder="Name" required style="width: 12rem" value=misc_data.standby.name)
+            input(type="tel", name="phone" placeholder="Phone Number" required value=misc_data.standby.phone)
+        .flexBar(style="gap: 10px; margin: 10px 0 0 5px; width: fit-content")
+            button Update
+
+#app_T.app
+    .header
+        button X
+    p.last_check Last check: ... ‎

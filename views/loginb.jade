@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    link(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)
+    link(rel='stylesheet' href='/stylesheets/default.css')
+    link(rel='stylesheet' href='/stylesheets/login.css')
+  body
+    div
+      h1 SCHIPHOL
+      h2(data-type='subheader') Kiosk Monitor
+      div
+        .inputField
+          label(for='password') Mobile Password:
+          input(type='password' name='password' required)
+        .inputField
+          label(for='name') Your Name: (Optional)
+          input(type='text' name='name' optional)
+          div.flex.down-20
+            img(src='/images/info-icon.png')
+            info Your name will never be shared without your permission.
+
+    script(type='module' src='/javascripts/login.js')

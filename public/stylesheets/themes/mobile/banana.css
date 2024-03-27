@@ -1,0 +1,70 @@
+@media (min-aspect-ratio: 1) {
+    :root {
+        --recommended-font-size: 1.5vw;
+    }
+}
+@media (max-aspect-ratio: 1) {
+    :root {
+        --recommended-font-size: 1.5vh;
+    }
+}
+
+:root {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+
+    /* Colors */
+    --text-color1: rgb(189, 255, 161);
+    --text-color2: rgb(255, 255, 255);
+
+    color: var(--text-color1);
+    --default-background-color: rgba(68, 24, 24);
+    --background-color-1: rgba(96, 31, 31, 1);
+    --background-color-2: rgba(122, 39, 39, 1);
+    --background-color-3: rgba(196, 70, 70, 1);
+    --table-row-color-1: rgba(173, 56, 56, 1);
+    --table-row-color-2: rgba(211, 68, 68, 1);
+
+    --button-hover-background-color: rgba(80, 80, 80, 1);
+    --input-hover-background-color: rgba(50, 50, 50, 1);
+
+    --link-color: rgb(76, 198, 255);
+    --alert-color: rgb(240, 83, 83);
+
+    /* Sizes */
+    --header-height: 2.5rem;
+    --footer-height: 3rem;
+
+    /* Borders */
+    --default-border-color: rgb(84, 132, 61);
+    --default-border-type: solid;
+    --default-border-width: 3px;
+    --default-border: var(--default-border-width) var(--default-border-type) var(--default-border-color);
+
+    --alt-border-color: rgb(84, 132, 61);
+    --alt-border-type: solid;
+    --alt-border-width: 1px;
+    --alt-border: var(--alt-border-width) var(--alt-border-type) var(--alt-border-color);
+
+    --input-border: var(--alt-border);
+
+    /* Other */
+    --default-shadow-color: rgba(10, 10, 10, 0.5);
+}
+
+/* Alt. Button */
+button:hover {
+    background-color: var(--button-hover-background-color);
+    color: var(--text-color1)
+}
+
+/* Alt. Input/Select */
+input:hover, select:hover {
+    background-color: var(--input-hover-background-color);
+    cursor: pointer;
+}
+
+/* Icon Dropshadow */
+table .ico {
+    filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.7));
+}

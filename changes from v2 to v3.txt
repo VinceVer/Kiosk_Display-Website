@@ -1,0 +1,20 @@
+Added:
+- An IO-connection for decreased latency and bandwidth. This means data will be updated every second instead of every 15-20 seconds.
+- More query options at /data/gradient.
+- Tile hover animations at /desktop.
+- Icons
+- A lot more customization.
+
+Updated:
+- The top of the desktop display has less rough edges and corners.
+- The scripts and functions have been reorganized and rewritten into typescript modules.
+- The /data/timeline page now fetches data per month instead of per week, with a max cache of 2 months.
+- "Change Layout" has been renamed to "User Preferences"
+- The entire /desktop/layout page.
+
+Bug Fixes:
+- The Start.bat script now supports spaces in the directory path.
+- Changing the color at /data/gradient will now apply without refreshing the page.
+- The slider at /data/timeline can no longer go into the future.
+- Changing the "align location labels" layout option will now update the page immediatly.
+- You can now select the kiosk name when when the overlay is opened.
