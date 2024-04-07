@@ -22,7 +22,7 @@ router.get('/:p1?/:p2?', function(req, res, next) {
 	}
 
 	if (session_mobile !== mobileKey) {
-		res.render('login', {type: "mobile", layout: layout, port: port})
+		res.render('login', {type: "mobile", layout: layout, port: port, baseURL: `${req.protocol}://${req.hostname}:${port}/`})
 	} else {
 		res.render('mobile-list', {
 			config_data: config_data,
@@ -30,6 +30,7 @@ router.get('/:p1?/:p2?', function(req, res, next) {
 			misc_data: misc_data,
 			layout: layout,
 			hub_adress: fs.readFileSync(__dirname+'/../storage/hub-connection.txt', 'utf8'),
+			baseURL: `${req.protocol}://${req.hostname}:${port}/`,
 			port: port
 		});
 	}
@@ -43,13 +44,14 @@ router.get('/grid/:p1?/:p2?', function(req, res, next) {
 	const misc_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/misc.json'));
 
 	if (session_mobile !== mobileKey) {
-		res.render('login', {type: "mobile", port: port})
+		res.render('login', {type: "mobile", port: port, baseURL: `${req.protocol}://${req.hostname}:${port}/`})
 	} else {
 		res.render('mobile-grid', {
 			config_data: config_data,
 			status_database: status_database,
 			misc_data: misc_data,
 			layout: layout,
+			baseURL: `${req.protocol}://${req.hostname}:${port}/`,
 			port: port
 		});
 	}
