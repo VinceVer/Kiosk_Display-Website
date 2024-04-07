@@ -9,7 +9,7 @@ const getSendableData = (cookies, customData) => {
 	const {session_settings, ... layout} = cookies;
 	const data = JSON.parse(fs.readFileSync(__dirname+'/../storage/config.json'));
 
-	const sendableData = {location: data.location, config_data: JSON.stringify(data), write: JSON.stringify(session_settings === settingsKey), layout: layout, port: port, baseURL: `${req.protocol}://${req.hostname}:${port}/`}
+	const sendableData = {location: data.location, config_data: JSON.stringify(data), write: JSON.stringify(session_settings === settingsKey), layout: layout, port: port, baseURL: `${req.protocol}://${req.hostname}/${port}/`}
 	for (let key in customData) {
 		sendableData[key] = customData[key];
 	}

@@ -45,7 +45,7 @@ router.get('/', (req, res, next) => {
     res.render('index', {
         version: websiteVersion,
         port: port,
-        baseURL: `${req.protocol}://${req.hostname}:${port}/`
+        baseURL: `${req.protocol}://${req.hostname}/${port}/`
     });
 });
 
@@ -54,7 +54,7 @@ router.get('/changelog', (req, res, next) => {
     res.render('changelog', {
         version: websiteVersion,
         port: port,
-        baseURL: `${req.protocol}://${req.hostname}:${port}/`
+        baseURL: `${req.protocol}://${req.hostname}/${port}/`
     });
 });
 

@@ -18,7 +18,7 @@ html
 
     script.
       const port = document.getElementById("data_storage").dataset.port;
-      const base = location.href.split("/")[0]+":"+port;
+      const base = location.href.split("/")[0]+"/"+port;
 
       const submitForm = (event, url) => {
         event.preventDefault();

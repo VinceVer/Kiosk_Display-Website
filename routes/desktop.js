@@ -30,7 +30,7 @@ router.get('/:p1?/:p2?', function(req, res, next) {
 	}
 
 	if (session_desktop !== desktopKey) {
-		res.render('login', {type: "desktop", layout: layout, port: port, baseURL: `${req.protocol}://${req.hostname}:${port}/`})
+		res.render('login', {type: "desktop", layout: layout, port: port, baseURL: `${req.protocol}://${req.hostname}/${port}/`})
 	} else {
 		if (reload) {
 			res.redirect('/desktop');
@@ -40,7 +40,7 @@ router.get('/:p1?/:p2?', function(req, res, next) {
 				status_database: status_database,
 				misc_data: misc_data,
 				layout: layout,
-				baseURL: `${req.protocol}://${req.hostname}:${port}/`,
+				baseURL: `${req.protocol}://${req.hostname}/${port}/`,
 				port: port
 			});
 		}
@@ -62,7 +62,7 @@ router.get('/layout', function(req, res, next) {
 	}
 
 	if (session_desktop !== desktopKey) {
-		res.render('login', {type: "desktop", port: port, baseURL: `${req.protocol}://${req.hostname}:${port}/`});
+		res.render('login', {type: "desktop", port: port, baseURL: `${req.protocol}://${req.hostname}/${port}/`});
 	} else {
 		if (reload) {
 			res.redirect('/desktop-layout');
@@ -71,7 +71,7 @@ router.get('/layout', function(req, res, next) {
 				config_data: config_data,
 				status_database: status_database,
 				layout: layout,
-				baseURL: `${req.protocol}://${req.hostname}:${port}/`,
+				baseURL: `${req.protocol}://${req.hostname}/${port}/`,
 				port: port
 			});
 		}
@@ -96,7 +96,7 @@ router.get('/data/:type', async function(req, res, next) {
 	}
 
 	if (session_desktop !== desktopKey) {
-		res.render('login', {type: "desktop", port: port, baseURL: `${req.protocol}://${req.hostname}:${port}/`});
+		res.render('login', {type: "desktop", port: port, baseURL: `${req.protocol}://${req.hostname}/${port}/`});
 	} else {
 		res.render('desktop-data-'+req.params.type, {
 			config_data: config_data,
@@ -104,7 +104,7 @@ router.get('/data/:type', async function(req, res, next) {
 			misc_data: misc_data,
 			layout: layout,
 			other: other,
-			baseURL: `${req.protocol}://${req.hostname}:${port}/`,
+			baseURL: `${req.protocol}://${req.hostname}/${port}/`,
 			port: port
 		});
 	}
@@ -139,14 +139,14 @@ router.get('/data', function(req, res, next) {
 	const misc_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/misc.json'));
 
 	if (session_desktop !== desktopKey) {
-		res.render('login', {type: "desktop", port: port, baseURL: `${req.protocol}://${req.hostname}:${port}/`})
+		res.render('login', {type: "desktop", port: port, baseURL: `${req.protocol}://${req.hostname}/${port}/`})
 	} else {
 		res.render('desktop-data', {
 			config_data: config_data,
 			status_database: status_database,
 			misc_data: misc_data,
 			layout: layout,
-			baseURL: `${req.protocol}://${req.hostname}:${port}/`,
+			baseURL: `${req.protocol}://${req.hostname}/${port}/`,
 			port: port
 		});
 	}
@@ -168,7 +168,7 @@ router.get('/info', function(req, res, next) {
 	}
 
 	if (session_desktop !== desktopKey) {
-		res.render('login', {type: "desktop", layout: layout, port: port, baseURL: `${req.protocol}://${req.hostname}:${port}/`})
+		res.render('login', {type: "desktop", layout: layout, port: port, baseURL: `${req.protocol}://${req.hostname}/${port}/`})
 	} else {
 		if (reload) {
 			res.redirect('/desktop/info?query='+req.query.query);
@@ -178,7 +178,7 @@ router.get('/info', function(req, res, next) {
 				status_database: status_database,
 				misc_data: misc_data,
 				layout: layout,
-				baseURL: `${req.protocol}://${req.hostname}:${port}/`,
+				baseURL: `${req.protocol}://${req.hostname}/${port}/`,
 				port: port
 			});
 		}
@@ -205,7 +205,7 @@ router.get('/simple', function(req, res, next) {
 		status_database: status_database,
 		misc_data: misc_data,
 		layout: layout,
-		baseURL: `${req.protocol}://${req.hostname}:${port}/`,
+		baseURL: `${req.protocol}://${req.hostname}/${port}/`,
 		port: port
 	});
 });

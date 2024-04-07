@@ -16,7 +16,7 @@ const clickEvent = new MouseEvent("click", {
 });
 
 const port = document.getElementById("data_storage").dataset.port;
-const base = location.href.split("/")[0]+":"+port;
+const base = location.href.split("/")[0]+"/"+port;
 
 if (window.innerWidth > window.innerHeight) {
     location.href = base+"/mobile/grid";

@@ -1,5 +1,5 @@
 const port = document.getElementById("data_storage").dataset.port;
-const base = location.href.split("/")[0]+":"+port;
+const base = location.href.split("/")[0]+"/"+port;
 
 const groupingURL = base+"/settings/grouping",
     layoutURL = base+"/settings/layout",
