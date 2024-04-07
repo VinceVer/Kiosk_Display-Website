@@ -3,7 +3,7 @@ var fs = require('fs');
 var router = express.Router();
 const mobileKey = JSON.parse(fs.readFileSync(__dirname+'/../storage/oauth.json')).passwords.mobile;
 
-const port = fs.readFileSync(__dirname+'/../bin/port.txt');
+const port = fs.readFileSync(__dirname+'/../bin/suffix.txt');
 
 /* GET home page. */
 router.get('/:p1?/:p2?', function(req, res, next) {

@@ -6,7 +6,7 @@ const desktopKey = JSON.parse(fs.readFileSync(__dirname+'/../storage/oauth.json'
 const Database = new sqlite3.Database(__dirname+'/../../.database/bin/main-database.db');
 const path = require('path');
 
-const port = fs.readFileSync(__dirname+'/../bin/port.txt');
+const port = fs.readFileSync(__dirname+'/../bin/suffix.txt');
 
 /* GET home page. */
 router.get('/:p1?/:p2?', function(req, res, next) {

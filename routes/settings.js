@@ -3,7 +3,7 @@ var fs = require('fs');
 var router = express.Router();
 const settingsKey = JSON.parse(fs.readFileSync(__dirname+'/../storage/oauth.json')).passwords.settings;
 
-const port = fs.readFileSync(__dirname+'/../bin/port.txt');
+const port = fs.readFileSync(__dirname+'/../bin/suffix.txt');
 
 const getSendableData = (cookies, customData) => {
 	const {session_settings, ... layout} = cookies;
