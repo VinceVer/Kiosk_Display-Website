@@ -48,7 +48,7 @@ const setupInputHandlers = () => {
         calculateSpan();
     });
     document.querySelector('select[name=theme]').addEventListener("input", (event) => {
-        document.getElementById("themeLink").href = `/stylesheets/theme-${event.target.value}.css`
+        document.getElementById("themeLink").href = base+`/stylesheets/theme-${event.target.value}.css`
         calculateSpan();
     });
 

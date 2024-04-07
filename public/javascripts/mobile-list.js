@@ -16,20 +16,10 @@ const clickEvent = new MouseEvent("click", {
 });
 
 const port = document.getElementById("data_storage").dataset.port;
-const base = location.href.split("/")[0]+":"+port
-
-function setBaseURL(url) {
-  var base = document.createElement('base');
-  base.href = url;
-  document.head.appendChild(base);
-}
-
-window.onload = function() {
-  setBaseURL(base);
-}
+const base = location.href.split("/")[0]+":"+port;
 
 if (window.innerWidth > window.innerHeight) {
-    location.href = "/mobile/grid";
+    location.href = base+"/mobile/grid";
 } else {
     document.getElementById("kiosk_table").style.height = (window.innerHeight - document.getElementById("header").offsetHeight - document.getElementById("search").offsetHeight - document.getElementById("footer").offsetHeight) + "px";
 }
@@ -549,7 +539,7 @@ document.querySelectorAll('.clickToClose').forEach(element => {
 
 addEventListener("resize", (event) => {
     if (window.innerWidth > window.innerHeight) {
-        location.href = "/mobile/grid"+location.href.split("/mobile")[1];
+        location.href = base+"/mobile/grid"+location.href.split("/mobile")[1];
     } else {
         document.getElementById("kiosk_table").style.height = window.innerHeight - document.getElementById("header").offsetHeight - document.getElementById("footer").offsetHeight + "px";
     }

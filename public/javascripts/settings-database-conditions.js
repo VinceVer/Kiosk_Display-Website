@@ -9,7 +9,7 @@ const loadHEAD = async () => {
     } catch (err) {}
 
     if (location.href.split("/").slice(-1)[0] !== "conditions") {
-        if (!writeAccess) {location.href = "/settings/database/conditions"}
+        if (!writeAccess) {location.href = base+"/settings/database/conditions"}
         loadInputForm();
         return;
     }
@@ -49,7 +49,7 @@ const loadHEAD = async () => {
                             buttons: [{text: "Cancel", invert: 0.85, action: () => {window.location.reload()}}, {text: "Confirm", action: (event) => {submitDelete(`/config.json/urgency_conditions/${urgency}/inputs/${conditionIndex}`)}}]
                         });
                     } else {
-                        window.location.href = `/settings/database/conditions?type=${urgency}&index=${conditionIndex}`;
+                        window.location.href = base+`/settings/database/conditions?type=${urgency}&index=${conditionIndex}`;
                     }
                 });
             }

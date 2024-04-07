@@ -11,7 +11,7 @@ const loadHEAD = async () => {
     } catch (err) {}
 
     if (location.href.split("/").slice(-1)[0] !== "filters") {
-        if (!writeAccess) {location.href = "/settings/database/conditions"}
+        if (!writeAccess) {location.href = base+"/settings/database/conditions"}
         loadInputForm();
         return;
     }

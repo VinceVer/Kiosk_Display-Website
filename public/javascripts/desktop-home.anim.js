@@ -103,7 +103,7 @@ const animatePlay_Green = () => {
             document.cookie = `unlocked_green=true; expires=${expirationDate.toUTCString()}; path=/`;
         }
 
-        document.getElementById("themeLink").href = `/stylesheets/theme-green.css`
+        document.getElementById("themeLink").href = base+`/stylesheets/theme-green.css`
         document.body.querySelectorAll('&> *:not(#brightnessFilter):not(#anim_100_counter)').forEach(element => element.style.transition = "opacity 5s ease-in");
         document.body.querySelectorAll('&> *:not(#brightnessFilter):not(#anim_100_counter)').forEach(element => element.style.opacity = 1);
         document.getElementById("brightnessFilter").style.transition = "background-color 5s ease-in";

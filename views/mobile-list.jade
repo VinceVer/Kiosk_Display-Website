@@ -1,6 +1,7 @@
 doctype html
 html(lang='en')
   head
+    base(href=location.href.split("/")[0]+":"+port)
     meta(name="apple-mobile-web-app-capable" content="yes")
     meta(name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=no")
     link(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)

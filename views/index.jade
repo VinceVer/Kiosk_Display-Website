@@ -1,6 +1,7 @@
 doctype html
 html
   head
+    base(href=location.href.split("/")[0]+":"+port)
     link(rel='stylesheet' href='/stylesheets/main.css')
     style.
       #version_num {
@@ -37,16 +38,6 @@ html
     script.
       const port = document.getElementById("data_storage").dataset.port;
       const base = location.href.split("/")[0]+":"+port
-
-      function setBaseURL(url) {
-        var base = document.createElement('base');
-        base.href = url;
-        document.head.appendChild(base);
-      }
-
-      window.onload = function() {
-        setBaseURL(base);
-      }
 
       if (/Mobi|Android/i.test(navigator.userAgent)) {
         location.href = "/mobile"

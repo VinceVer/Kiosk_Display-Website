@@ -1,15 +1,5 @@
 const port = document.getElementById("data_storage").dataset.port;
-const base = location.href.split("/")[0]+":"+port
-
-function setBaseURL(url) {
-  var base = document.createElement('base');
-  base.href = url;
-  document.head.appendChild(base);
-}
-
-window.onload = function() {
-  setBaseURL(base);
-}
+const base = location.href.split("/")[0]+":"+port;
 
 const alert = (info) => {
     const alertBox = document.getElementById("alertBox");

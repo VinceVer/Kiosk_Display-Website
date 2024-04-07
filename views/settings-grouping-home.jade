@@ -1,6 +1,7 @@
 doctype html
 html(lang='en')
   head
+    base(href=location.href.split("/")[0]+":"+port)
     link(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)
     link(rel='stylesheet' href='/stylesheets/settings.css')
     link(rel='stylesheet' href='/stylesheets/elements.css')

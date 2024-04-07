@@ -11,20 +11,10 @@ const clickEvent = new MouseEvent("click", {
 });
 
 const port = document.getElementById("data_storage").dataset.port;
-const base = location.href.split("/")[0]+":"+port
-
-function setBaseURL(url) {
-  var base = document.createElement('base');
-  base.href = url;
-  document.head.appendChild(base);
-}
-
-window.onload = function() {
-  setBaseURL(base);
-}
+const base = location.href.split("/")[0]+":"+port;
 
 if (!/Mobi|Android/i.test(navigator.userAgent)) {
-    location.href = "/desktop"
+    location.href = base+"/desktop"
 }
 
 const loadGrid = () => {
@@ -648,7 +638,7 @@ loadGrid();
 
 addEventListener("resize", (event) => {
     if (window.innerHeight > window.innerWidth) {
-        location.href = "/mobile"+location.href.split("mobile/grid")[1];
+        location.href = base+"/mobile"+location.href.split("mobile/grid")[1];
     } else {
         updateLocations();
     }

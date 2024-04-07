@@ -85,7 +85,7 @@ const app_iHandler = (bar) => {
 
     if (type !== "" && time !== "") {
         const condition = type.split(" + ").map(segment => segment + "%20IS%20NOT%20NULL").join("%20OR%20");
-        location.href = `/desktop/info?query=SELECT%20kiosk_name,%20device_name,%20start_value,%20end_value%20FROM%20(SELECT%20kiosk_name,%20device_name,%20FIRST_VALUE(${type})%20OVER%20(PARTITION%20BY%20device_name%20ORDER%20BY%20time%20ASC)%20AS%20start_value,%20FIRST_VALUE(${type})%20OVER%20(PARTITION%20BY%20device_name%20ORDER%20BY%20time%20DESC)%20AS%20end_value%20FROM%20devicetimeline%20WHERE%20time%20BETWEEN%20${getUnixTimestamp(time)}%20AND%20${getUnixTimestamp()}%20AND%20(${condition}))%20AS%20subquery%20GROUP%20BY%20device_name%20ORDER%20BY%20kiosk_name`;
+        location.href = base+`/desktop/info?query=SELECT%20kiosk_name,%20device_name,%20start_value,%20end_value%20FROM%20(SELECT%20kiosk_name,%20device_name,%20FIRST_VALUE(${type})%20OVER%20(PARTITION%20BY%20device_name%20ORDER%20BY%20time%20ASC)%20AS%20start_value,%20FIRST_VALUE(${type})%20OVER%20(PARTITION%20BY%20device_name%20ORDER%20BY%20time%20DESC)%20AS%20end_value%20FROM%20devicetimeline%20WHERE%20time%20BETWEEN%20${getUnixTimestamp(time)}%20AND%20${getUnixTimestamp()}%20AND%20(${condition}))%20AS%20subquery%20GROUP%20BY%20device_name%20ORDER%20BY%20kiosk_name`;
     }
 }
 
@@ -583,7 +583,7 @@ const loadContextMenu_SEGMENT = (event, segment) => {
             if (Number[statusCode] === segmentObject[statusType+"_status"] || Number[statusCode] === segmentObject[statusType+"_connection"]) {
                 codeObject = statusObject.codes[statusCode];
                 if (codeObject.messages.includes(segmentObject.status_message)) {
-                    statusButton.dataset.href =  codeObject.static ? "null" : `/settings/status/${statusType}/${statusCode}`;
+                    statusButton.dataset.href = codeObject.static ? "null" : base+`/settings/status/${statusType}/${statusCode}`;
                 };
             }
         }

@@ -561,7 +561,7 @@ const loadContextMenu_SEGMENT = (event, segment) => {
             if (Number[statusCode] === segmentObject[statusType+"_status"] || Number[statusCode] === segmentObject[statusType+"_connection"]) {
                 codeObject = statusObject.codes[statusCode];
                 if (codeObject.messages.includes(segmentObject.status_message)) {
-                    statusButton.dataset.href =  codeObject.static ? "null" : `/settings/status/${statusType}/${statusCode}`;
+                    statusButton.dataset.href =  codeObject.static ? "null" : base+`/settings/status/${statusType}/${statusCode}`;
                 };
             }
         }

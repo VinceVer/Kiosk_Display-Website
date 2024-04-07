@@ -1,9 +1,12 @@
-const groupingURL = "/settings/grouping",
-    layoutURL = "/settings/layout",
-    appURL = "/settings/apps",
-    statusURL = "/settings/status",
-    schedulesURL = "/settings/schedules"
-    databaseURL = "/settings/database";
+const port = document.getElementById("data_storage").dataset.port;
+const base = location.href.split("/")[0]+":"+port;
+
+const groupingURL = base+"/settings/grouping",
+    layoutURL = base+"/settings/layout",
+    appURL = base+"/settings/apps",
+    statusURL = base+"/settings/status",
+    schedulesURL = base+"/settings/schedules"
+    databaseURL = base+"/settings/database";
 let response, writeAccess;
 const tile_contextMenu = document.getElementById("tile_CM");
 
@@ -12,19 +15,6 @@ const clickEvent = new MouseEvent("click", {
     cancelable: true,
     view: window
 });
-
-const port = document.getElementById("data_storage").dataset.port;
-const base = location.href.split("/")[0]+":"+port
-
-function setBaseURL(url) {
-  var base = document.createElement('base');
-  base.href = url;
-  document.head.appendChild(base);
-}
-
-window.onload = function() {
-  setBaseURL(base);
-}
 
 const alert = (info) => {
     console.log(info)

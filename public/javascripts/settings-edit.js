@@ -3,14 +3,14 @@ const type = document.head.dataset.type;
 const getAlertInfo = (type, value) => {
     switch(type) {
         case "app":
-            return {title: "Success", description: `${document.head.dataset.name} has successfully been renamed to ${value}.`, buttons: [{text: "OK", action: () => {location.href = "/settings/apps"}}] }
+            return {title: "Success", description: `${document.head.dataset.name} has successfully been renamed to ${value}.`, buttons: [{text: "OK", action: () => {location.href = base+"/settings/apps"}}] }
         case "s_type_add":
-            return {title: "Success", description: `${document.getElementById("statusType").value} has successfully been added.`, buttons: [{text: "OK", action: () => {location.href = "/settings/status"}}] }
+            return {title: "Success", description: `${document.getElementById("statusType").value} has successfully been added.`, buttons: [{text: "OK", action: () => {location.href = base+"/settings/status"}}] }
     }
 }
 
 const loadHEAD = () => {
-    if (!writeAccess) {return location.href = "/settings"}
+    if (!writeAccess) {return location.href = base+"/settings"}
     switch(type) {
         case "app":
             const appName = location.pathname.split("/").slice(-1)[0]
