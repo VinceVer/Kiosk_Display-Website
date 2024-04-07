@@ -177,7 +177,7 @@ const appendData = async (kioskIndex) => {
     openOverlay();
 
     /* Images. */
-    fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
+    fetch(`images/${kiosk.location}.BANNER.jpg`)
         .then(async response => {
             if (response.ok) {
                 const bannerURL = URL.createObjectURL(await response.blob());
@@ -187,7 +187,7 @@ const appendData = async (kioskIndex) => {
             }
         })
     
-    fetch(base+`/images/${kiosk.location}.MAP.jpg`)
+    fetch(`images/${kiosk.location}.MAP.jpg`)
         .then(async response => {
             if (response.ok) {
                 const mapURL = URL.createObjectURL(await response.blob());
@@ -286,7 +286,7 @@ const appendData_GROUP = async (groupName) => {
     openOverlay();
 
     /* Images. */
-    // fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
+    // fetch(`images/${kiosk.location}.BANNER.jpg`)
     //     .then(async response => {
     //         if (response.ok) {
     //             const bannerURL = URL.createObjectURL(await response.blob());
@@ -296,7 +296,7 @@ const appendData_GROUP = async (groupName) => {
     //         }
     //     })
     
-    // fetch(base+`/images/${kiosk.location}.MAP.jpg`)
+    // fetch(`images/${kiosk.location}.MAP.jpg`)
     //     .then(async response => {
     //         if (response.ok) {
     //             const mapURL = URL.createObjectURL(await response.blob());
@@ -883,7 +883,7 @@ const updateUrgency = (tile, newUrgency) => {
 }
 
 const visualizeData = async () => {
-    const response = await (await fetch(base+'/database?query='+location.href.split("query=")[1])).json();
+    const response = await (await fetch('database?query='+location.href.split("query=")[1])).json();
     data = response.data
     kioskData = {};
 

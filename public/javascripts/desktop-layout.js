@@ -30,7 +30,7 @@ const setupImagePreview = () => {
             reader.readAsDataURL(file);
 
         } else {
-            document.body.style.backgroundImage = `url(/images/${document.getElementById("data_storage").dataset.background_file})`;
+            document.body.style.backgroundImage = `url(images/${document.getElementById("data_storage").dataset.background_file})`;
         }
     });
 }
@@ -96,7 +96,7 @@ const updateLabels = (urgency, opacity) => {
 const uploadFile = (file, name, progressBar) => {
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', "/imageUpload");
+        xhr.open('POST', "imageUpload");
 
         xhr.upload.addEventListener("progress", ({loaded, total}) => {
             if (document.querySelector(progressBar)) {

@@ -1,12 +1,14 @@
+console.log(document.getElementById("data_storage"))
 const port = document.getElementById("data_storage").dataset.port;
 const base = location.href.split("/")[0]+"/"+port;
 
-const groupingURL = base+"/settings/grouping",
-    layoutURL = base+"/settings/layout",
-    appURL = base+"/settings/apps",
-    statusURL = base+"/settings/status",
-    schedulesURL = base+"/settings/schedules"
-    databaseURL = base+"/settings/database";
+const groupingURL = base.replace(/http(s?):/,'')+"/settings/grouping",
+    layoutURL = base.replace(/http(s?):/,'')+"/settings/layout",
+    appURL = base.replace(/http(s?):/,'')+"/settings/apps",
+    statusURL = base.replace(/http(s?):/,'')+"/settings/status",
+    schedulesURL = base.replace(/http(s?):/,'')+"/settings/schedules"
+    databaseURL = base.replace(/http(s?):/,'')+"/settings/database";
+console.log(statusURL, location.pathname)
 let response, writeAccess;
 const tile_contextMenu = document.getElementById("tile_CM");
 
@@ -283,9 +285,9 @@ const testPassword = async (value, event) => {
     }
 
     if (value === "LOGOUT") {
-        response = await fetch(base+`/logout/settings`);
+        response = await fetch(`logout/settings`);
     } else {
-        response = await (await fetch(base+`/login/settings`, {
+        response = await (await fetch(`login/settings`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Set the content type to form data

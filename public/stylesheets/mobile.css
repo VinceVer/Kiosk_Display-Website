@@ -110,7 +110,7 @@ td, th, tr {
 
 button.HOME {
     aspect-ratio: 6/1;
-    background: url(/images/HomeButton.png) no-repeat;
+    background: url(../images/HomeButton.png) no-repeat;
     background-color: var(--gray40);
     background-size: cover;
     border: none;
@@ -144,7 +144,7 @@ button.HOME {
     justify-content: center;
     translate: 0 -100px;
     background-color: var(--gray20);
-    background-image: url(/images/Hal_1A.BANNER.jpg);
+    background-image: url(../images/Hal_1A.BANNER.jpg);
 }
 
 .content {
@@ -530,7 +530,7 @@ button.HOME {
 #settingsIcon {
     aspect-ratio: 1;
     background-color: rgba(0, 0, 0, 0);
-    background-image: url(/images/settingsIcon.svg);
+    background-image: url(../images/settingsIcon.svg);
     background-position: center;
     background-size: contain;
     border: none;

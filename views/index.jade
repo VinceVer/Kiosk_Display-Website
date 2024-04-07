@@ -2,7 +2,7 @@ doctype html
 html
   head
     base(href=baseURL)
-    link(rel='stylesheet' href='/stylesheets/main.css')
+    link(rel='stylesheet' href='stylesheets/main.css')
     style.
       #version_num {
         color: #3e3e3e;
@@ -24,21 +24,21 @@ html
 
   body
     #tiles
-      a.tile(href='/desktop')
-        .tile-content(style="background-image: url(/images/DesktopTile.jpg); background-size: contain;")
-      a.tile(href='/mobile')
-        .tile-content(style="background-image: url(/images/MobileTile.jpg); background-size: contain;")
-      a.tile(href='/settings')
-        .tile-content(style="background-image: url(/images/SettingsTile.jpg); background-size: contain;")
+      a.tile(href='desktop')
+        .tile-content(style=`background-image: url(${baseURL}/images/DesktopTile.jpg); background-size: contain;`)
+      a.tile(href='mobile')
+        .tile-content(style=`background-image: url(${baseURL}/images/MobileTile.jpg); background-size: contain;`)
+      a.tile(href='settings')
+        .tile-content(style=`background-image: url(${baseURL}/images/SettingsTile.jpg); background-size: contain;`)
 
-    h6#version_num(onclick="location.href='/changelog'") Display Version #{version}
+    h6#version_num(onclick=`location.href='changelog'`) Display Version #{version}
     #data_storage(data-port=port)
 
-    script(src='/javascripts/effects.js')
+    script(src='javascripts/effects.js')
     script.
       const port = document.getElementById("data_storage").dataset.port;
       const base = location.href.split("/")[0]+"/"+port
 
       if (/Mobi|Android/i.test(navigator.userAgent)) {
-        location.href = "/mobile"
+        location.href = "mobile"
       }

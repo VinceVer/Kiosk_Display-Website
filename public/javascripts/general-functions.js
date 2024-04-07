@@ -36,7 +36,12 @@ const alert = (info) => {
 
 const getCookie = (cookieName) => {
     const name = cookieName + "=";
-    const decodedCookie = decodeURIComponent(document.cookie);
+    let decodedCookie;
+    try {
+        decodedCookie = decodeURIComponent(document.cookie);
+    } catch (error) {
+        decodedCookie = document.cookie;
+    }
     const cookieArray = decodedCookie.split(';');
   
     for (let i = 0; i < cookieArray.length; i++) {

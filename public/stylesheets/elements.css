@@ -41,7 +41,7 @@
 }
 
 .gridTile.addButton {
-    background-image: url(/images/addButton.png);
+    background-image: url(../images/addButton.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;

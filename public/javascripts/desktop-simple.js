@@ -75,7 +75,7 @@ const loadGrid = () => {
 
     const background_file = getCookie("background_file");
     if (!background_file.includes(".")) background_file = `${background_file}.${getCookie(`background_extension[${config_data.location}]`)}`;
-    document.body.style.backgroundImage = `url(/images/${background_file})`;
+    document.body.style.backgroundImage = `url(images/${background_file})`;
 }
 
 const appendData = async (kioskIndex) => {
@@ -170,7 +170,7 @@ const appendData = async (kioskIndex) => {
     openOverlay();
 
     /* Images. */
-    fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
+    fetch(`images/${kiosk.location}.BANNER.jpg`)
         .then(async response => {
             if (response.ok) {
                 const bannerURL = URL.createObjectURL(await response.blob());
@@ -180,7 +180,7 @@ const appendData = async (kioskIndex) => {
             }
         })
     
-    fetch(base+`/images/${kiosk.location}.MAP.jpg`)
+    fetch(`images/${kiosk.location}.MAP.jpg`)
         .then(async response => {
             if (response.ok) {
                 const mapURL = URL.createObjectURL(await response.blob());
@@ -279,7 +279,7 @@ const appendData_GROUP = async (groupName) => {
     openOverlay();
 
     /* Images. */
-    // fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
+    // fetch(`images/${kiosk.location}.BANNER.jpg`)
     //     .then(async response => {
     //         if (response.ok) {
     //             const bannerURL = URL.createObjectURL(await response.blob());
@@ -289,7 +289,7 @@ const appendData_GROUP = async (groupName) => {
     //         }
     //     })
     
-    // fetch(base+`/images/${kiosk.location}.MAP.jpg`)
+    // fetch(`images/${kiosk.location}.MAP.jpg`)
     //     .then(async response => {
     //         if (response.ok) {
     //             const mapURL = URL.createObjectURL(await response.blob());
@@ -936,10 +936,10 @@ if (!location.href.includes("desktop/layout")) {
 
     setInterval(async function() {
         if (!skipUpdate) {
-            status_database = await (await fetch(base+'/status-database')).json();
+            status_database = await (await fetch('status-database')).json();
 
             updateApp5();
-            misc_data = await (await fetch(base+'/storage/misc.json')).json();
+            misc_data = await (await fetch('storage/misc.json')).json();
             updateAppP();
             updateAppT();
             document.getElementById("alert").innerText = misc_data.alert;

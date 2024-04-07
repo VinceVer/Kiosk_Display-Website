@@ -94,7 +94,7 @@ const fetchIssues = async () => {
 }
 
 const fetchRepo = async () => {
-    const response = await fetch('/repo');
+    const response = await fetch('repo');
     return response.json();
 }
 

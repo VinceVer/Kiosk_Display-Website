@@ -6,24 +6,24 @@ html(lang='en')
 
     title Kiosk Display - #{config_data.location}
 
-    link#themeLink(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)
-    link(rel='stylesheet' href='/stylesheets/desktop.css')
-    link(rel='stylesheet' href='/stylesheets/desktop.anim.css')
+    link#themeLink(rel='stylesheet' href=`stylesheets/theme-${layout.theme}.css`)
+    link(rel='stylesheet' href='stylesheets/desktop.css')
+    link(rel='stylesheet' href='stylesheets/desktop.anim.css')
   body.fade
     #brightnessFilter(style=`background-color: rgba(10, 10, 10, ${1 - layout.background_opacity / 100})`)
 
     nav#header
-      button.HOME(onclick="location.href = '/desktop'") RETURN TO DISPLAY
-      a.navLink(href="/desktop/layout") Change Layout
+      button.HOME(onclick=`location.href = 'desktop'`) RETURN TO DISPLAY
+      a.navLink(href="desktop/layout") Change Layout
       .dropdown.navLink(style="padding-bottom: 0;") Data Analytics
         .content(style="margin-top: 7px;")
           div
-            a.navLink.item(href="/desktop/data/gradient") Gradient Visualizer
+            a.navLink.item(href="desktop/data/gradient") Gradient Visualizer
           //div
-            a.navLink.item(href="/desktop/data/logs") Event Logs
+            a.navLink.item(href="desktop/data/logs") Event Logs
           div
-            a.navLink.item(href="/desktop/data/reports") Report Generator
-      a.navLink(href="/desktop/data/timeline") Timeline
+            a.navLink.item(href="desktop/data/reports") Report Generator
+      a.navLink(href="desktop/data/timeline") Timeline
 
     #display(style="visibility: visible")
       //.bar
@@ -62,8 +62,8 @@ html(lang='en')
 
     #data_storage(data-port=port data-config_data=config_data data-misc_data=misc_data style="display: none")
 
-    script(src='/javascripts/general-functions.js')
-    script(src='/javascripts/desktop-data-logs.js')
+    script(src='javascripts/general-functions.js')
+    script(src='javascripts/desktop-data-logs.js')
 
     style.
       .row {

@@ -7,9 +7,9 @@
 .urgency_2 {--line-color: #b56fe9}
 /*.urgency_3 {background-image: }*/
 .urgency_4 {--line-color: #f03e3e}
-.urgency_5 {--line-color: url(/images/urgency5.png);}
-.urgency_12 {--line-color: url(/images/urgency12.png);}
-.urgency_42 {--line-color: url(/images/urgency42.png);}
+.urgency_5 {--line-color: url(../images/urgency5.png);}
+.urgency_12 {--line-color: url(../images/urgency12.png);}
+.urgency_42 {--line-color: url(../images/urgency42.png);}
 
 input[type=number] {
     background-color: var(--gray40);
@@ -47,7 +47,7 @@ input[type=checkbox] {
 
     &:checked::after {
         background-color: var(--gray80);
-        background-image: url(/images/CheckboxX.svg);
+        background-image: url(../images/CheckboxX.svg);
         background-position: center;
         background-size: cover;
         border-color: var(--gray10);

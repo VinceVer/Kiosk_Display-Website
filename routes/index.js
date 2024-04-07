@@ -9,7 +9,7 @@ const Database = new sqlite3.Database(__dirname+'/../../.database/bin/main-datab
 const oauthKeys = JSON.parse(fs.readFileSync(__dirname+'/../storage/oauth.json')).passwords;
 const websiteVersion = JSON.parse(fs.readFileSync(__dirname+'/../package.json')).version;
 
-const port = fs.readFileSync(__dirname+'/../bin/suffix.txt');
+const port = fs.readFileSync(__dirname+'/../bin/suffix.txt', {encoding: 'utf-8'});
 
 const urgency_icons = {
     _1: "🟢",

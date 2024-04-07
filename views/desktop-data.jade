@@ -3,12 +3,12 @@ html(lang='en')
   head
     base(href=baseURL)
     meta(name="viewport" content="width=device-width, initial-scale=1")
-    link(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)
-    link(rel='stylesheet' href='/jquery/jquery-ui.min.css')
-    link(rel='stylesheet' href='/jquery/jquery-ui-timepicker-addon.min.css')
-    link(rel='stylesheet' href='/jquery/jquery-ui.theme.css')
-    link(rel='stylesheet' href='/stylesheets/desktop.css')
-    link(rel='stylesheet' href='/stylesheets/desktop-data.css')
+    link(rel='stylesheet' href=`stylesheets/theme-${layout.theme}.css`)
+    link(rel='stylesheet' href='jquery/jquery-ui.min.css')
+    link(rel='stylesheet' href='jquery/jquery-ui-timepicker-addon.min.css')
+    link(rel='stylesheet' href='jquery/jquery-ui.theme.css')
+    link(rel='stylesheet' href='stylesheets/desktop.css')
+    link(rel='stylesheet' href='stylesheets/desktop-data.css')
 
   body.fade
     script(src='/jquery/jquery.min.js')
@@ -18,9 +18,9 @@ html(lang='en')
     #brightnessFilter(style=`background-color: rgba(10, 10, 10, 0.8)`)
 
     nav#header
-      button.HOME(onclick="location.href = '/desktop'") RETURN TO DISPLAY
-      a.navLink(href="/desktop/layout") Change Layout
-      a.navLink(href="/desktop/data") Data Analytics
+      button.HOME(onclick=`location.href = 'desktop'`) RETURN TO DISPLAY
+      a.navLink(href="desktop/layout") Change Layout
+      a.navLink(href="desktop/data") Data Analytics
 
     #display(style="visibility: visible")
       #options
@@ -73,5 +73,5 @@ html(lang='en')
       .kiosk.urgency_12 {--identifier-opacity: max(#{layout.urgency1_tag || 0}, #{layout.urgency2_tag || 0});}
       .kiosk.urgency_42 {--identifier-opacity: max(#{layout.urgency4_tag || 0}, #{layout.urgency2_tag || 0});}
 
-    script(src='/javascripts/general-functions.js')
-    script(src='/javascripts/desktop-data.js')
+    script(src='javascripts/general-functions.js')
+    script(src='javascripts/desktop-data.js')

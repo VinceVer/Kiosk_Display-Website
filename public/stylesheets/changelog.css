@@ -31,7 +31,7 @@ body {
 
 button.HOME {
   aspect-ratio: 6/1;
-  background: url(/images/HomeButton.png) no-repeat;
+  background: url(../images/HomeButton.png) no-repeat;
   background-color: var(--card-color);
   background-size: cover;
   border: 0;

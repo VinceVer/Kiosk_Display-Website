@@ -2,13 +2,13 @@ doctype html
 html
   head
     base(href=baseURL)
-    link(rel='stylesheet' href='/stylesheets/changelog.css')
+    link(rel='stylesheet' href='stylesheets/changelog.css')
     style.
       
 
   body
     nav#sidebar
-      button.HOME(onclick="location.href = '/'") MAIN MENU
+      button.HOME(onclick="location.href = ''") MAIN MENU
     #container
       #bug_tracker.tab
         .content
@@ -23,4 +23,4 @@ html
               span#result(style="font-size: 0.9rem; margin-left: 10px; font-weight: normal;") Note: Your report will be reviewed manually before it is shown on this page.
 
     #data_storage(data-port=port data-version=version style="display: none")
-    script(src="/javascripts/changelog.js")
+    script(src="javascripts/changelog.js")

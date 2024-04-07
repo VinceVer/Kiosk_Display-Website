@@ -81,7 +81,7 @@ const loadGrid = () => {
     let background_file = getCookie("background_file");
     console.log(background_file, "&", getCookie(`background_extension[${config_data.location}]`));
     if (!background_file.includes(".")) background_file = `${background_file}.${getCookie(`background_extension[${config_data.location}]`)}`;
-    document.body.style.backgroundImage = `url(/images/${background_file})`;
+    document.body.style.backgroundImage = `url(images/${background_file})`;
 }
 
 const app_iHandler = (bar) => {
@@ -190,7 +190,7 @@ const appendData = async (kioskIndex) => {
     openOverlay();
 
     /* Images. */
-    fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
+    fetch(`images/${kiosk.location}.BANNER.jpg`)
         .then(async response => {
             if (response.ok) {
                 const bannerURL = URL.createObjectURL(await response.blob());
@@ -200,7 +200,7 @@ const appendData = async (kioskIndex) => {
             }
         })
     
-    fetch(base+`/images/${kiosk.location}.MAP.jpg`)
+    fetch(`images/${kiosk.location}.MAP.jpg`)
         .then(async response => {
             if (response.ok) {
                 const mapURL = URL.createObjectURL(await response.blob());
@@ -299,7 +299,7 @@ const appendData_GROUP = async (groupName) => {
     openOverlay();
 
     /* Images. */
-    // fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
+    // fetch(`images/${kiosk.location}.BANNER.jpg`)
     //     .then(async response => {
     //         if (response.ok) {
     //             const bannerURL = URL.createObjectURL(await response.blob());
@@ -309,7 +309,7 @@ const appendData_GROUP = async (groupName) => {
     //         }
     //     })
     
-    // fetch(base+`/images/${kiosk.location}.MAP.jpg`)
+    // fetch(`images/${kiosk.location}.MAP.jpg`)
     //     .then(async response => {
     //         if (response.ok) {
     //             const mapURL = URL.createObjectURL(await response.blob());
@@ -913,7 +913,7 @@ const updateUrgency = (tile, newUrgency) => {
 
 const visualizeData = async (type, time) => {
     const query = query_types[type].replaceAll("${type}",type).replaceAll("${start_time}", getUnixTimestamp(time)).replaceAll("${end_time}", getUnixTimestamp());
-    const response = await (await fetch(base+'/database?query='+query)).json();
+    const response = await (await fetch('database?query='+query)).json();
     data = response.data;
     if (data.length === 0) {
         return;
@@ -939,7 +939,7 @@ const visualizeData = async (type, time) => {
         tile = document.getElementById(row.kiosk_name);
         if (tile) {
             tile.dataset.netValue = row.value;
-            tile.style.backgroundImage = "url(/images/tileOverlay.png)";
+            tile.style.backgroundImage = "url(images/tileOverlay.png)";
             tile.style.backgroundColor = mapNumberToHex((row.value - minValue) / maxValue * 100);
             (function(currentTile) {
                 setTimeout(function() {

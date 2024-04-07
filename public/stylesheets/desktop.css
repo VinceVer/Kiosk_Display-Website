@@ -29,16 +29,16 @@ h3 {
 h5 {color: var(--text-color1)}
 
 /* Tile States. */
-.kiosk.urgency_-1 {background-image: url(/images/urgency-1.png);}
-.kiosk.urgency_null {background-image: url(/images/urgencynull.png);}
-.kiosk.urgency_0 {background-image: url(/images/urgency0.png);}
-.kiosk.urgency_1 {background-image: url(/images/urgency1.png);}
-.kiosk.urgency_2 {background-image: url(/images/urgency2.png);}
-.kiosk.urgency_3 {background-image: url(/images/urgency3.png);}
-.kiosk.urgency_4 {background-image: url(/images/urgency4.png);}
-.kiosk.urgency_5 {background-image: url(/images/urgency5.png);}
-.kiosk.urgency_12 {background-image: url(/images/urgency12.png);}
-.kiosk.urgency_42 {background-image: url(/images/urgency42.png);}
+.kiosk.urgency_-1 {background-image: url(../images/urgency-1.png);}
+.kiosk.urgency_null {background-image: url(../images/urgencynull.png);}
+.kiosk.urgency_0 {background-image: url(../images/urgency0.png);}
+.kiosk.urgency_1 {background-image: url(../images/urgency1.png);}
+.kiosk.urgency_2 {background-image: url(../images/urgency2.png);}
+.kiosk.urgency_3 {background-image: url(../images/urgency3.png);}
+.kiosk.urgency_4 {background-image: url(../images/urgency4.png);}
+.kiosk.urgency_5 {background-image: url(../images/urgency5.png);}
+.kiosk.urgency_12 {background-image: url(../images/urgency12.png);}
+.kiosk.urgency_42 {background-image: url(../images/urgency42.png);}
 /* ------------ */
 
 body {
@@ -137,7 +137,7 @@ td, th, tr {
 
 button.HOME {
     aspect-ratio: 6/1;
-    background: url(/images/HomeButton.png) no-repeat;
+    background: url(../images/HomeButton.png) no-repeat;
     background-color: var(--gray40);
     background-size: cover;
     border: 0;
@@ -239,7 +239,7 @@ button.HOME {
     display: flex;
     justify-content: center;
     background-color: var(--gray20);
-    background-image: url(/images/Hal_1A.BANNER.jpg);
+    background-image: url(../images/Hal_1A.BANNER.jpg);
 }
 
 .cardView {
@@ -798,7 +798,7 @@ button.HOME {
 }
 
 #hookT2S[name=gradient] {
-    /* background: url(/images/Background.png); */
+    /* background: url(../images/Background.png); */
     background-size: cover;
 
     & p {

@@ -2,20 +2,20 @@ doctype html
 html(lang='en')
   head(data-name=name data-type=type)
     base(href=baseURL)
-    link(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)
-    link(rel='stylesheet' href='/stylesheets/settings.css')
-    link(rel='stylesheet' href='/stylesheets/elements.css')
+    link(rel='stylesheet' href=`stylesheets/theme-${layout.theme}.css`)
+    link(rel='stylesheet' href='stylesheets/settings.css')
+    link(rel='stylesheet' href='stylesheets/elements.css')
   body
     nav
-      button.HOME(onclick="location.href = '/settings'") HOME
-      a.navLink(href="/settings/grouping") Display Groups
-      //a.navLink(href="/settings/layout") Display Layout
-      a.navLink(href="/settings/apps") Application Naming
-      a.navLink(href="/settings/database/conditions") Priority Conditions
-      a.navLink(href="/settings/database/filters") Database Filters
-      a.navLink(href="/settings/status") Status Messages
-      a.navLink.selected(href="/settings/downloads") Downloads
-      //a.navLink(href="/settings/schedules") Schedules
+      button.HOME(onclick="location.href = 'settings'") HOME
+      a.navLink(href="settings/grouping") Display Groups
+      //a.navLink(href="settings/layout") Display Layout
+      a.navLink(href="settings/apps") Application Naming
+      a.navLink(href="settings/database/conditions") Priority Conditions
+      a.navLink(href="settings/database/filters") Database Filters
+      a.navLink(href="settings/status") Status Messages
+      a.navLink.selected(href="settings/downloads") Downloads
+      //a.navLink(href="settings/schedules") Schedules
       form#login(onsubmit="testPassword(this.parentNode.querySelector('input').value, event)")
         input(type="password" placeholder=" Log in by entering the site key" required)
         input#loginButton(type="submit" value="\u23CE")
@@ -29,9 +29,9 @@ html(lang='en')
 
       .hrefBar
         | > 
-        a(href='/settings') Settings
+        a(href='settings') Settings
         |  / 
-        a(href='/settings/downloads') Downloads
+        a(href='settings/downloads') Downloads
 
       h2.header Website files:
       #website_files.cardView
@@ -45,7 +45,7 @@ html(lang='en')
               | ‎ ‎ for the desktop and mobile grid displays.
               br
               | This does not include personal layout settings.
-              a.t-stress(href="/file/config.json?action=download") Click here to download
+              a.t-stress(href="file/config.json?action=download") Click here to download
         div
           button#misc_json.gridTile
             .flexBar
@@ -56,7 +56,7 @@ html(lang='en')
               | The contents of this file are not important.
               br
               br
-              a.t-stress(href="/file/misc.json?action=download") Click here to download
+              a.t-stress(href="file/misc.json?action=download") Click here to download
       h2.header Database files:
       #database_files.cardView
         div
@@ -69,7 +69,7 @@ html(lang='en')
               | ‎ ‎ for each kiosk, device and application.
               br
               | It is stored as a readable JSON file.
-              a.t-stress(href="/file/status_database.json?action=download") Click here to download
+              a.t-stress(href="file/status_database.json?action=download") Click here to download
         div
           button#main-database_db.gridTile
             .flexBar
@@ -80,7 +80,7 @@ html(lang='en')
               | It is formatted using sqlite and stored as a database file.
               br
               | The size of this file will only increase.
-              a.t-stress(href="/file/main-database.db?action=download") Click here to download
+              a.t-stress(href="file/main-database.db?action=download") Click here to download
 
     #alertBox
       h2
@@ -90,8 +90,8 @@ html(lang='en')
 
     #data_storage(data-port=port style="display: none" data-write=write)
 
-    script(src='/javascripts/settings-functions.js')
-    script(src='/javascripts/settings-downloads.js')
+    script(src='javascripts/settings-functions.js')
+    script(src='javascripts/settings-downloads.js')
 
     style.
       a.t-stress {

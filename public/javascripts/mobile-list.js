@@ -282,7 +282,7 @@ const appendData = async (kiosk) => {
     document.getElementById("overlay").addEventListener("scroll", function() {clearTimeout(pressTimer);})
 
     /* Images. */
-    fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
+    fetch(`images/${kiosk.location}.BANNER.jpg`)
         .then(async response => {
             if (response.ok) {
                 const bannerURL = URL.createObjectURL(await response.blob());
@@ -292,7 +292,7 @@ const appendData = async (kiosk) => {
             }
         })
     
-    fetch(base+`/images/${kiosk.location}.MAP.jpg`)
+    fetch(`images/${kiosk.location}.MAP.jpg`)
         .then(async response => {
             if (response.ok) {
                 const mapURL = URL.createObjectURL(await response.blob());
@@ -593,7 +593,7 @@ phone_anchor.addEventListener("touchend", function (event) {
 });
 
 setInterval(async function() {
-    status_database = await (await fetch(base+'/status-database')).json();
+    status_database = await (await fetch('status-database')).json();
     
     if (!overlay.offsetHeight > 0) {
         let bar;
@@ -689,7 +689,7 @@ setInterval(async function() {
         }
     }
 
-    misc_data = await (await fetch(base+'/storage/misc.json')).json();
+    misc_data = await (await fetch('storage/misc.json')).json();
     updateAppP();
     updateAppT();
     updateAppS();

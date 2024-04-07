@@ -6,18 +6,18 @@ html(lang='en')
 
     title Kiosk Info - #{config_data.location}
 
-    link#themeLink(rel='stylesheet' href=`/stylesheets/theme-${layout.theme}.css`)
-    link(rel='stylesheet' href='/stylesheets/desktop.css')
-    link(rel='stylesheet' href='/stylesheets/desktop.anim.css')
+    link#themeLink(rel='stylesheet' href=`stylesheets/theme-${layout.theme}.css`)
+    link(rel='stylesheet' href='stylesheets/desktop.css')
+    link(rel='stylesheet' href='stylesheets/desktop.anim.css')
   body.fade
     #brightnessFilter(style=`background-color: rgba(10, 10, 10, ${1 - layout.background_opacity / 100})`)
 
     nav#header
-      button.HOME(onclick="location.href = '/desktop'") RETURN TO DISPLAY
-      a.navLink(href="/desktop/layout") Change Layout
-      a.navLink(href="/desktop/data") Data Analytics
-      //a.navLink(href="/desktop/") Link 2
-      //a.navLink(href="/desktop/") Link 3
+      button.HOME(onclick=`location.href = 'desktop'`) RETURN TO DISPLAY
+      a.navLink(href="desktop/layout") Change Layout
+      a.navLink(href="desktop/data") Data Analytics
+      //a.navLink(href="desktop/") Link 2
+      //a.navLink(href="desktop/") Link 3
 
       div#hookT1.hook(data-alt_align="start")
       div#hookT2S.hook_static(name="gradient" data-alt_align="start" style=`background: linear-gradient(to right, rgb(${layout.gradient_start || "255, 0, 0"}), rgb(${layout.gradient_end || "0, 255, 0"}))`)
@@ -175,6 +175,6 @@ html(lang='en')
         background-image: url(/images/tileOverlay.png)
       }
 
-    script(src='/javascripts/general-functions.js')
-    script(src='/javascripts/desktop-infographics.js')
-    script(src='/javascripts/desktop-home.anim.js')
+    script(src='javascripts/general-functions.js')
+    script(src='javascripts/desktop-infographics.js')
+    script(src='javascripts/desktop-home.anim.js')

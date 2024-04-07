@@ -23,7 +23,7 @@ const load = async () => {
     let background_file = getCookie("background_file");
     console.log(background_file, "&", getCookie(`background_extension[${config_data.location}]`));
     if (!background_file.includes(".")) background_file = `${background_file}.${getCookie(`background_extension[${config_data.location}]`)}`;
-    document.body.style.backgroundImage = `url(/images/${background_file})`;
+    document.body.style.backgroundImage = `url(images/${background_file})`;
 
     if (misc_data.emails) {
         for (let email of misc_data.emails) {
@@ -55,7 +55,7 @@ const addRecipient = (email) => {
 
 const downloadReport = (file) => {
     // Make a request to the server endpoint to download the file
-    fetch(base+'/download/report/'+file)
+    fetch('download/report/'+file)
         .then(response => {
             // Check if the response is successful
             if (!response.ok) {
