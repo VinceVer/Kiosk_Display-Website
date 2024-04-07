@@ -15,6 +15,19 @@ const clickEvent = new MouseEvent("click", {
     view: window
 });
 
+const port = document.getElementById("data_storage").dataset.port;
+const base = location.href.split("/")[0]+":"+port
+
+function setBaseURL(url) {
+  var base = document.createElement('base');
+  base.href = url;
+  document.head.appendChild(base);
+}
+
+window.onload = function() {
+  setBaseURL(base);
+}
+
 if (window.innerWidth > window.innerHeight) {
     location.href = "/mobile/grid";
 } else {
@@ -279,7 +292,7 @@ const appendData = async (kiosk) => {
     document.getElementById("overlay").addEventListener("scroll", function() {clearTimeout(pressTimer);})
 
     /* Images. */
-    fetch(`/images/${kiosk.location}.BANNER.jpg`)
+    fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
         .then(async response => {
             if (response.ok) {
                 const bannerURL = URL.createObjectURL(await response.blob());
@@ -289,7 +302,7 @@ const appendData = async (kiosk) => {
             }
         })
     
-    fetch(`/images/${kiosk.location}.MAP.jpg`)
+    fetch(base+`/images/${kiosk.location}.MAP.jpg`)
         .then(async response => {
             if (response.ok) {
                 const mapURL = URL.createObjectURL(await response.blob());
@@ -452,7 +465,7 @@ const openSettings = () => {
 }
 
 const sendRequest = (url, value, alertInfo) => {
-    fetch(url, {
+    fetch(base+url, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json', // Set the content type to form data
@@ -470,7 +483,7 @@ const sendRequest = (url, value, alertInfo) => {
 }
 
 const setupLocationSelect = async () => {
-    const connectedLocations = await (await fetch(document.getElementById("data_storage").dataset.hub_adress+'/connections')).json();
+    const connectedLocations = await (await fetch(base+document.getElementById("data_storage").dataset.hub_adress+'/connections')).json();
     const location_select = document.getElementById("location_select");
 
     for (let location in connectedLocations) {
@@ -590,7 +603,7 @@ phone_anchor.addEventListener("touchend", function (event) {
 });
 
 setInterval(async function() {
-    status_database = await (await fetch('/status-database')).json();
+    status_database = await (await fetch(base+'/status-database')).json();
     
     if (!overlay.offsetHeight > 0) {
         let bar;
@@ -686,7 +699,7 @@ setInterval(async function() {
         }
     }
 
-    misc_data = await (await fetch('/storage/misc.json')).json();
+    misc_data = await (await fetch(base+'/storage/misc.json')).json();
     updateAppP();
     updateAppT();
     updateAppS();

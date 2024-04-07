@@ -211,7 +211,7 @@ const removeAppliesTo = (element) => {
 }
 
 const sendRequest = (url, value, alertInfo, reload) => {
-    fetch(url, {
+    fetch(base+url, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json', // Set the content type to form data
@@ -347,7 +347,7 @@ const uploadConditionData = (event, form, alertInfo) => {
         url = `/update/config.json/urgency_conditions/${conditionType}/inputs/${ruleIndex}`;
     }
 
-    fetch(url, {
+    fetch(base+url, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json', // Set the content type to form data

@@ -27,7 +27,7 @@ const loadGrid = async () => {
     currentTime.setHours(0, 0, 0, 0);
     const startTime = Math.floor(currentTime.getTime() / 1000) - 172800;
 
-    timeline_data = (await (await fetch(`/database?query=SELECT time, kiosk_name, from_urgency_level, to_urgency_level FROM kiosktimeline WHERE time BETWEEN ${startTime} AND ${endTime} ORDER BY kiosk_name, time DESC`)).json()).data;
+    timeline_data = (await (await fetch(base+`/database?query=SELECT time, kiosk_name, from_urgency_level, to_urgency_level FROM kiosktimeline WHERE time BETWEEN ${startTime} AND ${endTime} ORDER BY kiosk_name, time DESC`)).json()).data;
 
     console.log(timeline_data);
 
@@ -117,7 +117,7 @@ const appendData = async (kioskIndex) => {
     document.querySelector('.banner h1').innerText = kiosk.id;
 
     /* Devices. */
-    const device_data = (await (await fetch(`/database?query=SELECT * FROM ( SELECT *, ROW_NUMBER() OVER(PARTITION BY device_name ORDER BY time DESC) AS rn FROM devicetimeline WHERE time BETWEEN ${slider.min} AND ${slider.value} AND kiosk_name = '${kioskIndex}' ) ranked WHERE rn = 1;`)).json()).data;
+    const device_data = (await (await fetch(base+`/database?query=SELECT * FROM ( SELECT *, ROW_NUMBER() OVER(PARTITION BY device_name ORDER BY time DESC) AS rn FROM devicetimeline WHERE time BETWEEN ${slider.min} AND ${slider.value} AND kiosk_name = '${kioskIndex}' ) ranked WHERE rn = 1;`)).json()).data;
     console.log(slider.value, device_data)
 
     for (let row of device_data) {
@@ -190,7 +190,7 @@ const appendData = async (kioskIndex) => {
     openOverlay();
 
     /* Images. */
-    fetch(`/images/${kiosk.location}.BANNER.jpg`)
+    fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
         .then(async response => {
             if (response.ok) {
                 const bannerURL = URL.createObjectURL(await response.blob());
@@ -200,7 +200,7 @@ const appendData = async (kioskIndex) => {
             }
         })
     
-    fetch(`/images/${kiosk.location}.MAP.jpg`)
+    fetch(base+`/images/${kiosk.location}.MAP.jpg`)
         .then(async response => {
             if (response.ok) {
                 const mapURL = URL.createObjectURL(await response.blob());
@@ -627,7 +627,7 @@ const submitForm = (event, form, url, alertInfo) => {
 
     console.log(putData)
 
-    fetch(url, {
+    fetch(base+url, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json', // Set the content type to form data
@@ -657,7 +657,7 @@ const switchDay = async (multiplier) => {
     startTime.setHours(0, 0, 0, 0);
     startTime = Math.floor(new Date(startTime).getTime() / 1000) - 172800;
 
-    timeline_data = (await (await fetch(`/database?query=SELECT time, kiosk_name, from_urgency_level, to_urgency_level FROM kiosktimeline WHERE time BETWEEN ${startTime} AND ${endTime} ORDER BY kiosk_name, time DESC`)).json()).data;
+    timeline_data = (await (await fetch(base+`/database?query=SELECT time, kiosk_name, from_urgency_level, to_urgency_level FROM kiosktimeline WHERE time BETWEEN ${startTime} AND ${endTime} ORDER BY kiosk_name, time DESC`)).json()).data;
 
     grouped_data = {};
 

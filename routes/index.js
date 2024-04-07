@@ -9,6 +9,8 @@ const Database = new sqlite3.Database(__dirname+'/../../.database/bin/main-datab
 const oauthKeys = JSON.parse(fs.readFileSync(__dirname+'/../storage/oauth.json')).passwords;
 const websiteVersion = JSON.parse(fs.readFileSync(__dirname+'/../package.json')).version;
 
+const port = fs.readFileSync(__dirname+'/../bin/port.txt');
+
 const urgency_icons = {
     _1: "🟢",
     null: "❔",
@@ -41,14 +43,16 @@ router.use(express.json());
 /* GET home page. */
 router.get('/', (req, res, next) => {
     res.render('index', {
-        version: websiteVersion
+        version: websiteVersion,
+        port: port
     });
 });
 
 /* GET home page. */
 router.get('/changelog', (req, res, next) => {
     res.render('changelog', {
-        version: websiteVersion
+        version: websiteVersion,
+        port: port
     });
 });
 

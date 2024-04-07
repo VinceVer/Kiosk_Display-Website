@@ -33,6 +33,10 @@
             "path": ".website/bin"
         },
         {
+            "file": "url.txt",
+            "path": ".website/bin"
+        },
+        {
             "file": "hub-connection.txt",
             "path": ".website/storage"
         },

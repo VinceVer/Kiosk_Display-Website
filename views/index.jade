@@ -19,6 +19,8 @@ html
         }
       }
 
+      #data_storage {display: none}
+
   body
     #tiles
       a.tile(href='/desktop')
@@ -29,9 +31,23 @@ html
         .tile-content(style="background-image: url(/images/SettingsTile.jpg); background-size: contain;")
 
     h6#version_num(onclick="location.href='/changelog'") Display Version #{version}
+    #data_storage(data-port=port)
 
     script(src='/javascripts/effects.js')
     script.
+      const port = document.getElementById("data_storage").dataset.port;
+      const base = location.href.split("/")[0]+":"+port
+
+      function setBaseURL(url) {
+        var base = document.createElement('base');
+        base.href = url;
+        document.head.appendChild(base);
+      }
+
+      window.onload = function() {
+        setBaseURL(base);
+      }
+
       if (/Mobi|Android/i.test(navigator.userAgent)) {
         location.href = "/mobile"
       }

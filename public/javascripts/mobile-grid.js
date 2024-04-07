@@ -10,6 +10,19 @@ const clickEvent = new MouseEvent("click", {
     view: window
 });
 
+const port = document.getElementById("data_storage").dataset.port;
+const base = location.href.split("/")[0]+":"+port
+
+function setBaseURL(url) {
+  var base = document.createElement('base');
+  base.href = url;
+  document.head.appendChild(base);
+}
+
+window.onload = function() {
+  setBaseURL(base);
+}
+
 if (!/Mobi|Android/i.test(navigator.userAgent)) {
     location.href = "/desktop"
 }
@@ -204,7 +217,7 @@ const appendData = async (kioskIndex) => {
     openOverlay();
 
     /* Images. */
-    fetch(`/images/${kiosk.location}.BANNER.jpg`)
+    fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
         .then(async response => {
             if (response.ok) {
                 const bannerURL = URL.createObjectURL(await response.blob());
@@ -214,7 +227,7 @@ const appendData = async (kioskIndex) => {
             }
         })
     
-    fetch(`/images/${kiosk.location}.MAP.jpg`)
+    fetch(base+`/images/${kiosk.location}.MAP.jpg`)
         .then(async response => {
             if (response.ok) {
                 const mapURL = URL.createObjectURL(await response.blob());
@@ -313,7 +326,7 @@ const appendData_GROUP = async (groupName) => {
     openOverlay();
 
     /* Images. */
-    // fetch(`/images/${kiosk.location}.BANNER.jpg`)
+    // fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
     //     .then(async response => {
     //         if (response.ok) {
     //             const bannerURL = URL.createObjectURL(await response.blob());
@@ -323,7 +336,7 @@ const appendData_GROUP = async (groupName) => {
     //         }
     //     })
     
-    // fetch(`/images/${kiosk.location}.MAP.jpg`)
+    // fetch(base+`/images/${kiosk.location}.MAP.jpg`)
     //     .then(async response => {
     //         if (response.ok) {
     //             const mapURL = URL.createObjectURL(await response.blob());
@@ -529,7 +542,7 @@ const openOverlay = () => {
 }
 
 const sendRequest = (url, value, alertInfo) => {
-    fetch(url, {
+    fetch(base+url, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json', // Set the content type to form data
@@ -675,7 +688,7 @@ if (!location.href.includes("desktop/layout")) {
     updateAppP();
 
     setInterval(async function() {
-        status_database = await (await fetch('/status-database')).json();
+        status_database = await (await fetch(base+'/status-database')).json();
 
         if (document.getElementById("overlay").style.display !== "block") {
             let tile;
@@ -686,7 +699,7 @@ if (!location.href.includes("desktop/layout")) {
                 }
             }
 
-            misc_data = await (await fetch('/storage/misc.json')).json();
+            misc_data = await (await fetch(base+'/storage/misc.json')).json();
             updateAppP();
             updateAppT();
             document.getElementById("alert").innerText = misc_data.alert;

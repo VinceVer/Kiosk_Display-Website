@@ -6,6 +6,8 @@ const desktopKey = JSON.parse(fs.readFileSync(__dirname+'/../storage/oauth.json'
 const Database = new sqlite3.Database(__dirname+'/../../.database/bin/main-database.db');
 const path = require('path');
 
+const port = fs.readFileSync(__dirname+'/../bin/port.txt');
+
 /* GET home page. */
 router.get('/:p1?/:p2?', function(req, res, next) {
 	if (req.params.p1 && req.params.p1 !== "k" && req.params.p1 !== "g") {
@@ -28,7 +30,7 @@ router.get('/:p1?/:p2?', function(req, res, next) {
 	}
 
 	if (session_desktop !== desktopKey) {
-		res.render('login', {type: "desktop", layout: layout})
+		res.render('login', {type: "desktop", layout: layout, port: port})
 	} else {
 		if (reload) {
 			res.redirect('/desktop');
@@ -37,7 +39,8 @@ router.get('/:p1?/:p2?', function(req, res, next) {
 				config_data: config_data,
 				status_database: status_database,
 				misc_data: misc_data,
-				layout: layout
+				layout: layout,
+				port: port
 			});
 		}
 	}
@@ -58,7 +61,7 @@ router.get('/layout', function(req, res, next) {
 	}
 
 	if (session_desktop !== desktopKey) {
-		res.render('login', {type: "desktop"});
+		res.render('login', {type: "desktop", port: port});
 	} else {
 		if (reload) {
 			res.redirect('/desktop-layout');
@@ -66,7 +69,8 @@ router.get('/layout', function(req, res, next) {
 			res.render('desktop-layout', {
 				config_data: config_data,
 				status_database: status_database,
-				layout: layout
+				layout: layout,
+				port: port
 			});
 		}
 	}
@@ -90,14 +94,15 @@ router.get('/data/:type', async function(req, res, next) {
 	}
 
 	if (session_desktop !== desktopKey) {
-		res.render('login', {type: "desktop"});
+		res.render('login', {type: "desktop", port: port});
 	} else {
 		res.render('desktop-data-'+req.params.type, {
 			config_data: config_data,
 			status_database: status_database,
 			misc_data: misc_data,
 			layout: layout,
-			other: other
+			other: other,
+			port: port
 		});
 	}
 });
@@ -131,13 +136,14 @@ router.get('/data', function(req, res, next) {
 	const misc_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/misc.json'));
 
 	if (session_desktop !== desktopKey) {
-		res.render('login', {type: "desktop"})
+		res.render('login', {type: "desktop", port: port})
 	} else {
 		res.render('desktop-data', {
 			config_data: config_data,
 			status_database: status_database,
 			misc_data: misc_data,
-			layout: layout
+			layout: layout,
+			port: port
 		});
 	}
 });
@@ -158,7 +164,7 @@ router.get('/info', function(req, res, next) {
 	}
 
 	if (session_desktop !== desktopKey) {
-		res.render('login', {type: "desktop", layout: layout})
+		res.render('login', {type: "desktop", layout: layout, port: port})
 	} else {
 		if (reload) {
 			res.redirect('/desktop/info?query='+req.query.query);
@@ -167,7 +173,8 @@ router.get('/info', function(req, res, next) {
 				config_data: config_data,
 				status_database: status_database,
 				misc_data: misc_data,
-				layout: layout
+				layout: layout,
+				port: port
 			});
 		}
 	}
@@ -192,7 +199,8 @@ router.get('/simple', function(req, res, next) {
 		config_data: config_data,
 		status_database: status_database,
 		misc_data: misc_data,
-		layout: layout
+		layout: layout,
+		port: port
 	});
 });
 

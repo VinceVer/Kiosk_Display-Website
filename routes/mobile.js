@@ -3,6 +3,8 @@ var fs = require('fs');
 var router = express.Router();
 const mobileKey = JSON.parse(fs.readFileSync(__dirname+'/../storage/oauth.json')).passwords.mobile;
 
+const port = fs.readFileSync(__dirname+'/../bin/port.txt');
+
 /* GET home page. */
 router.get('/:p1?/:p2?', function(req, res, next) {
 	if (req.params.p1 === "grid") next();
@@ -20,14 +22,15 @@ router.get('/:p1?/:p2?', function(req, res, next) {
 	}
 
 	if (session_mobile !== mobileKey) {
-		res.render('login', {type: "mobile", layout: layout})
+		res.render('login', {type: "mobile", layout: layout, port: port})
 	} else {
 		res.render('mobile-list', {
 			config_data: config_data,
 			status_database: status_database,
 			misc_data: misc_data,
 			layout: layout,
-			hub_adress: fs.readFileSync(__dirname+'/../storage/hub-connection.txt', 'utf8')
+			hub_adress: fs.readFileSync(__dirname+'/../storage/hub-connection.txt', 'utf8'),
+			port: port
 		});
 	}
 });
@@ -40,13 +43,14 @@ router.get('/grid/:p1?/:p2?', function(req, res, next) {
 	const misc_data = JSON.parse(fs.readFileSync(__dirname+'/../storage/misc.json'));
 
 	if (session_mobile !== mobileKey) {
-		res.render('login', {type: "mobile"})
+		res.render('login', {type: "mobile", port: port})
 	} else {
 		res.render('mobile-grid', {
 			config_data: config_data,
 			status_database: status_database,
 			misc_data: misc_data,
-			layout: layout
+			layout: layout,
+			port: port
 		});
 	}
 });

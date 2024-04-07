@@ -13,6 +13,19 @@ const clickEvent = new MouseEvent("click", {
     view: window
 });
 
+const port = document.getElementById("data_storage").dataset.port;
+const base = location.href.split("/")[0]+":"+port
+
+function setBaseURL(url) {
+  var base = document.createElement('base');
+  base.href = url;
+  document.head.appendChild(base);
+}
+
+window.onload = function() {
+  setBaseURL(base);
+}
+
 const alert = (info) => {
     console.log(info)
     const alertBox = document.getElementById("alertBox");
@@ -219,7 +232,7 @@ const setupAutoComplete = (field) => {
 }
 
 const submitDelete = (url, alertInfo) => {
-    fetch(url, {method: 'DELETE'})
+    fetch(base+url, {method: 'DELETE'})
     .then(response => response.json())
     .then(data => {
         alertInfo ? alert(alertInfo) : location.reload();
@@ -254,7 +267,7 @@ const submitForm = (event, form, url, alertInfo) => {
 
     console.log(putData)
 
-    fetch(url, {
+    fetch(base+url, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json', // Set the content type to form data
@@ -280,9 +293,9 @@ const testPassword = async (value, event) => {
     }
 
     if (value === "LOGOUT") {
-        response = await fetch(`/logout/settings`);
+        response = await fetch(base+`/logout/settings`);
     } else {
-        response = await (await fetch(`/login/settings`, {
+        response = await (await fetch(base+`/login/settings`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Set the content type to form data

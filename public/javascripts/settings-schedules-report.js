@@ -118,7 +118,7 @@ const uploadScheduleData = (event, form, url, alertInfo) => {
 
     putData.email_recipients = putData.email_recipients.split(", ").pop();
 
-    fetch(url, {
+    fetch(base+url, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json', // Set the content type to form data

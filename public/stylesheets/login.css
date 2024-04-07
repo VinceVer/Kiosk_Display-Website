@@ -148,3 +148,5 @@ button.HOME {
     transform: translateY(-50%);
     width: 100vw;
 }
+
+#data_storage {display: none}

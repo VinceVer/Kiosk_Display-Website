@@ -55,7 +55,7 @@ const addRecipient = (email) => {
 
 const downloadReport = (file) => {
     // Make a request to the server endpoint to download the file
-    fetch('/download/report/'+file)
+    fetch(base+'/download/report/'+file)
         .then(response => {
             // Check if the response is successful
             if (!response.ok) {
@@ -129,7 +129,7 @@ const submitSettings = (event, form, url, alertInfo) => {
 
     console.log(putData)
 
-    fetch(url, {
+    fetch(base+url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json', // Set the content type to form data

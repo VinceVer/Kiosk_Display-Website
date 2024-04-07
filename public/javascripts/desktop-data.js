@@ -73,7 +73,7 @@ const submitForm = (event, form, url, alertInfo) => {
 
     console.log(putData)
 
-    fetch(url, {
+    fetch(base+url, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json', // Set the content type to form data

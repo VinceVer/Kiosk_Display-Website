@@ -177,7 +177,7 @@ const appendData = async (kioskIndex) => {
     openOverlay();
 
     /* Images. */
-    fetch(`/images/${kiosk.location}.BANNER.jpg`)
+    fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
         .then(async response => {
             if (response.ok) {
                 const bannerURL = URL.createObjectURL(await response.blob());
@@ -187,7 +187,7 @@ const appendData = async (kioskIndex) => {
             }
         })
     
-    fetch(`/images/${kiosk.location}.MAP.jpg`)
+    fetch(base+`/images/${kiosk.location}.MAP.jpg`)
         .then(async response => {
             if (response.ok) {
                 const mapURL = URL.createObjectURL(await response.blob());
@@ -286,7 +286,7 @@ const appendData_GROUP = async (groupName) => {
     openOverlay();
 
     /* Images. */
-    // fetch(`/images/${kiosk.location}.BANNER.jpg`)
+    // fetch(base+`/images/${kiosk.location}.BANNER.jpg`)
     //     .then(async response => {
     //         if (response.ok) {
     //             const bannerURL = URL.createObjectURL(await response.blob());
@@ -296,7 +296,7 @@ const appendData_GROUP = async (groupName) => {
     //         }
     //     })
     
-    // fetch(`/images/${kiosk.location}.MAP.jpg`)
+    // fetch(base+`/images/${kiosk.location}.MAP.jpg`)
     //     .then(async response => {
     //         if (response.ok) {
     //             const mapURL = URL.createObjectURL(await response.blob());
@@ -746,7 +746,7 @@ const resetAppCookies = (app) => {
 }
 
 const sendRequest = (url, value, alertInfo) => {
-    fetch(url, {
+    fetch(base+url, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json', // Set the content type to form data
@@ -841,7 +841,7 @@ const submitForm = (event, form, url, alertInfo) => {
 
     console.log(putData)
 
-    fetch(url, {
+    fetch(base+url, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json', // Set the content type to form data
@@ -883,7 +883,7 @@ const updateUrgency = (tile, newUrgency) => {
 }
 
 const visualizeData = async () => {
-    const response = await (await fetch('/database?query='+location.href.split("query=")[1])).json();
+    const response = await (await fetch(base+'/database?query='+location.href.split("query=")[1])).json();
     data = response.data
     kioskData = {};
 
