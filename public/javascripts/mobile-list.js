@@ -74,7 +74,7 @@ const loadGrid = () => {
                     if (menu.style.display !== "none") {cm_opened = true;}
                 });
                 if (!cm_opened) {
-                    history.pushState(null, null, `/mobile/k/${element.id}`);
+                    history.pushState(null, null, `mobile/k/${element.id}`);
                     openOverlay(element.id);
                 }
             });
@@ -306,7 +306,7 @@ const appendData = async (kiosk) => {
 }
 
 const closeOverlay = () => {
-    history.pushState(null, null, `/mobile`);
+    history.pushState(null, null, `mobile`);
 
     document.querySelector('table').style.overflowY = "auto";
     document.querySelectorAll('.overlay').forEach(element => element.style.opacity = 0);

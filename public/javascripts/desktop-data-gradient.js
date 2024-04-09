@@ -99,7 +99,7 @@ const app_iHandler = (bar) => {
         });
 
         setTimeout(function() {
-            history.pushState(null, null, `/desktop/data/gradient?type=${type}&range=${time}`);
+            history.pushState(null, null, `desktop/data/gradient?type=${type}&range=${time}`);
             visualizeData(type, time);
             document.getElementById("alert").innerHTML = `<span style="color: var(--text-color1)">Currently displaying:</span> <span class=t-stress>${type.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")} over ${bar.querySelector('.i_time').value.replaceAll("_"," ")}</span>`;
         }, 600);

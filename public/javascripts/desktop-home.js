@@ -20,7 +20,7 @@ const loadGrid = () => {
             appendChild(document.createElement('h1'));
             querySelector('h1').innerText = group.name;
             querySelector('h1').addEventListener("click", () => {
-                history.pushState(null, null, `/desktop/g/${group.name}`);
+                history.pushState(null, null, `desktop/g/${group.name}`);
                 appendData_GROUP(group.name);
             });
 
@@ -53,7 +53,7 @@ const loadGrid = () => {
             div.querySelector('p').innerText = status_database[kioskIndex].id.slice(-3);
             div.classList.add("kiosk", "urgency_"+status_database[kioskIndex].urgency_level);
             div.addEventListener("click", () => {
-                history.pushState(null, null, `/desktop/k/${kioskIndex}`);
+                history.pushState(null, null, `desktop/k/${kioskIndex}`);
                 appendData(kioskIndex);
             });
             div.addEventListener("contextmenu", (event) => {
@@ -363,7 +363,7 @@ const checkHookSnap = (x, y) => {
 }
 
 const closeOverlay = () => {
-    history.pushState(null, null, `/desktop`);
+    history.pushState(null, null, `desktop`);
 
     document.getElementById("overlay").style.opacity = 0;
     document.querySelectorAll('.info div').forEach(element => {
